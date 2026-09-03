@@ -29,7 +29,11 @@ RUN uv pip install --system --no-cache --reinstall \
     --extra-index-url "https://wheels.vllm.ai/${VLLM_VERSION}/cu129" \
     --extra-index-url "https://download.pytorch.org/whl/cu129" \
     --index-strategy unsafe-best-match
-RUN uv pip install --system --no-cache --reinstall --no-deps "mcp==1.29.0"
+# vLLM resuelve mcp/transformers de forma abierta y se lleva la version mas nueva,
+# que rompe langchain-mcp-adapters y la config heterogenea de Gemma 4.
+# --no-deps es imprescindible: sin el vuelven a subir.
+RUN uv pip install --system --no-cache --reinstall --no-deps \
+    "mcp==1.29.0" "transformers==5.12.1" "tokenizers==0.22.2"
 RUN python3 -m pip uninstall -y torchcodec || true
 
 COPY --chown=user:user inference.py /opt/app/

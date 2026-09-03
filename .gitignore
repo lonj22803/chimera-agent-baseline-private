@@ -1,0 +1,23 @@
+# Secretos
+.env
+
+# Datos del challenge (nunca subir: DUA)
+data/
+
+# Pesos de modelos (GB, se descargan aparte)
+model/
+resources/embedding_model/
+
+# Salidas y artefactos
+test/output/
+outputs/
+*.tar.gz
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Artefactos de ejecucion (Hydra escribe en el cwd)
+.hydra/
+run.log
+*.log
