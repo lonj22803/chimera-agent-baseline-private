@@ -98,7 +98,14 @@ def read_split(split_dir: Path, task: int, split: str) -> set[str] | None:
     return {line.strip() for line in f.read_text().splitlines() if line.strip()}
 
 
-def score_task(ev, data_root: Path, output_root: Path, task: int, wanted: set[str] | None) -> dict | None:
+def score_task(
+    ev,
+    data_root: Path,
+    output_root: Path,
+    task: int,
+    wanted: set[str] | None,
+    count_missing: bool = False,
+) -> dict | None:
     gt_records = ev.load_ground_truth_records(data_root / f"task{task}" / "ground_truth", f"task{task}")
     preds = load_predictions(output_root, task)
 
@@ -111,6 +118,12 @@ def score_task(ev, data_root: Path, output_root: Path, task: int, wanted: set[st
         pred = preds.get(case_id)
         if pred is None:
             missing += 1
+            if not count_missing:
+                continue
+            # Asi lo cuenta el evaluador oficial cuando un job no entrega
+            # salida: puntua el caso con pred=None en vez de ignorarlo. Es lo
+            # que pasa en Grand Challenge si el contenedor aborta.
+            rows.append(ev.evaluate_case(gt, None, None, None))
             continue
         rows.append(ev.evaluate_case(gt, pred, None, None))
         scored += 1
@@ -123,11 +136,16 @@ def score_task(ev, data_root: Path, output_root: Path, task: int, wanted: set[st
     agg["_scored"] = scored
     agg["_missing"] = missing
     agg["_rows"] = rows
+    agg["_count_missing"] = count_missing
     return agg
 
 
 def report(task: int, agg: dict) -> None:
-    print(f"\n  ── task{task} · {agg['_scored']} casos puntuados, {agg['_missing']} sin prediccion aun")
+    nota = " (contados como fallo)" if agg["_count_missing"] else " (excluidos)"
+    print(
+        f"\n  ── task{task} · {agg['_scored']} con prediccion, "
+        f"{agg['_missing']} sin ella{nota if agg['_missing'] else ''}"
+    )
     print(f"     mean_case_score      {agg.get('mean_case_score', float('nan')):.4f}")
     if task == 3:
         for k in ("c_index", "mean_event_score", "mean_time_score"):
@@ -169,6 +187,13 @@ def main() -> None:
     ap.add_argument("--split", default="all", choices=["all", "dev", "val"])
     ap.add_argument("--tasks", type=int, nargs="+", default=[1, 2, 3])
     ap.add_argument("--json-out", default=None, help="Vuelca los agregados a un fichero")
+    ap.add_argument(
+        "--count-missing",
+        action="store_true",
+        help="Puntua los casos etiquetados sin prediccion como fallo (pred=None), que es lo que\n"
+        "hace Grand Challenge cuando un contenedor aborta. Sin esta bandera se excluyen,\n"
+        "lo que da un numero optimista si el agente abandona casos.",
+    )
     args = ap.parse_args()
 
     ev = load_evaluator(Path(args.eval_repo))
@@ -178,7 +203,7 @@ def main() -> None:
     results: dict[int, dict] = {}
     for task in args.tasks:
         wanted = read_split(Path(args.split_dir), task, args.split)
-        agg = score_task(ev, Path(args.data_root), Path(args.output_root), task, wanted)
+        agg = score_task(ev, Path(args.data_root), Path(args.output_root), task, wanted, args.count_missing)
         if agg:
             results[task] = agg
             report(task, agg)
