@@ -451,6 +451,37 @@ Baseline sin modificar (Gemma‑4‑E2B‑it en vLLM, `temperature 1.0`, `max_it
 | 8 | `temperature = 1.0` → el mismo caso falla o no según la tirada | `configs/config.yaml` | bajar temperatura / fijar semilla |
 | 9 | No hay trazabilidad persistida: mensajes, resultados de herramientas y reintentos se descartan | `run.py` sólo guarda los dos JSON | callback en `ainvoke` |
 
+### 8.1 Segunda medición, a temperatura 0 ([delete_test/](delete_test/README.md))
+
+El experimento del predictor volvió a medir **los mismos 238 casos etiquetados** con el mismo evaluador (juez desactivado, casos sin salida contados como fallo), pero con **`temperature = 0`** y el modelo cargado una sola vez para todos los brazos. Deja dos corridas completas que sirven para dos cosas distintas — no confundirlas:
+
+| `ranking_score` | referencia arriba (T = 1.0) | control `off` (T = 0) | tratamiento `on_prompt` (T = 0) |
+|---|---|---|---|
+| T1 · biopsia | 0.6351 | 0.6428 | 0.6387 |
+| T2 · tratamiento | 0.4458 | 0.3485 | 0.4476 |
+| T3 · recurrencia | 0.6636 | 0.4650 | 0.4381 |
+| **OVERALL (2:2:1)** | **0.5651** | **0.4895** | **0.5221** |
+
+**(a) `off` contra la referencia: −0.0756 es el precio de fijar la temperatura, no una regresión.** Misma configuración salvo la temperatura (y una sola corrida). Todo el hueco está en T3 (−0.199) y T2 (−0.097); T1 no se mueve (+0.008). En T3 el `form_fill` pierde **9 de 75** casos de forma determinista en lugar de 2: la patología 5, ahora reproducible en vez de enmascarada por el muestreo. Es la patología 8 medida de frente — **el 0.5651 no es un número, es una tirada.**
+
+**(b) `on_prompt` contra `off`: +0.0326, indistinguible del ruido.** Es la única comparación A/B válida de las tres columnas (mismo modelo, mismos casos, mismo orden, misma temperatura). Por caso: 84 suben, 77 bajan, 77 empatan → prueba de signos p = 0.64.
+
+| detalle | control `off` | tratamiento `on_prompt` |
+|---|---|---|
+| T1 · puerta / F1 `yes` | 68.1 % / 0.794 | 68.1 % / 0.794 |
+| T2 · puerta / F1 ponderado | 45.8 % / 0.399 | 56.9 % / 0.521 |
+| T3 · c‑index / casos sin salida | 0.465 / 9 | 0.438 / 9 |
+
+Tres avisos que salen de ahí:
+
+1. **Todo el movimiento está en T2, y no es de la herramienta.** El 85 % del delta viene de casos en los que el predictor **nunca se llamó**: la adenda de 1045 chars cambió el prompt de los 72 y reordenó sus trayectorias. Por caso, los que la llamaron mejoran +0.084 y los que no, +0.075.
+2. **T3 empeora y avisa sobre la palanca de Nivel 2.** El c‑index baja a 0.438 y las AUC dependientes del tiempo quedan todas **por debajo de 0.5** (0.40–0.43): el orden de riesgo sale invertido. Producir un número de meses razonable no es producir un orden.
+3. **Con el prompt intacto la herramienta no existe: 0 llamadas en 30 casos** (brazo sonda). Si no está en la tabla de siete herramientas del prompt de sistema, no se llama nunca. Anunciada, se usa al revés de como conviene: 38 % en T1 (donde la cabeza tiene AUC 0.43, peor que el azar), 14 % en T2 (0.76) y ~1 % en T3.
+
+**La línea base sigue siendo 0.5651.** Lo que sube es 0.4895 → 0.5221 dentro de su propio control, y esa subida ni es significativa ni es atribuible al predictor. Comparar 0.5221 contra 0.5651 sería exactamente la forma de medir mal nº 5 de la §10.
+
+Lo que sí queda medido es el **techo de la cabeza** sobre embeddings congelados, out‑of‑fold: T2 AUC 0.76 en `active_treatment` con F1 ponderado 0.544 — y predice las dos clases que el agente nunca emite (16 `continued_surveillance`, 3 `watchful_waiting`); T1 AUC 0.43, peor que el azar; T3 c‑index oráculo 0.599. Eso califica el Nivel 3 de la §9: la señal existe, pero entregarla como un número dentro de una herramienta opcional no la convierte en puntos.
+
 ---
 
 ## 9. Palancas para planear la solución

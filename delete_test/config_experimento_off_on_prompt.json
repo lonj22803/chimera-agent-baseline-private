@@ -1,0 +1,18 @@
+{
+  "model_id": "google/gemma-4-E2B-it",
+  "temperature": 0.0,
+  "top_p": 0.95,
+  "max_new_tokens": 4096,
+  "max_iterations": 25,
+  "brazos": [
+    "off",
+    "on_prompt"
+  ],
+  "adenda_prompt": "\n\n## Image-embedding predictor\n\nOne further tool is available: `get_image_predictor`.\n\n| Tool                    | Cost | What it covers |\n|-------------------------|------|----------------|\n| `get_image_predictor`   | ~\u20ac0  | a trained head over foundation-model embeddings of images already acquired |\n\nIt runs a trained head over this patient's frozen foundation-model embeddings (MRI / biopsy / prostatectomy, whichever exist) and returns a compact score or label \u2014 never the raw vectors. The images were already acquired, so the call adds no patient burden and no marginal cost.\n\nCall it as part of the workup. Its payload includes a `reliability` field with the head's cross-validated discrimination on labelled cases: weigh the score accordingly. A head reported near AUC 0.5 carries no information and must not move your decision; a head with good discrimination is evidence like any other and should be reconciled with the clinical variables \u2014 not substituted for them. State in your reasoning trace how much weight you gave it and why.\n",
+  "tasks": [
+    1,
+    2,
+    3
+  ],
+  "limite": null
+}
