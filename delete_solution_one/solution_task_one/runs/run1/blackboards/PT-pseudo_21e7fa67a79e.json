@@ -1,0 +1,236 @@
+{
+  "case_id": "PT-pseudo_21e7fa67a79e",
+  "task": 1,
+  "n_entries": 6,
+  "entries": [
+    {
+      "speaker": "INTAKE",
+      "role": "the patient record, verbatim; adds no interpretation",
+      "title": "CASE FILE",
+      "body": "The structured clinical record below is the read-only panel the urologist sees up front, exactly as it arrives in this patient's record. The documents it refers to are masked and must be retrieved.\n\nYou are a senior urologist reviewing a patient case. The structured clinical\nrecord below is shown to you up front, exactly as in the reading form. Some\ndocuments are not shown and must be pulled up via the available tools\n(radiology / MRI report, pathology report, previous notes, laboratory\nresults, PSA history, and the family-history anamnesis) when you need to\nconsult them.\n\nCase ID: PT-pseudo_21e7fa67a79e\nTask: 1\n\nEncounter: Urology - outpatient on 01 Feb 2025.\nReferrer: Dr. N. Kuiper (GP).\nType: Re-evaluation - prior PCa diagnosis.\n\nClinical data (read-only — values loaded from the record):\n  - 70-year-old male\n  - PSA: 11.0 ng/mL\n  - mpMRI — PI-RADS score: 5 (1–2 low · 3 equivocal · 4–5 high risk)\n  - PSA density: 0.108 ng/mL²\n  - PSA velocity: 2.49 ng/mL/yr\n  - Prior PSA: 7.8 ng/mL\n  - Prostate volume: 101.95 mL\n  - Months since last PSA: 3\n  - DRE findings: Normal (Normal · Nodus · Benign · Suspicious · Abnormal · Negative · Not done)\n  - Prior biopsy: Positive (None · Negative · ASAP/HGPIN · Positive)\n  - csPCa predicted probability: 0.77544403 (clinically significant PCa = ISUP ≥ 2)\n\nMedical history & medication:\n  - Medical history: Not reported\n  - Problem list / PMHx: none recorded\n  - Current medication: None\n  - Allergies: NKA\n  - Additional notes: PSA 11 ng/mL. PI-RADS 5. PSAD 0.11. Prostate volume 102 mL. csPCa 0.78.\n\nVitals: weight 100 kg, height 183 cm, BMI 29.9, BP 123/79 mmHg, HR 72 bpm. Smoking: Ex-smoker (29 pack-yr, quit 2007).\n\nChief complaint: Assessment of a previously positive prostate biopsy alongside a steadily climbing PSA trajectory.\n\nHistory: First brought to clinical attention for a PSA elevation in late 2022, this 70-year-old gentleman has a previously positive prostate biopsy bucket recording Gleason 3+4 pathology. He endures severe lower urinary tract symptoms, scoring 34 on the IPSS, which heavily disrupts his daily activities despite a lack of prior surgical interventions. A retired postal worker who has never married, he resides alone with his adult daughter acting as primary contact and a longstanding friend listed as next of kin. His lifestyle includes cycling roughly 20 kilometres twice each week and drinking about five alcohol units weekly; he ceased smoking 29 pack-years ago back in 2007. Aside from a right knee arthroscopy in 2018 and a recent practice-nurse-administered influenza vaccine, his medical background remains clear. He explicitly denies unexplained weight loss, bone pain, or haematuria.\n\nPhysical examination: Normal DRE: The prostate measures symmetrically enlarged, presenting a smooth capsule devoid of palpable nodules or asymmetry. General examination remains unremarkable, characterised by stable vital signs and an absence of systemic illness or lymphadenopathy.\n\nPatient info: retired postal worker; Never married; Lives alone; adult daughter is primary contact.\nNext of kin: Long-time friend (no close family).\n\nLifestyle: alcohol 5 units / week; exercise Cycling 2x/week, ~20 km; IPSS score: 34/35 (severe LUTS).\n\nRecent other appointments: GP practice nurse — flu vaccination.\nAdmin: Interpreter: not required. Consent for data use: signed.\n\nInformation you can request via tools (the masked \"Extended EHR view\" — what\nthe urologist would actively pull up during the consult):\n  - radiology / MRI report (full mpMRI prose behind the headline imaging values)\n  - pathology report (any prior biopsy on record)\n  - previous GP / urology consultation notes\n  - laboratory results (full panel)\n  - PSA history (trend / velocity beyond the headline value)\n  - family history of prostate cancer (anamnesis)\n\nQuestion:\nBased on this patient's data, do you recommend biopsy?\n\n\n[Note for the conference: for a task-1 biopsy decision only FOUR masked documents actually exist on file - the radiology / mpMRI report, the PSA history, the previous notes and the laboratory panel - plus the family-history anamnesis. There is no pathology report to retrieve for this task; the prior-biopsy status shown in the panel above is all the pathology information on record.]",
+      "data": {
+        "case_id": "PT-pseudo_21e7fa67a79e"
+      }
+    },
+    {
+      "speaker": "EXPERT-PRIOR",
+      "role": "statistical expert; k-NN over 8 structured variables of THIS prompt only, trained on 91 labelled cases, leave-one-out honest",
+      "title": "INITIAL RECOMMENDATION (statistical prior)",
+      "body": "A basic classifier, whose sole purpose is to provide a suggestion, produces this result along with its associated uncertainty. The purpose of this decision is to use it as an initial reference point for discussing the results.\n\nSUGGESTION: NO BIOPSY\n  p(biopsy = yes) = 0.50 +/- 0.21   (95% CI 0.11-0.89)\n\nWhere the uncertainty comes from:\n  - aleatoric  dA = 0.17  (the nearest labelled cases disagree with each other)\n  - epistemic  dA = 0.13  (few labelled cases resemble this one)\n  - 5.6 effective neighbours out of 10; 2 of the 5 closest labelled cases were biopsied\n  - 80%-coverage conformal set: {no}\n\nTIER 'discuss': A +/- dA straddles 0.5. The classifier genuinely CANNOT tell these two answers apart; measured accuracy in this tier is 0.61, barely above the 0.62 majority-class rate. Its number is a starting point only, and the case must be decided on the clinical evidence retrieved by the other participants.\n\nVariables it actually read (from the visible panel only, no documents retrieved):\n  pirads=5.0, bx_ord=3.0, psa=11.0, age=70.0, psad=0.108, dre_ord=0.0, vol=101.95, n_pmhx=0.0\n  missing / not evaluable: none\n\nOut-of-fold performance of this recommender on the 91 labelled cases (5x5 CV):\n  accuracy 0.703, balanced accuracy 0.662, AUC 0.75, ECE 0.095.\nIt is right about 7 times out of 10 overall. It is NOT an oracle and it has never seen the\nradiology report, the PSA trajectory, the laboratory panel or the previous notes.",
+      "data": {
+        "case_id": "PT-pseudo_21e7fa67a79e",
+        "tarea": 1,
+        "pregunta": "prostate-biopsy-decision",
+        "prediccion": "no",
+        "A": 0.4956,
+        "delta_A": 0.2114,
+        "pizarra": "NO biopsiar  ·  p(biopsia=yes) = 0.50 ± 0.21  (IC95 0.11–0.89)  ·  discutir",
+        "magnitud_A": "p(biopsia = yes)",
+        "intervalo_68": [
+          0.264,
+          0.7275
+        ],
+        "intervalo_95": [
+          0.1092,
+          0.8855
+        ],
+        "incertidumbre": {
+          "delta_total": 0.2114,
+          "delta_aleatoria": 0.1682,
+          "delta_epistemica": 0.128,
+          "confianza": 0.5044,
+          "margen_z": 0.021,
+          "entropia_normalizada": 0.9999,
+          "vecinos_efectivos": 5.57,
+          "de_k_vecinos": 10,
+          "concordancia_vecinos": 0.5,
+          "conjunto_conformal": [
+            "no"
+          ],
+          "cobertura_conformal": 0.8
+        },
+        "veredicto_operativo": "discutir",
+        "lectura": "A ± ΔA cruza 0.5: el recomendador NO distingue. Escribir el número en la pizarra como punto de partida y dejar que los demás expertos lo muevan; aquí acierta poco más que la clase mayoritaria.",
+        "acierto_esperado": 0.613,
+        "evidencia": [
+          {
+            "case_id": "PT-pseudo_37d8ae9b27f1",
+            "decision": "no",
+            "distancia": 1.357,
+            "variables": {
+              "pirads": 4.0,
+              "bx_ord": 3.0,
+              "psa": 4.8,
+              "age": 67.0,
+              "psad": 0.05,
+              "dre_ord": 0.0,
+              "vol": 90.82,
+              "n_pmhx": 0.0
+            }
+          },
+          {
+            "case_id": "PT-pseudo_2e0346bce3b3",
+            "decision": "yes",
+            "distancia": 1.696,
+            "variables": {
+              "pirads": 4.0,
+              "bx_ord": 3.0,
+              "psa": 3.5,
+              "age": 64.0,
+              "psad": 0.01,
+              "dre_ord": 0.0,
+              "vol": 99.0,
+              "n_pmhx": 1.0
+            }
+          },
+          {
+            "case_id": "PT-pseudo_2fbb84505a45",
+            "decision": "yes",
+            "distancia": 1.808,
+            "variables": {
+              "pirads": 4.0,
+              "bx_ord": 3.0,
+              "psa": 8.4,
+              "age": 63.0,
+              "psad": 0.1,
+              "dre_ord": 0.0,
+              "vol": 78.0,
+              "n_pmhx": 0.0
+            }
+          },
+          {
+            "case_id": "PT-pseudo_2e4988b84112",
+            "decision": "no",
+            "distancia": 2.015,
+            "variables": {
+              "pirads": 5.0,
+              "bx_ord": 3.0,
+              "psa": 70.0,
+              "age": 68.0,
+              "psad": 0.67,
+              "dre_ord": 0.0,
+              "vol": 105.0,
+              "n_pmhx": 0.0
+            }
+          },
+          {
+            "case_id": "PT-pseudo_175e6ad47991",
+            "decision": "no",
+            "distancia": 2.067,
+            "variables": {
+              "pirads": 5.0,
+              "bx_ord": 1.0,
+              "psa": 28.0,
+              "age": 79.0,
+              "psad": 0.28,
+              "dre_ord": 0.0,
+              "vol": 100.0,
+              "n_pmhx": 0.0
+            }
+          }
+        ],
+        "variables_usadas": {
+          "pirads": 5.0,
+          "bx_ord": 3.0,
+          "psa": 11.0,
+          "age": 70.0,
+          "psad": 0.108,
+          "dre_ord": 0.0,
+          "vol": 101.95,
+          "n_pmhx": 0.0
+        },
+        "variables_faltantes": [],
+        "caso_en_entrenamiento": true,
+        "nota_entrenamiento": "El caso está entre los 91 etiquetados; se ha excluido de sus propios vecinos, así que esta respuesta es honesta.",
+        "rendimiento_validacion": {
+          "n": 91,
+          "clase_mayoritaria": 0.615,
+          "acc": 0.703,
+          "bal_acc": 0.662,
+          "auc": 0.75,
+          "logloss": 0.573,
+          "brier": 0.197,
+          "ece": 0.095,
+          "acc@30%": 0.926,
+          "acc@50%": 0.778,
+          "acc@70%": 0.73,
+          "auc_delta_detecta_error": 0.661,
+          "protocolo": "5x5 StratifiedKFold, out-of-fold"
+        }
+      }
+    },
+    {
+      "speaker": "LLM-1-GAP-ANALYST",
+      "role": "raises doubt only; has no access to clinical documents and issues no recommendation",
+      "title": "GAPS AND DOUBTS",
+      "body": "WHAT THE PRIOR CANNOT SEE\n  The statistical recommender only used the structured panel. It could not weigh the patient's PSA velocity (2.49 ng/mL/yr), the prior PSA (7.8 ng/mL), or the specific details from the mpMRI report (PI-RADS 5) beyond the score itself, which might be context-dependent.\n\nWHY THE SUGGESTION COULD BE WRONG\n  The prior suggests 'NO BIOPSY' with a wide interval (0.50 +/- 0.21), indicating high uncertainty. This uncertainty could stem from the conflict between the high csPCa probability (0.77544403) and the 'Normal' DRE finding, or the fact that the prior biopsy was 'Positive'. The prior cannot weigh the clinical significance of the rising PSA trajectory (velocity 2.49 ng/mL/yr) against the prior positive result.\n\nWHAT TO RETRIEVE, AND WHAT WOULD CHANGE THE ANSWER\n  <document> radiology / mpMRI report -> If the report details specific features of the PI-RADS 5 lesion (e.g., volume, extent) -> Could refine the risk stratification beyond the score.\n  <document> PSA history (trend) -> If the trend shows a steeper rise or plateau -> Could change the urgency of the decision.\n  <document> previous GP / urology consultation notes -> If these notes mention specific LUTS severity or prior management plans -> Could inform the clinical context for intervention.\n  <document> laboratory results (full panel) -> If lab results show any markers that might influence the risk assessment -> Could provide additional objective data.",
+      "data": {}
+    },
+    {
+      "speaker": "LLM-2-EVIDENCE",
+      "role": "the only participant who retrieved documents; reports findings, not verdicts",
+      "title": "EVIDENCE REPORT",
+      "body": "RETRIEVED\n  One block per document you opened. Quote the values and phrases that matter, verbatim and with units. Numbers, lesion descriptions, dates, explicit radiologist or clinician recommendations. Do not paraphrase a number. If a document turned out to be uninformative, say so in one line.\n\n  **radiology / mpMRI report**\n  {\"case_id\": \"PT-pseudo_21e7fa67a79e\", \"radiology_report\": \"LUMC Imaging Department | 28 Jan 2025 | Exam: Multiparametric MRI Prostate\\n\\nClinical Indication:\\nAssessment of a rising PSA trajectory (11.0 ng/mL) alongside a previously positive biopsy, given ongoing suspicion for clinically significant prostate cancer.\\n\\nFINDINGS:\\nThe gland measures 101.95 mL in volume. Diffuse benign prostatic hyperplasia is evident, featuring a prominent median lobe that extends into the bladder neck.\\n\\nA focal lesion occupies the left peripheral zone at the base/mid-gland level, spanning approximately 28 mm in maximum dimension. Marked T2-weighted hypointensity correlates with severely restricted diffusion on high b-value DWI, yielding low ADC values. Dynamic contrast imaging shows early, focal enhancement relative to the surrounding parenchyma. No extracapsular extension is visualised. Bilateral neurovascular bundles appear intact. Seminal vesicles demonstrate normal morphology and enhancement. Pelvic lymphadenopathy is absent. Bladder and rectal walls are unremarkable.\\n\\nIMPRESSION:\\nPI-RADS 5 lesion in the left peripheral zone (base/mid), consistent with high probability of clinically significant prostate cancer.\\nProstate volume: 101.95 mL\\nPSA density: 0.108\\nClinical staging: iT2NxMx\\ncsPCa probability: 0.77544403\"}\n\n  **PSA history**\n  {\"case_id\": \"PT-pseudo_21e7fa67a79e\", \"psa_trend\": [{\"date\": \"Dec 2022\", \"val\": 10.2}, {\"date\": \"Aug 2023\", \"val\": 9.2}, {\"date\": \"May 2024\", \"val\": 5.2}, {\"date\": \"Feb 2025\", \"val\": 11.0}]}\n\n  **previous GP / urology consultation notes**\n  {\"case_id\": \"PT-pseudo_21e7fa67a79e\", \"previous_notes\": [{\"date\": \"07 Feb 2024\", \"author\": \"Dr. N. Kuiper (GP)\", \"text\": \"11 Aug 2023 - Dr. N. Kuiper (GP): Review of the PSA trend revealed an increase to 6.7 ng/mL compared to the previous measurement. A multiparametric MRI was subsequently arranged to further characterise the gland and rule out clinically significant disease. Results were discussed in a multidisciplinary setting prior to scheduling a urology referral.\"}, {\"date\": \"11 Aug 2023\", \"author\": \"Dr. N. Kuiper (GP)\", \"text\": \"07 Feb 2024 - Dr. N. Kuiper (GP): Follow-up laboratory testing showed a further PSA rise to 7.8 ng/mL. The previously scheduled MRI at LUMC has been completed and returned a suspicious finding in the left peripheral zone. A referral to the urology clinic was processed.\"}]}\n\n  **laboratory results**\n  {\"case_id\": \"PT-pseudo_21e7fa67a79e\", \"laboratory_results\": [{\"name\": \"PSA\", \"val\": \"11.0 ng/mL\", \"date\": \"06 Jan 2025\", \"flag\": \"H\"}, {\"name\": \"Free PSA\", \"val\": \"2.96 ng/mL\", \"date\": \"06 Jan 2025\", \"flag\": \"\"}, {\"name\": \"%Free PSA\", \"val\": \"27%\", \"date\": \"06 Jan 2025\", \"flag\": \"\"}, {\"name\": \"Haemoglobin\", \"val\": \"12.9 g/dL\", \"date\": \"06 Jan 2025\", \"flag\": \"L\"}, {\"name\": \"WBC\", \"val\": \"6.1 x10^9/L\", \"date\": \"06 Jan 2025\", \"flag\": \"\"}, {\"name\": \"Platelets\", \"val\": \"206 x10^9/L\", \"date\": \"06 Jan 2025\", \"flag\": \"\"}, {\"name\": \"Creatinine\", \"val\": \"90 umol/L\", \"date\": \"06 Jan 2025\", \"flag\": \"\"}, {\"name\": \"eGFR\", \"val\": \">60 mL/min/1.73m2\", \"date\": \"06 Jan 2025\", \"flag\": \"\"}, {\"name\": \"Testosterone\", \"val\": \"13.0 nmol/L\", \"date\": \"06 Jan 2025\", \"flag\": \"\"}, {\"name\": \"Alkaline phosphatase\", \"val\": \"69 U/L\", \"date\": \"06 Jan 2025\", \"flag\": \"\"}, {\"name\": \"LDH\", \"val\": \"224 U/L\", \"date\": \"06 Jan 2025\", \"flag\": \"\"}]}\n\nNOT RETRIEVED\n  get_family_history - Not called as per retrieval economy rules.\n\nWHAT THE EVIDENCE SUPPORTS\n  FOR sampling this patient now:\n  - mpMRI report: PI-RADS 5 lesion in the left peripheral zone (base/mid), consistent with high probability of clinically significant prostate cancer.\n  - PSA history: PSA velocity of 2.49 ng/mL/yr and a recent rise to 11.0 ng/mL following a prior positive biopsy.\n  - previous notes: Prior biopsy was positive (Gleason 3+4 pathology).\n  - laboratory results: PSA is 11.0 ng/mL, and %Free PSA is 27%.\n\n  AGAINST sampling this patient now:\n  - DRE findings: Normal (Normal · Nodus · Benign · Suspicious · Abnormal · Negative · Not done).\n\nWHERE THIS LEANS\n  The retrieved evidence strongly argues for sampling due to the high-risk MRI finding (PI-RADS 5), the rising PSA velocity, and the history of a prior positive biopsy. This leans towards a strong recommendation for biopsy, contradicting the statistical prior of NO BIOPSY.\n\n[Sections actually revealed in this consultation: radiology_report, psa_trend, previous_notes, laboratory_results. Tools executed: get_lab_results, get_mri_report, get_previous_notes, get_psa_trend.]",
+      "data": {
+        "revealed": [
+          "radiology_report",
+          "psa_trend",
+          "previous_notes",
+          "laboratory_results"
+        ],
+        "tools_called": [
+          "get_lab_results",
+          "get_mri_report",
+          "get_previous_notes",
+          "get_psa_trend"
+        ]
+      }
+    },
+    {
+      "speaker": "EXPERT-IMAGE",
+      "role": "image-embedding expert; frozen foundation-model MRI vectors behind a trained head",
+      "title": "IMAGE-EMBEDDING PREDICTOR",
+      "body": "Frozen foundation-model embeddings on file for this patient: MRI image (1 vector).\nThe raw vectors are never shown; only a compact score would be.\n\nNo calibrated head is deployed for the biopsy decision, so no score was produced. The probe that measured this modality for task 1 reported AUC 0.43 (at or below chance), which is why nothing is being asserted here.\n\nBottom line for the chair: the image-embedding route contributes NO usable evidence for this\nbiopsy decision. Decide on the structured panel, the retrieved documents and the guidelines.\nDo not cite imaging-embedding support in the reasoning, and do not let the absence of a score\ncount as a negative finding.",
+      "data": {
+        "case_id": "PT-pseudo_21e7fa67a79e",
+        "origins": {
+          "MRI image": 1
+        },
+        "head_auc_task1": 0.43,
+        "prediction": null,
+        "detail": "stub predictor — replace tools.predictor.run_predictor with your trained head"
+      }
+    },
+    {
+      "speaker": "LLM-3-CHAIR",
+      "role": "chairs the conference; the only participant who decides",
+      "title": "FINAL DECISION AND FORM",
+      "body": "FINAL DECISION: BIOPSY   (confidence: clear)\n\nBiopsy is recommended due to the convergence of high-risk imaging features and clinical progression. The PI-RADS 5 lesion in the left peripheral zone is a decisive factor, compounded by a rising PSA velocity of 2.49 ng/mL/yr and a history of a prior positive biopsy. This evidence strongly overrides the statistical prior suggesting deferral.\n\nVariables that carried weight: bx=decisive, age=noted, psa=decisive, vol=noted, psad=noted, pirads=decisive\nSections revealed: radiology_report, psa_trend, previous_notes, laboratory_results",
+      "data": {
+        "case_id": "PT-pseudo_21e7fa67a79e",
+        "task": 1,
+        "biopsy_decision": true,
+        "confidence": "clear",
+        "variable_weights": {
+          "bx": "decisive",
+          "age": "noted",
+          "dre": "not_used",
+          "psa": "decisive",
+          "vol": "noted",
+          "psad": "noted",
+          "cspca": "not_used",
+          "pirads": "decisive",
+          "comorbidity": "not_used",
+          "fh": "not_used"
+        },
+        "reveal_sequence": [
+          "radiology_report",
+          "psa_trend",
+          "previous_notes",
+          "laboratory_results"
+        ],
+        "reasoning": "Biopsy is recommended due to the convergence of high-risk imaging features and clinical progression. The PI-RADS 5 lesion in the left peripheral zone is a decisive factor, compounded by a rising PSA velocity of 2.49 ng/mL/yr and a history of a prior positive biopsy. This evidence strongly overrides the statistical prior suggesting deferral."
+      }
+    }
+  ]
+}

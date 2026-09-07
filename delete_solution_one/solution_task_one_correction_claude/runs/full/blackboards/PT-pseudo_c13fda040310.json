@@ -1,0 +1,218 @@
+{
+  "case_id": "PT-pseudo_c13fda040310",
+  "task": 1,
+  "n_entries": 9,
+  "entries": [
+    {
+      "speaker": "INTAKE",
+      "role": "the patient record, verbatim; adds no interpretation",
+      "title": "CASE FILE",
+      "body": "The structured clinical record below is the read-only panel the urologist sees up front, exactly as it arrives in this patient's record. The documents it refers to are masked and must be retrieved.\n\nYou are a senior urologist reviewing a patient case. The structured clinical\nrecord below is shown to you up front, exactly as in the reading form. Some\ndocuments are not shown and must be pulled up via the available tools\n(radiology / MRI report, pathology report, previous notes, laboratory\nresults, PSA history, and the family-history anamnesis) when you need to\nconsult them.\n\nCase ID: PT-pseudo_c13fda040310\nTask: 1\n\nEncounter: Urology - outpatient on 19 Feb 2025.\nReferrer: Dr. E. Mulder (GP).\nType: Re-evaluation - prior negative biopsy.\n\nClinical data (read-only — values loaded from the record):\n  - 63-year-old male\n  - PSA: 6.1 ng/mL\n  - mpMRI — PI-RADS score: 4 (1–2 low · 3 equivocal · 4–5 high risk)\n  - PSA density: 0.08 ng/mL²\n  - PSA velocity: 1.35 ng/mL/yr\n  - Prior PSA: 4.9 ng/mL\n  - Prostate volume: 73.0 mL\n  - Months since last PSA: 3\n  - DRE findings: Normal (Normal · Nodus · Benign · Suspicious · Abnormal · Negative · Not done)\n  - Prior biopsy: Negative (None · Negative · ASAP/HGPIN · Positive)\n  - csPCa predicted probability: 0.81674135 (clinically significant PCa = ISUP ≥ 2)\n\nMedical history & medication:\n  - Medical history: Type 2 diabetes, Hypercholesterolaemia, Osteoarthritis, Benign prostatic hyperplasia\n  - Problem list / PMHx: Type 2 diabetes, Hypercholesterolaemia, Osteoarthritis, Benign prostatic hyperplasia\n  - Current medication: metformin, empagliflozin, atorvastatin, simvastatin, rosuvastatin, paracetamol PRN, tamsulosin\n  - Allergies: NKA\n  - Additional notes: PSA 6.1 ng/mL. PI-RADS 4. PSAD 0.08. Prostate volume 73 mL. csPCa 0.82.\n\nVitals: weight 81 kg, height 180 cm, BMI 25.0, BP 125/95 mmHg, HR 72 bpm. Smoking: Current smoker (23 pack-yr).\n\nChief complaint: An escalating PSA trajectory reaching 6.1 ng/mL after a previously negative systematic biopsy necessitates specialist re-evaluation.\n\nHistory: Divorced and currently residing with a partner, the 63-year-old freelance translator entered initial prostate cancer risk assessment in mid-2023 following a PSA reading of 3.5 ng/mL. Over the subsequent two years, he has experienced a steady, asymptomatic PSA increase now reaching 6.1 ng/mL. Despite the earlier negative biopsy, he expresses considerable apprehension regarding another invasive procedure. Lower urinary tract symptoms remain minimal (IPSS 5), adequately controlled with tamsulosin and a routine of commuter cycling five times each week. His clinical background includes benign prostatic hyperplasia, well-managed type 2 diabetes treated with metformin and empagliflozin, as well as hypercholesterolaemia addressed through atorvastatin, simvastatin, and rosuvastatin. He maintains an active lifestyle despite being a current smoker with a 23 pack-year history. He explicitly denies haematuria, pelvic pain, or unexplained weight loss. A stable, decades-long right knee osteoarthritis restricts his marathon goals and occasionally requires paracetamol PRN. Weekly alcohol intake averages one unit, and he notes that extended hours spent translating technical documents frequently contribute to his general fatigue.\n\nPhysical examination: DRE — texture: smooth and firm; mobility: unrestricted; asymmetry: none. The prostate is symmetrically enlarged but otherwise unremarkable, confirming a normal digital rectal examination. General physical assessment shows no abnormalities, with clear cardiovascular and respiratory auscultation, absent peripheral lymphadenopathy, and no palpable abdominal masses.\n\nPatient info: freelance translator; Divorced; Lives with partner.\nNext of kin: Adult daughter (primary contact).\n\nLifestyle: alcohol 1 units / week; exercise Cycling 5x/week (commuter); IPSS score: 5/35 (mild LUTS).\n\n\nAdmin: Patient anxious about procedures — allocate extra consult time.\n\nInformation you can request via tools (the masked \"Extended EHR view\" — what\nthe urologist would actively pull up during the consult):\n  - radiology / MRI report (full mpMRI prose behind the headline imaging values)\n  - pathology report (any prior biopsy on record)\n  - previous GP / urology consultation notes\n  - laboratory results (full panel)\n  - PSA history (trend / velocity beyond the headline value)\n  - family history of prostate cancer (anamnesis)\n\nQuestion:\nBased on this patient's data, do you recommend biopsy?\n\n\n[Note for the conference: for a task-1 biopsy decision only FOUR masked documents exist on file - the radiology / mpMRI report, the PSA history, the previous notes and the laboratory panel - plus the family-history anamnesis. There is no pathology report to retrieve for this task; the prior-biopsy status in the panel above is all the pathology information on record.]",
+      "data": {
+        "case_id": "PT-pseudo_c13fda040310"
+      },
+      "round": 1
+    },
+    {
+      "speaker": "EXPERT-PRIOR",
+      "role": "statistical expert; bagged classifier over the structured panel, trained on the labelled cohort, out-of-fold honest",
+      "title": "STATISTICAL PRIOR (classifier)",
+      "body": "A basic classifier, whose sole purpose is to provide a suggestion, produces this result along with its associated uncertainty. The purpose of this decision is to use it as an initial reference point for discussing the results.\n\nSUGGESTION: BIOPSY\n  p(biopsy = yes) = 0.72 +/- 0.13   (95% CI 0.46-0.98)\n\nTwo different uncertainties, reported separately because they mean different things:\n  - epistemic  dp = 0.13  — the error bar on this number. It is the spread\n    across bootstrap members: how much the answer would move with a different training sample.\n  - aleatoric  H  = 0.86 of 1.00 — how mixed the outcome was among\n    patients this model cannot tell apart. High H means the disagreement is in the data, not in\n    the model, and more labelled cases would not fix it.\n\nTIER 'supports': p +/- dp does not cross 0.5 but p +/- 1.96*dp does. A direction, not a conclusion; a weighted vote. Measured accuracy in this tier on the labelled cohort: 0.8 over 20 cases.\n\nModel: RF over the A-core variable set, chosen by the ablation study, not assumed.\nOut-of-fold performance on the 91 labelled cases (5x5 StratifiedKFold, out-of-fold):\n  accuracy 0.714 (majority-class baseline 0.615), AUC 0.789, F1(yes) 0.78.\nVariables it could not read for this patient: none.\n\nIt has read ONLY the structured panel and the parsed record. It has not reasoned about the\nprose of the mpMRI report, and it does not know what this patient's management plan is.",
+      "data": {
+        "prediccion": "yes",
+        "A": 0.7198,
+        "delta_A": 0.132,
+        "delta_epistemica": 0.132,
+        "entropia_aleatoria": 0.8558,
+        "intervalo_95": [
+          0.461,
+          0.979
+        ],
+        "veredicto_operativo": "supports",
+        "margen_z": 1.664,
+        "variables_faltantes": [],
+        "caso_en_entrenamiento": true,
+        "modelo": "RF",
+        "conjunto": "A-core",
+        "rendimiento_validacion": {
+          "n": 91,
+          "acc": 0.714,
+          "auc": 0.789,
+          "f1_yes": 0.78,
+          "majority": 0.615,
+          "protocol": "5x5 StratifiedKFold, out-of-fold"
+        },
+        "acierto_tramo": [
+          0.8,
+          20
+        ]
+      },
+      "round": 1
+    },
+    {
+      "speaker": "EXPERT-PROTOCOL",
+      "role": "protocol expert; applies the guideline criterion for this patient's clinical situation",
+      "title": "GUIDELINE CRITERION FOR THIS SITUATION",
+      "body": "CLINICAL SITUATION: prior negative biopsy.\n\nCRITERION VERDICT: BIOPSY.\n\nThe criterion: Re-biopsy (targeted) when the mpMRI shows a PI-RADS 4-5 lesion; do not repeat a negative biopsy for a PI-RADS 3 or lower picture that has not changed.\n\nIn the labelled cohort this criterion matched the reading urologist in 16 of the 18 cases with a prior negative biopsy.\n\nTrack record of this criterion on the labelled cohort: 16 of 18 cases matched the reading urologist. Departing from it needs a specific finding from a retrieved document, named explicitly - not a restatement of the panel numbers it already used.\n\nLike the statistical prior, this expert has read ONLY the visible panel. It has not seen the\nmpMRI prose, the PSA trajectory, the previous notes or the laboratory panel.",
+      "data": {
+        "bucket": "prior negative biopsy",
+        "rule": "Re-biopsy (targeted) when the mpMRI shows a PI-RADS 4-5 lesion; do not repeat a negative biopsy for a PI-RADS 3 or lower picture that has not changed.",
+        "verdict": "yes",
+        "hits": 16,
+        "n": 18,
+        "note": "In the labelled cohort this criterion matched the reading urologist in 16 of the 18 cases with a prior negative biopsy."
+      },
+      "round": 1
+    },
+    {
+      "speaker": "EXPERT-IMAGE",
+      "role": "image-embedding expert; frozen foundation-model MRI vectors behind a trained head",
+      "title": "IMAGE-EMBEDDING PREDICTOR",
+      "body": "Frozen foundation-model embeddings on file for this patient: MRI image (1 vector).\nThe raw vectors are never shown; only a compact score would be.\n\nNo calibrated head is deployed for the biopsy decision, so no score was produced. The probe that measured this modality for task 1 reported AUC 0.43 (at or below chance), which is why nothing is being asserted here.\n\nBottom line for the chair: the image-embedding route contributes NO usable evidence for this\nbiopsy decision. Decide on the structured panel, the retrieved documents and the guidelines.\nDo not cite imaging-embedding support in the reasoning, and do not let the absence of a score\ncount as a negative finding.",
+      "data": {
+        "case_id": "PT-pseudo_c13fda040310",
+        "origins": {
+          "MRI image": 1
+        },
+        "head_auc_task1": 0.43,
+        "prediction": null,
+        "detail": "stub predictor — replace tools.predictor.run_predictor with your trained head"
+      },
+      "round": 1
+    },
+    {
+      "speaker": "MODERATOR",
+      "role": "moderator; owns the agenda and decides whether the conference may close",
+      "title": "AGENDA (round 1)",
+      "body": "AGENDA FOR ROUND 1. These are the documents this case needs opened, and the question each one must answer. Open these and nothing else unless a named question requires it.\n\n  - radiology_report (get_mri_report) -> Does the mpMRI show a PI-RADS 4-5 lesion that warrants re-biopsy?\n  - psa_trend (get_psa_trend) -> Does the PSA trend provide evidence of significant change since the prior negative biopsy?\n  - previous_notes (get_previous_notes) -> What was the prior management context, including prior grade and surveillance pathway?\n\nThis case hinges on whether the mpMRI findings (radiology_report) or the PSA trajectory (psa_trend) necessitate a re-biopsy, given the prior negative result and the guideline criterion.",
+      "data": {
+        "agenda": [
+          "radiology_report",
+          "psa_trend",
+          "previous_notes"
+        ],
+        "questions": {
+          "radiology_report": "Does the mpMRI show a PI-RADS 4-5 lesion that warrants re-biopsy?",
+          "psa_trend": "Does the PSA trend provide evidence of significant change since the prior negative biopsy?",
+          "previous_notes": "What was the prior management context, including prior grade and surveillance pathway?"
+        },
+        "raw": {
+          "sufficient_without_documents": false,
+          "agenda": [
+            "radiology_report",
+            "psa_trend",
+            "previous_notes"
+          ],
+          "questions": {
+            "radiology_report": "Does the mpMRI show a PI-RADS 4-5 lesion that warrants re-biopsy?",
+            "psa_trend": "Does the PSA trend provide evidence of significant change since the prior negative biopsy?",
+            "previous_notes": "What was the prior management context, including prior grade and surveillance pathway?"
+          },
+          "note": "This case hinges on whether the mpMRI findings (radiology_report) or the PSA trajectory (psa_trend) necessitate a re-biopsy, given the prior negative result and the guideline criterion."
+        }
+      },
+      "round": 1
+    },
+    {
+      "speaker": "LLM-1-GAP-ANALYST",
+      "role": "raises doubt only; has no access to clinical documents and issues no recommendation",
+      "title": "GAPS AND DOUBTS (round 1)",
+      "body": "WHAT THE PRIOR CANNOT SEE\nThe statistical prior only weighed the structured panel, which includes PSA (6.1 ng/mL), PI-RADS 4, prior negative biopsy, PSA density (0.08 ng/mL²), and prostate volume (73.0 mL). It cannot weigh the clinical context such as the patient's anxiety about procedures, his history of Type 2 diabetes and smoking, or the specific trajectory of the PSA increase over two years.\n\nWHY THE SUGGESTION COULD BE WRONG\nThe prior suggested biopsy with a probability of 0.72, which is high. This suggestion could be wrong because the model's high probability is based on a high aleatoric uncertainty (H=0.86), meaning the disagreement is likely in the data itself, not the model. Furthermore, the guideline criterion suggests that a stable MRI (PI-RADS 1-3) does not make repeat biopsy superfluous, which contradicts the model's suggestion without considering the prose of the mpMRI report.\n\nWHAT TO RETRIEVE, AND WHAT WOULD CHANGE THE ANSWER\nradiology report - Does the mpMRI show a PI-RADS 4-5 lesion that warrants re-biopsy?\npsa_trend - Does the PSA trend provide evidence of significant change since the prior negative biopsy?\nprevious_notes - What was the prior management context, including prior grade and surveillance pathway?\nlaboratory panel - What are the current lab values, specifically PSA density, and any other relevant markers?\n\nGUIDELINE ANCHOR\nThe guideline criterion mandates a biopsy if the mpMRI shows a PI-RADS 4-5 lesion; otherwise, a stable MRI (PI-RADS 1-3) does not make repeat biopsy superfluous.",
+      "data": {},
+      "round": 1
+    },
+    {
+      "speaker": "LLM-2-EVIDENCE",
+      "role": "the only participant who retrieved documents; reports findings, not verdicts",
+      "title": "EVIDENCE REPORT (round 1)",
+      "body": "RETRIEVED\nget_mri_report\nRadiology Division | Catharina Ziekenhuis, Eindhoven | 15 Feb 2025 | Multiparametric MRI Prostate\nThe mpMRI report identifies a focal lesion (12 x 9 x 11 mm) in the left mid-gland posterior peripheral zone demonstrating restricted diffusion and early contrast enhancement.\nPI-RADS score is 4.\nThe report notes no evidence of extracapsular extension or seminal vesicle invasion.\n\nget_psa_trend\nThe PSA trend shows a significant increase from 1.4 ng/mL in Jun 2023 to 6.1 ng/mL in Feb 2025.\n\nget_previous_notes\nThe previous notes document a systematic biopsy in June 2024 which returned entirely benign. The patient is not explicitly on an active surveillance protocol, but the context is a re-evaluation following a negative biopsy.\n\nNOT RETRIEVED\nget_lab_results\nThe full laboratory panel was not retrieved because the moderator's agenda did not explicitly require it, and no immediate question arose from the retrieved documents.\n\nWHAT THE EVIDENCE SUPPORTS\nFOR sampling this patient now:\n- mpMRI shows a PI-RADS 4 lesion, which aligns with the guideline criterion for re-biopsy.\n- PSA trend shows a significant, continuous increase from 1.4 ng/mL to 6.1 ng/mL over two years.\n\nAGAINST sampling this patient now:\n- Prior biopsy was negative.\n- DRE findings were Normal.\n\nWHERE THIS LEANS\nThe combination of a PI-RADS 4 finding on the MRI and a significant PSA trajectory strongly supports proceeding with a targeted biopsy as per the guideline criterion.\nLEAN: biopsy\n\n[Opened in this round: radiology_report, psa_trend, previous_notes. Open on the board so far: radiology_report, psa_trend, previous_notes.]",
+      "data": {
+        "revealed": [
+          "radiology_report",
+          "psa_trend",
+          "previous_notes"
+        ],
+        "tools_called": [
+          "get_mri_report",
+          "get_previous_notes",
+          "get_psa_trend"
+        ]
+      },
+      "round": 1
+    },
+    {
+      "speaker": "MODERATOR",
+      "role": "moderator; owns the agenda and decides whether the conference may close",
+      "title": "CLOSING CHECK (round 1)",
+      "body": "THE CONFERENCE MAY CLOSE.\n\nPositions on the table: prior=yes, protocol=yes, evidence=yes.\nConsensus: yes — unanimous among those who took a position.\nAgenda: requested ['radiology_report', 'psa_trend', 'previous_notes']; opened ['radiology_report', 'psa_trend', 'previous_notes']; still missing nothing.\n\nThe retrieved evidence (PI-RADS 4 lesion and significant PSA trend) strongly supports proceeding with a targeted biopsy according to the guideline criterion. The record is sufficient to proceed to the final decision.\n\nThe chair decides on the record as it stands.",
+      "data": {
+        "reached": true,
+        "reason": "unanimous among those who took a position",
+        "votes": {
+          "prior": "yes",
+          "protocol": "yes",
+          "evidence": "yes"
+        },
+        "n_voiced": 3,
+        "rounds": 1,
+        "status": {
+          "requested": [
+            "radiology_report",
+            "psa_trend",
+            "previous_notes"
+          ],
+          "revealed": [
+            "radiology_report",
+            "psa_trend",
+            "previous_notes"
+          ],
+          "missing": [],
+          "fulfilled": true,
+          "extra": []
+        },
+        "llm": {
+          "record_is_sufficient": true,
+          "genuine_disagreement": false,
+          "reopen": false,
+          "still_missing": [
+            "get_lab_results - The full laboratory panel was not retrieved because the moderator's agenda did not explicitly require it, and no immediate question arose from the retrieved documents."
+          ],
+          "note": "The retrieved evidence (PI-RADS 4 lesion and significant PSA trend) strongly supports proceeding with a targeted biopsy according to the guideline criterion. The record is sufficient to proceed to the final decision."
+        },
+        "reopened": false
+      },
+      "round": 1
+    },
+    {
+      "speaker": "LLM-3-CHAIR",
+      "role": "chairs the conference; the only participant who decides",
+      "title": "FINAL DECISION AND FORM",
+      "body": "FINAL DECISION: BIOPSY   (confidence: clear)\n\nThe decision to proceed with a targeted biopsy is supported by convergence across all inputs. The guideline criterion mandates re-biopsy for a PI-RADS 4-5 lesion, which was confirmed by the retrieved radiology report. This finding was further strengthened by the significant PSA trend, showing an increase from 1.4 ng/mL to 6.1 ng/mL over two years. The statistical prior also suggested biopsy, and the retrieved evidence confirmed the clinical necessity for further sampling.\n\nVariables that carried weight: bx=important, age=important, psa=important, vol=noted, psad=important, pirads=decisive, comorbidity=noted\nSections revealed: radiology_report, psa_trend, previous_notes",
+      "data": {
+        "case_id": "PT-pseudo_c13fda040310",
+        "task": 1,
+        "biopsy_decision": true,
+        "confidence": "clear",
+        "variable_weights": {
+          "bx": "important",
+          "age": "important",
+          "dre": "not_used",
+          "psa": "important",
+          "vol": "noted",
+          "psad": "important",
+          "cspca": "not_used",
+          "pirads": "decisive",
+          "comorbidity": "noted",
+          "fh": "not_used"
+        },
+        "reveal_sequence": [
+          "radiology_report",
+          "psa_trend",
+          "previous_notes"
+        ],
+        "reasoning": "The decision to proceed with a targeted biopsy is supported by convergence across all inputs. The guideline criterion mandates re-biopsy for a PI-RADS 4-5 lesion, which was confirmed by the retrieved radiology report. This finding was further strengthened by the significant PSA trend, showing an increase from 1.4 ng/mL to 6.1 ng/mL over two years. The statistical prior also suggested biopsy, and the retrieved evidence confirmed the clinical necessity for further sampling."
+      },
+      "round": 1
+    }
+  ]
+}
