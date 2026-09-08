@@ -138,7 +138,8 @@ async def run(args) -> None:
     panel = get_panel(args.rebuild_panel)
     library = Library(DATA, exclude_self=not args.self_match, k=args.k)
     params = {**P.PARAMS, "confidence_policy": args.confidence_policy, "threshold": args.threshold,
-              "grade_rule": not args.no_grade_rule, "library_weight": args.library_weight}
+              "grade_rule": not args.no_grade_rule, "library_weight": args.library_weight,
+              "form_weights": args.form_weights}
 
     t_model = time.time()
     model = load_model(cfg)
@@ -223,6 +224,12 @@ async def _run_queries(graph, queries, out_root: Path, args, meter: ConferenceMe
                 "planned": state.get("planned"), "protocol_rule": proto.get("rule"),
                 "protocol_who": proto.get("who"), "protocol_p": proto.get("p"),
                 "protocol_votes": proto.get("votes"), "dissenting": proto.get("dissenting"),
+                "variable_view": [{k: r[k] for k in ("variable", "value", "levels", "n_strong", "trace", "record")}
+                                  for r in (proto.get("variable_view") or [])],
+                "expert_confidence": {sp: (next((it.get("data", {}).get("confidence") for it in reversed(state.get("interventions", []))
+                                                 if it["speaker"] == sp), None))
+                                      for sp in ("EXPERT-STRUCTURED", "EXPERT-FUSION", "EXPERT-COHORT",
+                                                 "EXPERT-LIBRARY", "EXPERT-PSA", "EXPERT-TRACE")},
                 "grade": (state.get("grade") or {}).get("gg"),
                 "grade_quote": (state.get("grade") or {}).get("quote"),
                 "on_surveillance": (state.get("grade") or {}).get("on_surveillance"),
@@ -259,6 +266,8 @@ def main() -> None:
     ap.add_argument("--threshold", type=float, default=P.PARAMS["threshold"])
     ap.add_argument("--library-weight", type=float, default=P.PARAMS["library_weight"])
     ap.add_argument("--no-grade-rule", action="store_true")
+    ap.add_argument("--form-weights", default=P.PARAMS["form_weights"], choices=["trace", "board"],
+                    help="qué pesos van al formulario: los del Experto 4 (trace) o subidos por acuerdo del panel (board)")
     ap.add_argument("--rebuild-panel", action="store_true")
     ap.add_argument("--split", default=None, choices=["dev", "val"])
     ap.add_argument("--pids", nargs="+", default=None)

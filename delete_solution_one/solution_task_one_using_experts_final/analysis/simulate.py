@@ -82,7 +82,18 @@ def simulate(mode: str, exclude_self: bool, k: int, params: dict, weights_policy
                    "variant": "fusion_full" if "laboratory_results" in opened else "fusion_nolab"}
                   if "radiology_report" in opened else {"available": False})
         grade = documented_grade(_corpus(clinical, opened))
-        res = P.consolidate(payload, cohort, structured, fusion, lib, trace, grade, opened, params=params)
+        # los expertos declaran sus pesos: la simulación los pasa igual que el grafo
+        from delete_solution_one.solution_task_one_using_experts_final.experts import cohort as _c  # noqa: PLC0415
+        cohort = dict(cohort)
+        cohort["variable_weights"], cohort["confidence"], _ = _c.variables_for(cohort)
+        structured["variable_weights"] = panel.experts["structured"].get("form_weights") or {}
+        if fusion.get("available"):
+            fusion["variable_weights"] = dict(panel.experts["fusion"].get("form_weights") or {})
+            if "laboratory_results" not in opened:
+                fusion["variable_weights"]["dre"] = "not_used"
+        psa_view = {"variable_weights": {"psa": "noted"}} if "psa_trend" in opened else {}
+        res = P.consolidate(payload, cohort, structured, fusion, lib, trace, grade, opened, params=params,
+                            psa=psa_view)
         pred = {"biopsy_decision": res["decision"], "confidence": res["confidence"],
                 "variable_weights": dict(res["variable_weights"]), "reveal_sequence": opened,
                 "free_text": "simulated", "case_id": cid}
@@ -136,6 +147,14 @@ def main() -> None:
         for conf, wpol, thr, libw, grade in itertools.product(
                 ("trace", "agreement"), ("model+mode", "mode"), (0.5, 0.45, 0.4, 0.35), (0.5, 0.0), (True, False)):
             run("deployed", True, 3, conf, wpol, thr, libw, grade)
+        print("\n=== ENTREGA, pesos del formulario: traza frente a acuerdo del panel ===")
+        for fw in ("trace", "board"):
+            params = {**P.PARAMS, "form_weights": fw}
+            s_ = score(simulate("deployed", True, 3, params, "model+mode", panel))
+            c_ = s_["components"]
+            print(f"form_weights={fw:6} | ranking {s_['ranking']:.4f} case {s_['mean_case']:.4f} | "
+                  f"w {c_['variable_weight_score']:.4f} f1f {c_['important_decisive_factor_score']:.4f} "
+                  f"gnd {c_['section_grounding_score']:.4f}")
         print("\n=== ENTREGA, k de la biblioteca ===")
         for k in (1, 3, 5, 7):
             run("deployed", True, k, "trace", "model+mode", 0.4, 0.5, True)
@@ -152,9 +171,15 @@ def main() -> None:
         print("\n=== deployed panel but library leave-one-out (what memorisation the experts alone give) ===")
         run("deployed", True, 3, "trace", "model+mode", 0.5, 0.5, True)
     else:
+        # Sin --grid se simula la configuración de ENTREGA (biblioteca leave-one-out
+        # en los dos modos) y, para referencia, el techo con el caso idéntico.
         modes = [args.mode] if args.mode else ["deployed", "honest"]
         for mode in modes:
-            run(mode, mode == "honest", 3, P.PARAMS["confidence_policy"], "model+mode", P.PARAMS["threshold"],
+            run(mode, True, 3, P.PARAMS["confidence_policy"], "model+mode", P.PARAMS["threshold"],
+                P.PARAMS["library_weight"], P.PARAMS["grade_rule"])
+        if not args.mode:
+            print("--- techo, sólo para referencia (la biblioteca devuelve el propio caso):")
+            run("deployed", False, 3, P.PARAMS["confidence_policy"], "model+mode", P.PARAMS["threshold"],
                 P.PARAMS["library_weight"], P.PARAMS["grade_rule"])
 
 

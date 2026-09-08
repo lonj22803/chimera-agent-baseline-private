@@ -93,7 +93,16 @@ resultado.
 | Tarea | Estado | Métrica principal |
 |---|---|---|
 | 1 — decisión de biopsia | **implementada** — 4 expertos, AUC 0.794 [0.698, 0.881] | *case score* (decisión + razonamiento) |
-| 2 — estratificación tras biopsia | pendiente | *case score* |
+| 2 — estratificación tras biopsia | **implementada** — 5 expertos + formulario, acierto 0.861 [0.778, 0.944] sobre un techo de consistencia de 0.931 | *case score* (decisión + razonamiento) |
 | 3 — recurrencia bioquímica | pendiente | C-index de Harrell |
+
+La tarea 2 se comporta distinto a la 1 y conviene decirlo aquí: su etiqueta se
+derivó retrospectivamente de la histopatología, de modo que un mapa
+`ISUP → conducta` de un solo predictor ya acierta 0.861 y **ningún modelo
+aprendido lo bate**. Lo que sí mejora es la *probabilidad* —Extra-Trees empata
+en decisión y gana en Brier y ECE— y, sobre todo, la **descomposición**: la
+cascada de guía separa el mismo acierto en dos preguntas contestables
+(AUC 0.940 y 0.881) y una que la cohorte no puede contestar (AUC 0.500).
+Detalle en [`task_two/README.md`](task_two/README.md).
 
 La bibliografía completa está en [`task_one/train/README.md`](task_one/train/README.md).

@@ -55,11 +55,13 @@ están en [`../solution_task_one`](../solution_task_one) (0.6749),
 > | salidas que validan contra `Task1Output` | **195/195** |
 > | notas que describen el procedimiento en vez del paciente | **0/195** (generación anterior: 187/195) |
 > | notas con un grado de biopsia que ningún documento recoge | **0/195** (sin la guardia: 5/195; la guardia actuó en 10 casos) |
+> | variables registradas *important*/*decisive* que la nota nombra | **0.923** de recall, 0.753 de precisión |
+> | confianza entregada frente a la del urólogo | **0.753** de `confidence_score`, la mejor de las seis fuentes |
 > | lo abierto coincide con el plan | **195/195** |
 > | `family_history` abierta (el urólogo: 0/91) | **0/195** |
 > | respaldo determinista del formulario | 0 · de la nota, 2 |
 > | precedente idéntico (imposible en el test) | 0 |
-> | tiempo por caso, modelo ya cargado | 24 s (p90 27 s) |
+> | tiempo por caso, modelo ya cargado | 30 s (p90 34 s) |
 >
 > ### La cifra honesta, al lado
 >
@@ -173,6 +175,33 @@ para los 195 casos.
 | 14 | VERIFIER | LLM + RAG | el acta y la guía | si el expediente está en condiciones |
 | 15 | CHAIR | LLM | un parte clínico sin locutores | **la nota clínica** y el formulario |
 
+### Lo que cada experto declara, y en qué vocabulario
+
+Cada experto —entrenado o de reglas— cierra su turno con el mismo bloque: **qué
+variables pesó, a qué nivel y con qué confianza, en las palabras del formulario**
+(`not_used` / `noted` / `important` / `decisive`; `clear` / `borderline` /
+`uncertain`), con el valor del paciente al lado y, si es un modelo, la parte de
+su señal que cada variable explica. El protocolo lo consolida en una **tabla de
+variables de la sala** —valor, lo que marcó cada experto, lo que se registra— que
+va al acta y al turno del verificador, que la contesta variable por variable. Al
+presidente **no** le llega: se midieron las tres variantes sobre los 195 casos y
+darle la tabla, entera o resumida, **empeora** la nota (la fracción de variables
+registradas que llega a nombrar baja de 0.932 a 0.890 y 0.900). Le ayuda razonar
+sobre los hechos clínicos y llegar a ellas solo. Los papeles LLM hablan con esas
+mismas palabras: el especialista en la guía critica niveles, el moderador
+pregunta por variables, el verificador contesta con niveles y su propia
+confianza.
+
+Una advertencia medida antes de decidir qué va al formulario: los niveles de los
+clasificadores miden *cuánto movió su predicción* una variable —para ellos el
+estado de biopsia previa es el 43 % de la señal y PI-RADS apenas varía en esta
+serie—; para el urólogo, PI-RADS es la puerta de entrada. Subir al formulario una
+variable por acuerdo del panel **baja la nota** (0.8390 → 0.8365, evaluador
+oficial), así que los pesos que se entregan siguen siendo los del Experto 4,
+entrenado contra la traza del urólogo, y las variables de los demás alimentan el
+razonamiento. El cuaderno de anatomía mide el acuerdo de cada fuente con el
+urólogo, variable por variable.
+
 Los cuatro expertos entrenados vienen de
 [`../../delete_expert_modelate/task_one`](../../delete_expert_modelate/task_one)
 y se cargan de sus artefactos. Los que leen documentos (2 y 3) hablan **después**
@@ -263,6 +292,8 @@ que se publica está en el extremo alto de una distribución que se exploró.
 | regla del grado documentado | **activa** | inactiva → −0.001 aquí, −0.031 en la configuración honesta |
 | política de confianza | **acuerdo** | acuerdo 0.8390 · traza 0.8384 (la traza da `clear` constante: empata y no informa) |
 | política de pesos | **modelo + moda** | moda pura → 0.8344 |
+| pesos del formulario | **traza (Experto 4)** | subidos por acuerdo del panel (≥ 2 expertos) → 0.8365 |
+| qué ve el presidente de la tabla | **nada** | tabla entera → recall 0.890 · lista corta → 0.900 · nada → **0.932** (misma nota oficial en las tres) |
 | k de la biblioteca | **3** | 1, 5, 7 dentro de ±0.008 |
 
 Dos de los seis se eligieron por principio y no por la tercera cifra decimal: la
@@ -286,10 +317,12 @@ PYTHONPATH=src:. python -m delete_solution_one.solution_task_one_using_experts_f
 # 3. la corrida de entrega: los 195 casos
 delete_solution_one/solution_task_one_using_experts_final/runs/launch.sh final "--all-cases"
 
-# 4. el cuaderno de verificación
+# 4. los dos cuadernos (nbclient; el venv no trae nbconvert)
 python delete_solution_one/solution_task_one_using_experts_final/analysis/_build_notebook.py
-jupyter nbconvert --to notebook --execute --inplace --ExecutePreprocessor.timeout=1800 \
-    delete_solution_one/solution_task_one_using_experts_final/analysis/analisis_final.ipynb
+python delete_solution_one/solution_task_one_using_experts_final/analysis/_build_anatomia.py
+PYTHONPATH=src:. python delete_solution_one/solution_task_one_using_experts_final/analysis/_run_notebook.py
+PYTHONPATH=src:. python delete_solution_one/solution_task_one_using_experts_final/analysis/_run_notebook.py \
+    --notebook anatomia_del_agente.ipynb
 
 # 5. la nota oficial, por si se quiere sin cuaderno
 python dev/score_local.py --tasks 1 --count-missing \
@@ -364,10 +397,12 @@ lo que añade 30–80 s.
 | [`gc_entry.py`](gc_entry.py) | el adaptador de un caso para Grand Challenge |
 | [`sampling.py`](sampling.py) | muestreo por papel (temperatura y tope de tokens) |
 | [`experts/panel.py`](experts/panel.py) | carga de los cuatro artefactos, precálculo en lote, puntuación en vivo |
-| [`experts/*.py`](experts/) | cómo habla cada experto |
+| [`experts/vocab.py`](experts/vocab.py) | el vocabulario compartido: variables, niveles y confianza, con los valores del caso |
+| [`experts/*.py`](experts/) | cómo habla cada experto, con su bloque de variables |
 | [`analysis/report.py`](analysis/report.py) | lectura y puntuación con el evaluador oficial |
 | [`analysis/simulate.py`](analysis/simulate.py) | el protocolo sin LLM; la rejilla de parámetros |
-| [`analysis/analisis_final.ipynb`](analysis/analisis_final.ipynb) | **el cuaderno de verificación** |
+| [`analysis/analisis_final.ipynb`](analysis/analisis_final.ipynb) | **el cuaderno de verificación**: mide |
+| [`analysis/anatomia_del_agente.ipynb`](analysis/anatomia_del_agente.ipynb) | **el cuaderno de anatomía**: qué entra, qué sale, los prompts que vio el modelo, el diagrama, y las variables de la sala |
 | [`runs/launch.sh`](runs/launch.sh) | lanza una corrida en tmux |
 
 El paquete es autocontenido y borrable. Importa de `chimera_agent_baseline` sin

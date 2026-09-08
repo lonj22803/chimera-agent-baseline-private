@@ -68,6 +68,13 @@ PARAMS: dict[str, Any] = {
     # la política 'trace'. Empata en ranking (0.8390 vs 0.8384) y gana en el
     # componente que mide (0.765 vs 0.759), así que se prefiere la que informa.
     "confidence_policy": "agreement",
+    # Qué pesos van al formulario. 'trace': los del Experto 4, entrenado contra
+    # la traza del urólogo (0.8506 de variable_weight_score). 'board': los del
+    # Experto 4 subidos a 'important' donde al menos dos expertos marcan la
+    # variable important/decisive y su sección está abierta. Se mide en
+    # analysis/simulate.py antes de elegir; ver README §5.
+    "form_weights": "trace",
+    "board_min_votes": 2,
 }
 
 
@@ -77,9 +84,49 @@ def _w(params: dict, verdict: dict | None, mult: float = 1.0) -> float:
     return params["tier_weight"].get(verdict.get("tier"), 1.0) * mult
 
 
+VARIABLES = ["bx", "fh", "age", "dre", "psa", "vol", "psad", "cspca", "pirads", "comorbidity"]
+_SECTION_OF = {"pirads": "radiology_report", "psad": "radiology_report", "vol": "radiology_report",
+               "cspca": "radiology_report", "dre": "laboratory_results", "fh": "family_history"}
+
+
+def variable_view(payload: dict[str, Any], views: dict[str, dict[str, Any]], trace: dict[str, Any],
+                  opened: list[str], *, min_votes: int = 2, policy: str = "trace") -> list[dict[str, Any]]:
+    """La tabla de variables de la sala: valor, nivel por experto, y nivel a registrar.
+
+    Es lo que convierte cinco opiniones en una vista: para cada variable del
+    formulario, qué dijo cada experto en el vocabulario del formulario, cuántos
+    la marcaron important/decisive, y el nivel que se entrega. El nivel que se
+    entrega es el del Experto 4 —está entrenado contra la traza del urólogo—
+    salvo con la política 'board', que lo sube a 'important' donde el panel
+    coincide y la sección que aterriza la variable está abierta.
+    """
+    from .experts.vocab import case_values  # noqa: PLC0415
+    values = case_values(payload)
+    rows: list[dict[str, Any]] = []
+    tw = trace.get("variable_weights") or {}
+    for v in VARIABLES:
+        levels = {who: (d.get("variable_weights") or {}).get(v, "not_used") for who, d in views.items()
+                  if d and d.get("variable_weights")}
+        strong = [who for who, lvl in levels.items() if lvl in ("important", "decisive")]
+        record = tw.get(v, "not_used")
+        grounded = (v in ("psa", "age", "bx", "comorbidity")) or (_SECTION_OF.get(v) in (opened or []))
+        if policy == "board" and record == "noted" and len(strong) >= min_votes and grounded:
+            record = "important"
+        # La vista de la sala ya lleva el aterrizaje aplicado: lo que el presidente
+        # ve como «record» es exactamente lo que se entrega, y la guardia de
+        # aterrizaje del cierre queda como doble comprobación.
+        if not grounded and record != "not_used":
+            record = "not_used"
+        rows.append({"variable": v, "value": values.get(v), "levels": levels, "n_strong": len(strong),
+                     "strong_by": strong, "trace": tw.get(v, "not_used"), "record": record,
+                     "grounded": grounded})
+    return rows
+
+
 def consolidate(payload: dict[str, Any], cohort: dict[str, Any], structured: dict[str, Any] | None,
                 fusion: dict[str, Any] | None, library: dict[str, Any] | None, trace: dict[str, Any],
-                grade: dict[str, Any] | None, opened: list[str], *, params: dict | None = None) -> dict[str, Any]:
+                grade: dict[str, Any] | None, opened: list[str], *, params: dict | None = None,
+                psa: dict[str, Any] | None = None) -> dict[str, Any]:
     params = {**PARAMS, **(params or {})}
     bx = str(payload.get("bx") or "None")
     lines: list[str] = []
@@ -154,10 +201,16 @@ def consolidate(payload: dict[str, Any], cohort: dict[str, Any], structured: dic
             confidence = "uncertain" if all(t == "discuss" for t in tiers) else "borderline"
 
     disagree = [v["who"] for v in votes if v["answer"] in ("yes", "no") and v["answer"] != decision]
+    view = variable_view(payload, {"EXPERT-STRUCTURED": structured or {}, "EXPERT-FUSION": fusion or {},
+                                   "EXPERT-COHORT": cohort or {}, "EXPERT-LIBRARY": library or {},
+                                   "EXPERT-PSA": psa or {}},
+                         trace, opened, min_votes=int(params.get("board_min_votes", 2)),
+                         policy=str(params.get("form_weights", "trace")))
+    form_weights = {r["variable"]: r["record"] for r in view}
     return {
         "decision": decision, "p": None if p_final is None else round(p_final, 4),
         "rule": rule, "who": who, "track": track, "confidence": confidence,
-        "variable_weights": dict(trace.get("variable_weights") or {}),
+        "variable_weights": form_weights, "variable_view": view,
         "planned_sections": list(trace.get("reveal_sequence") or []),
         "opened": list(opened), "votes": votes, "dissenting": disagree,
         "grade": grade, "params": {k: v for k, v in params.items() if k != "tier_weight"},
@@ -279,9 +332,21 @@ def render(result: dict[str, Any]) -> tuple[str, dict[str, Any]]:
     if result["dissenting"]:
         lines.append(f"Dissenting on the board: {', '.join(result['dissenting'])}. Their bids are recorded "
                      "above; they did not carry because a higher rung of the protocol applied.")
-    marks = ", ".join(f"{k}={v}" for k, v in result["variable_weights"].items() if v != "not_used")
     lines.append("")
-    lines.append(f"Confidence the trace model expects here: {result['confidence']}. Weights it expects: {marks}.")
+    lines.append("THE BOARD'S VARIABLES — value · what each expert marked · what goes on the form")
+    who_order = ["EXPERT-STRUCTURED", "EXPERT-FUSION", "EXPERT-COHORT", "EXPERT-LIBRARY", "EXPERT-PSA"]
+    short = {"EXPERT-STRUCTURED": "E1", "EXPERT-FUSION": "E3", "EXPERT-COHORT": "cohort",
+             "EXPERT-LIBRARY": "library", "EXPERT-PSA": "E2"}
+    abbrev = {"decisive": "DEC", "important": "IMP", "noted": "not", "not_used": "—"}
+    for r in result.get("variable_view") or []:
+        marks = " ".join(f"{short[w]}:{abbrev.get(r['levels'].get(w, 'not_used'), '?')}"
+                         for w in who_order if w in r["levels"])
+        tag = "" if r["record"] == r["trace"] else f" (raised from {r['trace']} by the board)"
+        lines.append(f"  {r['variable']:<12} {str(r['value'])[:28]:<28} {marks:<52} -> {r['record']}{tag}")
+    lines.append("  (DEC decisive · IMP important · not noted · — not used; the last column is the level recorded, "
+                 "from the trace of the reading urologist)")
+    lines.append("")
+    lines.append(f"Confidence to record: {result['confidence']}.")
     lines.append("")
     lines.append("CHAIR: this is the panel's position. You sign it, and you write why in the room's words — "
                  "naming what the registrar retrieved. If you believe a retrieved finding overturns it, "

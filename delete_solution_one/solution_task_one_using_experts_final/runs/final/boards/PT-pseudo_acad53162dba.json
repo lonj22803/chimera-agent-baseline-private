@@ -28,7 +28,7 @@
       "n": 3,
       "speaker": "EXPERT-STRUCTURED",
       "who": "Expert 1, Extra-Trees on the structured panel only; opening bid with an error bar",
-      "body": "Expert 1 here — the classifier that reads the structured panel and nothing else. My bid:\n\nSUGGESTION: BIOPSY   p(biopsy) = 0.81\n  uncertainty  +/- 0.08 epistemic (95% band 0.65-0.96); among patients I cannot tell apart the outcome was 0.71 of 1.00 mixed\n  reliability  HIGH ('firm' tier) — out-of-fold it was right 88% of the time over the 33 labelled cases in this tier\n\nWhat moved me most, across the labelled series: prior positive biopsy, PI-RADS >= 4, no prior biopsy, pmhx_hypercholesterolaemia, suspicious DRE, number of comorbidities. I read 39 variables, all\nfrom the panel — nothing from the mpMRI prose, the PSA trajectory, the previous notes or the\nlaboratory. Out-of-fold over 91 labelled cases: AUC 0.758, balanced\naccuracy 0.625.\n\nThe final call is the chair's.",
+      "body": "Expert 1 here — the classifier that reads the structured panel and nothing else. My bid:\n\nSUGGESTION: BIOPSY   p(biopsy) = 0.81\n  uncertainty  +/- 0.08 epistemic (95% band 0.65-0.96); among patients I cannot tell apart the outcome was 0.71 of 1.00 mixed\n  reliability  HIGH ('firm' tier) — out-of-fold it was right 88% of the time over the 33 labelled cases in this tier\n\nVARIABLES I WEIGHED — in the form's vocabulary, with this man's values (panel only; the levels are what moved my prediction across the series, not what a urologist would mark)\n  decisive   prior biopsy = None (43% of my signal; from bx_positive, bx_none)\n  important  comorbidity = none recorded (21% of my signal; from pmhx_hypercholesterolaemia, n_comorbidities)\n  noted      age = 65 (2% of my signal; from age) · DRE = Normal (10% of my signal; from dre_suspicious) · PSA = 4 ng/mL (3% of my signal; from log_psa, psav) · prostate volume = 56.95 mL (1% of my signal; from log_vol, vol) · PSA density = 0.07 (0% of my signal; from psad_calc, log_psad) · csPCa probability = 0.68 (1% of my signal; from cspca) · PI-RADS = 4 (20% of my signal; from pirads_ge4, pirads_ge3)\n  not used   family history\nCONFIDENCE: clear — 'firm' tier; out-of-fold it was right 88% of the time over the 33 labelled cases in this tier\n\nI read 39 raw variables, all from the panel — nothing from the mpMRI prose, the PSA\ntrajectory, the previous notes or the laboratory. Out-of-fold over 91 labelled cases: AUC\n0.758, balanced accuracy 0.625.\nThe final call is the chair's.",
       "data": {
         "decision": "yes",
         "p": 0.8052,
@@ -50,7 +50,31 @@
           "hits": 29,
           "acc": 0.8788
         },
-        "gist": "Expert 1 suggests BIOPSY, p=0.81 +/- 0.08, HIGH reliability (firm)"
+        "variable_weights": {
+          "bx": "decisive",
+          "fh": "not_used",
+          "age": "noted",
+          "dre": "noted",
+          "psa": "noted",
+          "vol": "noted",
+          "psad": "noted",
+          "cspca": "noted",
+          "pirads": "noted",
+          "comorbidity": "important"
+        },
+        "variable_importance_share": {
+          "bx": 0.4299,
+          "fh": 0.0,
+          "age": 0.0224,
+          "dre": 0.0965,
+          "psa": 0.0252,
+          "vol": 0.0077,
+          "psad": 0.0029,
+          "cspca": 0.0097,
+          "pirads": 0.196,
+          "comorbidity": 0.2098
+        },
+        "gist": "Expert 1 suggests BIOPSY, p=0.81 +/- 0.08, HIGH reliability (firm); weighs bx, comorbidity"
       },
       "pass_": 1
     },
@@ -58,7 +82,7 @@
       "n": 4,
       "speaker": "EXPERT-COHORT",
       "who": "cohort criterion; what the labelled series did in this exact situation",
-      "body": "This patient's situation: never biopsied. My criterion answers BIOPSY.\n\nThe criterion: sample when the mpMRI shows a PI-RADS 3 or higher lesion; defer at PI-RADS 1-2. In the labelled series this criterion matched the reading urologist in 24 of 24 cases in exactly this situation.\n\nLike Expert 1, I have read ONLY the visible panel — not the mpMRI prose, the PSA trajectory, the\nprevious notes or the laboratory panel. Departing from me needs a specific finding from a document\nsomebody actually opened, named out loud; not a restatement of the panel numbers I already used.",
+      "body": "This patient's situation: never biopsied. My criterion answers BIOPSY.\n\nThe criterion: sample when the mpMRI shows a PI-RADS 3 or higher lesion; defer at PI-RADS 1-2. In the labelled series this criterion matched the reading urologist in 24 of 24 cases in exactly this situation.\n\nLike Expert 1, I have read ONLY the visible panel — not the mpMRI prose, the PSA trajectory, the\nprevious notes or the laboratory panel. Departing from me needs a specific finding from a document\nsomebody actually opened, named out loud; not a restatement of the panel numbers I already used.\n\nVARIABLES I WEIGHED — in the form's vocabulary, with this man's values (panel only; 'decisive' marks the variable the rule turns on)\n  decisive   PI-RADS = 4\n  important  prior biopsy = None\n  noted      age = 65 · DRE = Normal · PSA = 4 ng/mL · prostate volume = 56.95 mL · PSA density = 0.07 · comorbidity = none recorded\n  not used   family history, csPCa probability\nCONFIDENCE: clear — the rule matched the reading urologist in 24 of 24 labelled cases",
       "data": {
         "bucket": "never biopsied",
         "rule": "sample when the mpMRI shows a PI-RADS 3 or higher lesion; defer at PI-RADS 1-2",
@@ -66,6 +90,19 @@
         "hits": 24,
         "n": 24,
         "fired": "pirads_ge_3",
+        "variable_weights": {
+          "bx": "important",
+          "fh": "not_used",
+          "age": "noted",
+          "dre": "noted",
+          "psa": "noted",
+          "vol": "noted",
+          "psad": "noted",
+          "cspca": "not_used",
+          "pirads": "decisive",
+          "comorbidity": "noted"
+        },
+        "confidence": "clear",
         "gist": "cohort criterion answers BIOPSY (never biopsied, rule pirads_ge_3, 24/24 in the labelled series)"
       },
       "pass_": 1
@@ -74,7 +111,7 @@
       "n": 5,
       "speaker": "EXPERT-LIBRARY",
       "who": "case library; the closest labelled precedents and what the reading urologist did with them",
-      "body": "The case library holds 24 labelled men in this same situation (None prior biopsy). The 3 closest by panel distance, and what the reading urologist did:\n  1. distance 0.85: PI-RADS NA, PSA 4.5, PSAD 0.095, age 67, DRE Normal -> DEFER (clear). He wrote: \"Normal MRI. No biopsy\"\n  2. distance 1.27: PI-RADS 4, PSA 2.11, PSAD 0.058, age 59, DRE Normal -> BIOPSY (clear). He wrote: \"P4 and LUTS symptoms. Note , low PSA.\"\n  3. distance 1.60: PI-RADS 4, PSA 4.8, PSAD 0.086, age 65, DRE Nodus -> BIOPSY (clear). He wrote: \"P4 in patient 65 years.\"\n\nPRECEDENT: BIOPSY (weighted vote 0.55 for biopsy). Distance-weighted precedent is strong here (0.92 leave-one-out).\n\nWhat the precedents are FOR: they show what this urologist looks at and how he phrases the call. What they are NOT: facts about this patient. Nobody may cite a precedent's grade, PSA or MRI as if it were his.",
+      "body": "The case library holds 24 labelled men in this same situation (None prior biopsy). The 3 closest by panel distance, and what the reading urologist did:\n  1. distance 0.85: PI-RADS NA, PSA 4.5, PSAD 0.095, age 67, DRE Normal -> DEFER (clear). He wrote: \"Normal MRI. No biopsy\"\n  2. distance 1.27: PI-RADS 4, PSA 2.11, PSAD 0.058, age 59, DRE Normal -> BIOPSY (clear). He wrote: \"P4 and LUTS symptoms. Note , low PSA.\"\n  3. distance 1.60: PI-RADS 4, PSA 4.8, PSAD 0.086, age 65, DRE Nodus -> BIOPSY (clear). He wrote: \"P4 in patient 65 years.\"\n\nPRECEDENT: BIOPSY (weighted vote 0.55 for biopsy). Distance-weighted precedent is strong here (0.92 leave-one-out).\n\nWhat the precedents are FOR: they show what this urologist looks at and how he phrases the call. What they are NOT: facts about this patient. Nobody may cite a precedent's grade, PSA or MRI as if it were his.\n\nWHAT THE READING UROLOGIST WEIGHED IN THESE PRECEDENTS — in the form's vocabulary, with this man's values (weighted majority of the 3 nearest labelled traces; the distance itself is on PI-RADS, prior biopsy first)\n  decisive   PI-RADS = 4\n  important  prior biopsy = None · age = 65\n  noted      family history = not opened (0 of 91) · DRE = Normal · PSA = 4 ng/mL · prostate volume = 56.95 mL · PSA density = 0.07\n  not used   csPCa probability, comorbidity\nCONFIDENCE: borderline — the library is right 92% of the time in this situation out of fold",
       "data": {
         "bucket": "None",
         "k": 3,
@@ -82,7 +119,7 @@
         "self_match": false,
         "answer": "yes",
         "p_yes": 0.5517,
-        "confidence": "clear",
+        "confidence": "borderline",
         "variable_weights": {
           "bx": "important",
           "fh": "noted",
@@ -195,7 +232,7 @@
           }
         ],
         "exclude_self": true,
-        "gist": "library precedent BIOPSY (p=0.55)"
+        "gist": "library precedent BIOPSY (p=0.55; borderline)"
       },
       "pass_": 1
     },
@@ -203,7 +240,7 @@
       "n": 6,
       "speaker": "EXPERT-TRACE",
       "who": "Expert 4, trace model; which documents the reading urologist opens and what he weighs in this situation",
-      "body": "Expert 4 here — the model of how the reading urologist works a case like this. Predicted from his 24 labelled traces in this situation (None prior biopsy): a per-field model where it beats the mode out of fold (prior-biopsy weight, DRE weight, PI-RADS weight, and whether he opens the laboratory), the mode elsewhere.\n\nWHAT HE OPENS: radiology_report, psa_trend, previous_notes.\nWHAT HE WEIGHS: bx=noted, fh=noted, age=important, dre=noted, psa=important, vol=noted, psad=noted, pirads=decisive, comorbidity=noted.\nHOW SURE HE USUALLY IS: clear.\n\nMODERATOR: that list of documents is the plan — exactly those, no more. Every document opened beyond what\nhe would open is scored against the conference as an unnecessary reveal; every document left closed\nleaves a variable he weighed without its source. Attach the question each one must answer.",
+      "body": "Expert 4 here — the model of how the reading urologist works a case like this. Predicted from his 24 labelled traces in this situation (None prior biopsy): a per-field model where it beats the mode out of fold (prior-biopsy weight, DRE weight, PI-RADS weight, and whether he opens the laboratory), the mode elsewhere.\n\nWHAT HE OPENS: radiology_report, psa_trend, previous_notes.\n\nWHAT HE WEIGHS — in the form's vocabulary, with this man's values (these are the levels that go on the form, unless a colleague shows a reason to move one)\n  decisive   PI-RADS = 4\n  important  age = 65 · PSA = 4 ng/mL\n  noted      prior biopsy = None · family history = not opened (0 of 91) · DRE = Normal · prostate volume = 56.95 mL · PSA density = 0.07 · comorbidity = none recorded\n  not used   csPCa probability\nCONFIDENCE: clear — the level the reading urologist records in this situation, from his labelled traces\n\nMODERATOR: that list of documents is the plan — exactly those, no more. Every document opened beyond what\nhe would open is scored against the conference as an unnecessary reveal; every document left closed\nleaves a variable he weighed without its source. Attach the question each one must answer.",
       "data": {
         "confidence": "clear",
         "variable_weights": {
@@ -232,7 +269,7 @@
       "n": 7,
       "speaker": "EXPERT-EAU",
       "who": "EAU guideline specialist; speaks only from the guideline text he retrieved",
-      "body": "GUIDELINE\nThe EAU guidelines suggest that a PI-RADS threshold of $\\ge 3$ is used to trigger a biopsy. The guideline states, \"a PI-RADS threshold of $\\ge 3$ is used to trigger biopsy [135, 226, 264, 375], at the cost of missing a small number of mainly ISUP GG 2 cancers, especially in biopsy-naive patients or in highly selected populations with high prevalence of csPCa (in which the MRI NPV decreases) [372, 472].\"\n\nWHAT THE EXPERTS' BIDS DO NOT SETTLE\nEXPERT-STRUCTURED, I disagree with the high probability of biopsy because the guideline makes the decision based on the PI-RADS score, which is 4 here. EXPERT-COHORT, while you state the criterion matches in 24/24 cases, the guideline suggests that increasing the threshold to $\\ge 4$ would have avoided 59% of biopsy procedures while missing 28% of cancers, suggesting the current threshold is a trade-off that the guideline itself addresses.\n\nWHAT THE DOCUMENTS MUST SETTLE\nprevious_notes - the prior-biopsy status: None means the guideline suggests that a PI-RADS $\\ge 3$ mandates a biopsy, which is the current decision point.\nradiology_report - whether the lesion is compared against an earlier study: Unchanged does not support re-sampling, new or larger does\npsa_trend - the PSA velocity: The velocity of $0.78 \\text{ ng/mL/yr}$ is a factor that the guideline matrix may use in conjunction with the PI-RADS score.\nlaboratory_results - the PSA density: The PSA density of $0.07 \\text{ ng/mL/cc}$ is a factor in risk-adapted matrix tables that guide the decision.",
+      "body": "GUIDELINE\n\"a PI-RADS threshold of $\\\\ge 3$ is used to trigger biopsy [135, 226, 264, 375], at the cost of missing a small number of mainly ISUP GG 2 cancers, especially in biopsy-naïve patients or in highly selected populations with high prevalence of csPCa (in which the MRI NPV decreases) [372, 472].\"\nThis guideline suggests that a PI-RADS threshold of $\\\\ge 3$ should trigger a biopsy, but it notes this comes at the cost of missing some ISUP GG $\\\\ge 2$ cancers in biopsy-naïve patients.\n\nWHAT THE EXPERTS' BIDS DO NOT SETTLE\nEXPERT-STRUCTURED, I see that the guideline treats the PI-RADS score as a trigger for biopsy, which aligns with my 'decisive' variable. The guideline suggests that the level of PI-RADS is the key factor, whereas my 'prior biopsy = None' variable is marked as decisive. The guideline suggests that the PI-RADS score is the key factor, whereas I weigh the prior biopsy status as decisive. The guideline suggests that the PI-RADS score is the key factor, whereas I weigh the prior biopsy status as decisive. The guideline needs the prior grade of the prior biopsy to determine the next step, which is a fact the panel does not represent.\n\nWHAT THE DOCUMENTS MUST SETTLE\nprevious_notes - the prior biopsy status: at None the guideline suggests biopsy is triggered by PI-RADS $\\\\ge 3$, not the prior biopsy status itself; if it is unrecorded the indication stands\nradiology_report - whether the lesion is compared against an earlier study: unchanged does not support re-sampling, new or larger does\npsa_trend - the PSA velocity: the guideline does not explicitly state how PSA velocity should modify the PI-RADS threshold for biopsy in this context; if it is unrecorded the indication stands\nlaboratory_results - the PSA density: the guideline suggests that PSA-D is a significant predictor in risk-adapted matrices, which is a fact the panel represents; if it is unrecorded the indication stands",
       "data": {
         "gist": "guideline reading",
         "searched": true
@@ -243,32 +280,30 @@
       "n": 8,
       "speaker": "MODERATOR",
       "who": "chairs the discussion; sets the open questions and assigns the documents",
-      "body": "This case hinges on whether the PI-RADS 4 score, combined with the PSA velocity and PSA density, meets the threshold for biopsy according to the EAU guidelines.\n\nThe documents for this session were fixed by EXPERT-TRACE; what I add is the question each one has to answer, and the open questions for the room.\n\nREGISTRAR — pull these up, and answer exactly the question attached to each:\n  radiology_report (get_mri_report) -> Does the report state whether the lesion is compared against an earlier study?\n  psa_trend (get_psa_trend) -> What does the PSA velocity indicate in conjunction with the PI-RADS 4 score?\n  previous_notes (get_previous_notes) -> What does the prior-biopsy status indicate regarding the mandate for biopsy based on the PI-RADS score?\n\nOPEN QUESTIONS for this conference — these are what the decision hangs on:\n  Q1. What does the radiology_report state regarding whether the lesion is compared against an earlier study?\n  Q2. What does the psa_trend indicate regarding the PSA velocity in the context of the PI-RADS 4 score?\n  Q3. What does the laboratory_results indicate regarding the PSA density in the context of the decision?",
+      "body": "The case hinges on whether the PI-RADS 4 score alone, as per the EAU guideline, is sufficient to mandate a biopsy when the prior biopsy status is unknown.\n\nThe documents for this session were fixed by EXPERT-TRACE; what I add is the question each one has to answer, and the open questions for the room.\n\nREGISTRAR — pull these up, and answer exactly the question attached to each:\n  radiology_report (get_mri_report) -> Does the mpMRI prose indicate whether the lesion is compared against an earlier study?\n  psa_trend (get_psa_trend) -> Does the PSA velocity modify the PI-RADS threshold for biopsy in this context?\n  previous_notes (get_previous_notes) -> What is the prior biopsy status, and is there a surveillance protocol planned?\n\nOPEN QUESTIONS for this conference — these are what the decision hangs on:\n  Q1. What should be done given the prior biopsy = None and the EAU guideline's recommendation when PI-RADS is $\\ge 3$?\n\nOn the plan itself: Dropped 1 question(s) that asked for a value already printed on the panel: \"What should be done given the PI-RADS = 4 and the EAU guideline's threshold for biopsy?\".",
       "data": {
         "plan": [
           {
             "section": "radiology_report",
             "tool": "get_mri_report",
-            "question": "Does the report state whether the lesion is compared against an earlier study?"
+            "question": "Does the mpMRI prose indicate whether the lesion is compared against an earlier study?"
           },
           {
             "section": "psa_trend",
             "tool": "get_psa_trend",
-            "question": "What does the PSA velocity indicate in conjunction with the PI-RADS 4 score?"
+            "question": "Does the PSA velocity modify the PI-RADS threshold for biopsy in this context?"
           },
           {
             "section": "previous_notes",
             "tool": "get_previous_notes",
-            "question": "What does the prior-biopsy status indicate regarding the mandate for biopsy based on the PI-RADS score?"
+            "question": "What is the prior biopsy status, and is there a surveillance protocol planned?"
           }
         ],
         "questions": [
-          "What does the radiology_report state regarding whether the lesion is compared against an earlier study?",
-          "What does the psa_trend indicate regarding the PSA velocity in the context of the PI-RADS 4 score?",
-          "What does the laboratory_results indicate regarding the PSA density in the context of the decision?"
+          "What should be done given the prior biopsy = None and the EAU guideline's recommendation when PI-RADS is $\\ge 3$?"
         ],
         "need_image": false,
-        "gist": "plan: radiology_report, psa_trend, previous_notes; 3 open question(s)"
+        "gist": "plan: radiology_report, psa_trend, previous_notes; 1 open question(s)"
       },
       "pass_": 1
     },
@@ -276,7 +311,7 @@
       "n": 9,
       "speaker": "REGISTRAR",
       "who": "the registrar who pulls up documents; reports what they say, nothing else",
-      "body": "WHAT I FOUND\nradiology_report\nThe report states: \"This area exhibits pronounced diffusion restriction alongside low ADC signal.\"\npsa_trend\nThe PSA velocity indicates a rise from 1.9 (Jul 2023) to 4.0 (Mar 2025), which is a significant increase over the observed period.\nprevious_notes\nThe prior-biopsy status is \"None\", which indicates that the guideline suggests a PI-RADS $\\ge 3$ mandates a biopsy.\n\nWHAT I DID NOT OPEN\nlaboratory_results, as the PSA density was not explicitly addressed by the retrieved documents.\n\nWHAT THIS SUPPORTS\nFOR sampling this patient now\nPI-RADS 4 score is present, which is a trigger according to the EAU guideline.\nPSA velocity of $0.78 \\text{ ng/mL/yr}$ indicates a concerning trajectory in conjunction with the PI-RADS 4 score.\nPrior-biopsy status is \"None\", which aligns with the guideline mandate for biopsy at PI-RADS $\\ge 3$.\n\nAGAINST sampling this patient now\nnothing\n\nWHERE THIS LEANS\nLEAN: biopsy",
+      "body": "WHAT I FOUND\nradiology_report\nSubject: Prostate MRI | Leiden University Medical Center\nDate: 28 February 2025\nThe mpMRI prose indicates that the lesion is compared against an earlier study: new.\nLESION: size and zone of the index lesion, as the report words it: \"a discrete hypointense focus measuring roughly 11 x 9 mm within the right peripheral zone at the mid-gland level.\"\n\npsa_trend\nThe PSA velocity does not explicitly state how it modifies the PI-RADS threshold for biopsy in this context.\n\nprevious_notes\nPRIOR GRADE: not recorded\nBIOPSY SESSIONS: None\nSURVEILLANCE: not recorded\nTREATMENT: none recorded\n\nWHAT I DID NOT OPEN\nfamily-history anamnesis, because the decision hinges on the clinical and imaging data already retrieved.\n\nWHAT THIS SUPPORTS\nFOR sampling this patient now\nPI-RADS 4 score as per EXPERT-COHORT criterion, which matched the reading urologist in 24 of 24 cases.\nmpMRI report finding of a \"discrete hypointense focus measuring roughly 11 x 9 mm within the right peripheral zone at the mid-gland level.\"\npsa_trend showing a rising trend from 1.9 (Jul 2023) to 4.0 (Mar 2025).\n\nAGAINST sampling this patient now\nThe EAU guideline notes that biopsy may miss some ISUP GG $\\ge 2$ cancers in biopsy-naïve patients.\n\nWHERE THIS LEANS\nLEAN: biopsy",
       "data": {
         "revealed": [
           "radiology_report",
@@ -297,7 +332,7 @@
       "n": 10,
       "speaker": "EXPERT-PSA",
       "who": "Expert 2, PSA projector; the trajectory behind the headline PSA, with a conformal band",
-      "body": "Expert 2 here — the PSA projector. I read only the serial PSA the registrar opened.\n\nTRAJECTORY: RISING (borderline). Last value 4.00 ng/mL over 4 points spanning 20 months; velocity +1.22 ng/mL per year; doubling time about 17 months.\nPROJECTION at 6 months: 6.1 ng/mL, conformal 95% band 1.8-21.4.\n\nRead the band before the point: it is wide by construction, and I only call a direction when the whole\nband clears the last value. This does not vote on the biopsy — a rising PSA in a man with a known\ndiagnosis is the disease behaving as known — it tells the chair how fast the number is moving.",
+      "body": "Expert 2 here — the PSA projector. I read only the serial PSA the registrar opened.\n\nTRAJECTORY: RISING (borderline). Last value 4.00 ng/mL over 4 points spanning 20 months; velocity +1.22 ng/mL per year; doubling time about 17 months.\nPROJECTION at 6 months: 6.1 ng/mL, conformal 95% band 1.8-21.4.\n\nRead the band before the point: it is wide by construction, and I only call a direction when the whole\nband clears the last value. This does not vote on the biopsy — a rising PSA in a man with a known\ndiagnosis is the disease behaving as known — it tells the chair how fast the number is moving.\n\nVARIABLES I WEIGHED — in the form's vocabulary, with this man's values (the serial PSA only)\n  noted      PSA = 4 ng/mL\n  not used   prior biopsy, family history, age, DRE, prostate volume, PSA density, csPCa probability, PI-RADS, comorbidity\nCONFIDENCE: borderline — the conformal band does not clear the last value",
       "data": {
         "horizon_months": 6.0,
         "psa_last": 4.0,
@@ -314,6 +349,19 @@
         "fit_r2_log": 0.1915793947206973,
         "method": "extra_trees_anchored",
         "available": true,
+        "variable_weights": {
+          "bx": "not_used",
+          "fh": "not_used",
+          "age": "not_used",
+          "dre": "not_used",
+          "psa": "noted",
+          "vol": "not_used",
+          "psad": "not_used",
+          "cspca": "not_used",
+          "pirads": "not_used",
+          "comorbidity": "not_used"
+        },
+        "confidence": "borderline",
         "gist": "PSA rising (borderline), 6-month projection 6.1 [1.8-21.4]"
       },
       "pass_": 1
@@ -322,7 +370,7 @@
       "n": 11,
       "speaker": "EXPERT-FUSION",
       "who": "Expert 3, Extra-Trees on panel + laboratory + MRI prose; speaks only on documents that were opened",
-      "body": "Expert 3 here — the fusion classifier. I read the panel, the mpMRI report — the laboratory panel was not opened, so that block is imputed and my band is wider for it; nothing from the previous notes or the PSA series.\n\nSUGGESTION: BIOPSY   p(biopsy) = 0.79\n  uncertainty  +/- 0.07 epistemic (95% band 0.65-0.93), of which 0.01 comes from values that had to be imputed\n  reliability  HIGH ('firm' tier) — out-of-fold it was right 89% of the time over the 37 labelled cases in this tier\n\nWhat moved me most across the labelled series: prior positive biopsy, no prior biopsy, free PSA < 15%, DWI restriction in the report, lesion >= 15 mm in the report, suspicious DRE. Out-of-fold AUC 0.794. I am the only expert that has read the report's wording, and I still cannot see the prior grade or the\nsurveillance history: those are in the notes, and the registrar has to carry them.",
+      "body": "Expert 3 here — the fusion classifier. I read the panel, the mpMRI report — the laboratory panel was not opened, so that block is imputed and my band is wider for it; nothing from the previous notes or the PSA series.\n\nSUGGESTION: BIOPSY   p(biopsy) = 0.79\n  uncertainty  +/- 0.07 epistemic (95% band 0.65-0.93), of which 0.01 comes from values that had to be imputed\n  reliability  HIGH ('firm' tier) — out-of-fold it was right 89% of the time over the 37 labelled cases in this tier\n\nVARIABLES I WEIGHED — in the form's vocabulary, with this man's values (panel + the documents that were opened; PI-RADS here means the report's own wording — DWI restriction, lesion size — not the score)\n  decisive   prior biopsy = None (43% of my signal; from bx_positive, bx_none)\n  important  PI-RADS = 4 (22% of my signal; from rad_dwi_restriction, rad_lesion_ge15mm)\n  noted      PSA = 4 ng/mL (21% of my signal; from fpsa_lt15, psa_delta_prev) · prostate volume = 56.95 mL (4% of my signal; from log_vol, vol) · PSA density = 0.07 (0% of my signal; from psad_calc) · comorbidity = none recorded (4% of my signal; from n_comorbidities, on_alpha_blocker)\n  not used   family history, age, DRE, csPCa probability\nCONFIDENCE: clear — 'firm' tier; out-of-fold it was right 89% of the time over the 37 labelled cases in this tier\n\nOut-of-fold AUC 0.794. I am the only expert that has read the report's\nwording, and I still cannot see the prior grade or the surveillance history: those are in the notes, and\nthe registrar has to carry them.",
       "data": {
         "decision": "yes",
         "p": 0.7923,
@@ -345,7 +393,31 @@
           "hits": 33,
           "acc": 0.8919
         },
-        "gist": "Expert 3 suggests BIOPSY, p=0.79 +/- 0.07, HIGH reliability (firm, fusion_nolab)"
+        "variable_weights": {
+          "bx": "decisive",
+          "fh": "not_used",
+          "age": "not_used",
+          "dre": "not_used",
+          "psa": "noted",
+          "vol": "noted",
+          "psad": "noted",
+          "cspca": "not_used",
+          "pirads": "important",
+          "comorbidity": "noted"
+        },
+        "variable_importance_share": {
+          "bx": 0.4309,
+          "fh": 0.0,
+          "age": 0.0,
+          "dre": 0.0502,
+          "psa": 0.2111,
+          "vol": 0.0407,
+          "psad": 0.0007,
+          "cspca": 0.0,
+          "pirads": 0.2216,
+          "comorbidity": 0.0447
+        },
+        "gist": "Expert 3 suggests BIOPSY, p=0.79 +/- 0.07, HIGH reliability (firm, fusion_nolab); weighs bx, pirads"
       },
       "pass_": 1
     },
@@ -353,7 +425,7 @@
       "n": 12,
       "speaker": "PANEL-PROTOCOL",
       "who": "the panel's written protocol; consolidates the experts by rule and says which rule fired",
-      "body": "The panel protocol, applied to what is on the board:\n\n  EXPERT-STRUCTURED  BIOPSY, p(biopsy)=0.81  ('firm' tier; weight 3.0)\n  EXPERT-FUSION      BIOPSY, p(biopsy)=0.79  ('firm' tier, fusion_nolab; weight 4.5)\n  EXPERT-LIBRARY     BIOPSY, p(biopsy)=0.55  (k=3 precedents; does not vote)\n  EXPERT-COHORT      BIOPSY  (rule pirads_ge_3; does not vote)\n\n  documented prior grade in the opened documents: none recorded\n\nRULE THAT FIRED: cohort criterion (pirads_ge_3) — carried by EXPERT-COHORT.\nPANEL ANSWER: BIOPSY. It matched the reading urologist in 24 of 24 labelled cases in exactly this situation (never biopsied).\n\nConfidence the trace model expects here: clear. Weights it expects: bx=noted, fh=noted, age=important, dre=noted, psa=important, vol=noted, psad=noted, pirads=decisive, comorbidity=noted.\n\nCHAIR: this is the panel's position. You sign it, and you write why in the room's words — naming what the registrar retrieved. If you believe a retrieved finding overturns it, name that finding with its value; the burden is on the finding, not on the panel.",
+      "body": "The panel protocol, applied to what is on the board:\n\n  EXPERT-STRUCTURED  BIOPSY, p(biopsy)=0.81  ('firm' tier; weight 3.0)\n  EXPERT-FUSION      BIOPSY, p(biopsy)=0.79  ('firm' tier, fusion_nolab; weight 4.5)\n  EXPERT-LIBRARY     BIOPSY, p(biopsy)=0.55  (k=3 precedents; does not vote)\n  EXPERT-COHORT      BIOPSY  (rule pirads_ge_3; does not vote)\n\n  documented prior grade in the opened documents: none recorded\n\nRULE THAT FIRED: cohort criterion (pirads_ge_3) — carried by EXPERT-COHORT.\nPANEL ANSWER: BIOPSY. It matched the reading urologist in 24 of 24 labelled cases in exactly this situation (never biopsied).\n\nTHE BOARD'S VARIABLES — value · what each expert marked · what goes on the form\n  bx           None                         E1:DEC E3:DEC cohort:IMP library:IMP E2:—            -> noted\n  fh           not opened (0 of 91)         E1:— E3:— cohort:— library:not E2:—                  -> not_used (raised from noted by the board)\n  age          65                           E1:not E3:— cohort:not library:IMP E2:—              -> important\n  dre          Normal                       E1:not E3:— cohort:not library:not E2:—              -> not_used (raised from noted by the board)\n  psa          4 ng/mL                      E1:not E3:not cohort:not library:not E2:not          -> important\n  vol          56.95 mL                     E1:not E3:not cohort:not library:not E2:—            -> noted\n  psad         0.07                         E1:not E3:not cohort:not library:not E2:—            -> noted\n  cspca        0.68                         E1:not E3:— cohort:— library:— E2:—                  -> not_used\n  pirads       4                            E1:not E3:IMP cohort:DEC library:DEC E2:—            -> decisive\n  comorbidity  none recorded                E1:IMP E3:not cohort:not library:— E2:—              -> noted\n  (DEC decisive · IMP important · not noted · — not used; the last column is the level recorded, from the trace of the reading urologist)\n\nConfidence to record: clear.\n\nCHAIR: this is the panel's position. You sign it, and you write why in the room's words — naming what the registrar retrieved. If you believe a retrieved finding overturns it, name that finding with its value; the burden is on the finding, not on the panel.",
       "data": {
         "decision": "yes",
         "p": null,
@@ -363,9 +435,9 @@
         "confidence": "clear",
         "variable_weights": {
           "bx": "noted",
-          "fh": "noted",
+          "fh": "not_used",
           "age": "important",
-          "dre": "noted",
+          "dre": "not_used",
           "psa": "important",
           "vol": "noted",
           "psad": "noted",
@@ -373,6 +445,181 @@
           "pirads": "decisive",
           "comorbidity": "noted"
         },
+        "variable_view": [
+          {
+            "variable": "bx",
+            "value": "None",
+            "levels": {
+              "EXPERT-STRUCTURED": "decisive",
+              "EXPERT-FUSION": "decisive",
+              "EXPERT-COHORT": "important",
+              "EXPERT-LIBRARY": "important",
+              "EXPERT-PSA": "not_used"
+            },
+            "n_strong": 4,
+            "strong_by": [
+              "EXPERT-STRUCTURED",
+              "EXPERT-FUSION",
+              "EXPERT-COHORT",
+              "EXPERT-LIBRARY"
+            ],
+            "trace": "noted",
+            "record": "noted",
+            "grounded": true
+          },
+          {
+            "variable": "fh",
+            "value": "not opened (0 of 91)",
+            "levels": {
+              "EXPERT-STRUCTURED": "not_used",
+              "EXPERT-FUSION": "not_used",
+              "EXPERT-COHORT": "not_used",
+              "EXPERT-LIBRARY": "noted",
+              "EXPERT-PSA": "not_used"
+            },
+            "n_strong": 0,
+            "strong_by": [],
+            "trace": "noted",
+            "record": "not_used",
+            "grounded": false
+          },
+          {
+            "variable": "age",
+            "value": "65",
+            "levels": {
+              "EXPERT-STRUCTURED": "noted",
+              "EXPERT-FUSION": "not_used",
+              "EXPERT-COHORT": "noted",
+              "EXPERT-LIBRARY": "important",
+              "EXPERT-PSA": "not_used"
+            },
+            "n_strong": 1,
+            "strong_by": [
+              "EXPERT-LIBRARY"
+            ],
+            "trace": "important",
+            "record": "important",
+            "grounded": true
+          },
+          {
+            "variable": "dre",
+            "value": "Normal",
+            "levels": {
+              "EXPERT-STRUCTURED": "noted",
+              "EXPERT-FUSION": "not_used",
+              "EXPERT-COHORT": "noted",
+              "EXPERT-LIBRARY": "noted",
+              "EXPERT-PSA": "not_used"
+            },
+            "n_strong": 0,
+            "strong_by": [],
+            "trace": "noted",
+            "record": "not_used",
+            "grounded": false
+          },
+          {
+            "variable": "psa",
+            "value": "4 ng/mL",
+            "levels": {
+              "EXPERT-STRUCTURED": "noted",
+              "EXPERT-FUSION": "noted",
+              "EXPERT-COHORT": "noted",
+              "EXPERT-LIBRARY": "noted",
+              "EXPERT-PSA": "noted"
+            },
+            "n_strong": 0,
+            "strong_by": [],
+            "trace": "important",
+            "record": "important",
+            "grounded": true
+          },
+          {
+            "variable": "vol",
+            "value": "56.95 mL",
+            "levels": {
+              "EXPERT-STRUCTURED": "noted",
+              "EXPERT-FUSION": "noted",
+              "EXPERT-COHORT": "noted",
+              "EXPERT-LIBRARY": "noted",
+              "EXPERT-PSA": "not_used"
+            },
+            "n_strong": 0,
+            "strong_by": [],
+            "trace": "noted",
+            "record": "noted",
+            "grounded": true
+          },
+          {
+            "variable": "psad",
+            "value": "0.07",
+            "levels": {
+              "EXPERT-STRUCTURED": "noted",
+              "EXPERT-FUSION": "noted",
+              "EXPERT-COHORT": "noted",
+              "EXPERT-LIBRARY": "noted",
+              "EXPERT-PSA": "not_used"
+            },
+            "n_strong": 0,
+            "strong_by": [],
+            "trace": "noted",
+            "record": "noted",
+            "grounded": true
+          },
+          {
+            "variable": "cspca",
+            "value": "0.68",
+            "levels": {
+              "EXPERT-STRUCTURED": "noted",
+              "EXPERT-FUSION": "not_used",
+              "EXPERT-COHORT": "not_used",
+              "EXPERT-LIBRARY": "not_used",
+              "EXPERT-PSA": "not_used"
+            },
+            "n_strong": 0,
+            "strong_by": [],
+            "trace": "not_used",
+            "record": "not_used",
+            "grounded": true
+          },
+          {
+            "variable": "pirads",
+            "value": "4",
+            "levels": {
+              "EXPERT-STRUCTURED": "noted",
+              "EXPERT-FUSION": "important",
+              "EXPERT-COHORT": "decisive",
+              "EXPERT-LIBRARY": "decisive",
+              "EXPERT-PSA": "not_used"
+            },
+            "n_strong": 3,
+            "strong_by": [
+              "EXPERT-FUSION",
+              "EXPERT-COHORT",
+              "EXPERT-LIBRARY"
+            ],
+            "trace": "decisive",
+            "record": "decisive",
+            "grounded": true
+          },
+          {
+            "variable": "comorbidity",
+            "value": "none recorded",
+            "levels": {
+              "EXPERT-STRUCTURED": "important",
+              "EXPERT-FUSION": "noted",
+              "EXPERT-COHORT": "noted",
+              "EXPERT-LIBRARY": "not_used",
+              "EXPERT-PSA": "not_used"
+            },
+            "n_strong": 1,
+            "strong_by": [
+              "EXPERT-STRUCTURED"
+            ],
+            "trace": "noted",
+            "record": "noted",
+            "grounded": true
+          }
+        ],
         "planned_sections": [
           "radiology_report",
           "psa_trend",
@@ -426,7 +673,9 @@
           "library_weight": 0.0,
           "threshold": 0.45,
           "grade_rule": true,
-          "confidence_policy": "agreement"
+          "confidence_policy": "agreement",
+          "form_weights": "trace",
+          "board_min_votes": 2
         },
         "gist": "protocol: BIOPSY by cohort criterion (pirads_ge_3)"
       },
@@ -436,7 +685,7 @@
       "n": 13,
       "speaker": "VERIFIER",
       "who": "second EAU reader; checks against the guideline whether this can be decided yet",
-      "body": "SUFFICIENCY\nThe documents retrieved by the registrar—radiology_report, psa_trend, and previous_notes—directly address the questions posed by the moderator regarding the status of the lesion comparison, the PSA velocity context, and the prior biopsy status, respectively.\n\nALIGNMENT WITH THE PANEL\nThe retrieved evidence strongly aligns with the PANEL-PROTOCOL's answer of BIOPSY, as the registrar found that the PI-RADS 4 score is present, the PSA velocity indicates a concerning trajectory, and the prior-biopsy status is \"None,\" which aligns with the guideline mandate.\n\nTHE OPEN QUESTIONS, ONE BY ONE\nQ1. What does the radiology_report state regarding whether the lesion is compared against an earlier study? The report states: \"This area exhibits pronounced diffusion restriction alongside low ADC signal.\"\nQ2. What does the psa_trend indicate regarding the PSA velocity in the context of the PI-RADS 4 score? The PSA velocity indicates a rise from 1.9 (Jul 2023) to 4.0 (Mar 2025), which is a significant increase over the observed period.\nQ3. What does the laboratory_results indicate regarding the PSA density in the context of the decision? The laboratory_results were not retrieved, meaning this specific variable remains unaddressed by the retrieved evidence.\n\nWHAT CARRIES WEIGHT, AND WHY\nThe PI-RADS 4 score is the most decisive variable as it is the primary trigger according to the EAU guideline. The PSA velocity is also highly relevant as it indicates disease progression, and the prior-biopsy status being \"None\" confirms the patient is in the biopsy-naive category where the threshold is clearly defined.\n\nMY SUGGESTION TO THE CHAIR\nBased on the retrieved evidence confirming a PI-RADS 4, concerning PSA velocity, and no prior biopsy, the guideline mandates a biopsy. I suggest proceeding with a biopsy.\n\nVERDICT: ready | SUGGEST: biopsy | MISSING: none\n\n[The conference closes after pass 1: the verifier called the record ready. The chair decides on the record as it stands.]",
+      "body": "SUFFICIENCY\nThe documents the registrar opened—radiology_report, psa_trend, and previous_notes—have addressed the moderator's questions by providing information on the MRI comparison status, the PSA velocity, and the prior biopsy status.\n\nALIGNMENT WITH THE PANEL\nThe retrieved evidence aligns with the PANEL-PROTOCOL's answer of BIOPSY, as the cohort criterion (PI-RADS $\\ge 3$) fired, which is the rule that was explicitly documented as the deciding factor.\n\nTHE OPEN QUESTIONS, ONE BY ONE\nQ1. What should be done given the prior biopsy = None and the EAU guideline's recommendation when PI-RADS is $\\ge 3$? The guideline suggests biopsy is triggered by PI-RADS $\\ge 3$, and the retrieved data confirms PI-RADS is 4.\n\nWHAT CARRIES WEIGHT, AND WHY\n<pirads>: decisive: 4 (The cohort criterion fired, which is the panel's primary justification.)\n<prior biopsy>: decisive: None (This was a decisive variable for multiple experts, driving the decision toward biopsy.)\n<psa>: important: 4 ng/mL (The PSA level is noted by multiple experts, supporting the clinical concern.)\nMy confidence in the record as it stands is clear, as the necessary variables for the panel's decision have been retrieved.\n\nMY SUGGESTION TO THE CHAIR\nI suggest proceeding with a biopsy based on the alignment of the PI-RADS 4 score with the EAU guideline trigger, as confirmed by the panel protocol.\n\nVERDICT: ready | SUGGEST: biopsy | MISSING: none\n\n[The conference closes after pass 1: the verifier called the record ready. The chair decides on the record as it stands.]",
       "data": {
         "ready": true,
         "suggest": "biopsy",
@@ -453,7 +702,7 @@
       "n": 14,
       "speaker": "CHAIR",
       "who": "the senior urologist who signs the decision",
-      "body": "MY DECISION: BIOPSY   (confidence: clear)\n\n65y male, PSA 4.0, PI-RADS 4, biopsy-naive. PI-RADS 4 mandates biopsy per guidelines, despite low PSA density of 0.07. No prior biopsy grade is recorded. Biopsy indicated based on imaging finding and lack of prior pathology.\n\nWhat carried weight: bx=noted, age=important, psa=important, vol=noted, psad=noted, pirads=decisive, comorbidity=noted\nSections retrieved: radiology_report, psa_trend, previous_notes",
+      "body": "MY DECISION: BIOPSY   (confidence: clear)\n\n65y male, PSA 4.0, PSAD 0.07, biopsy-naive, PI-RADS 4. Biopsy is indicated due to PI-RADS 4 finding, despite low PSA density. No prior pathology to weigh against the imaging finding. Initial ISUP not recorded.\n\nWhat carried weight: bx=noted, age=important, psa=important, vol=noted, psad=noted, pirads=decisive, comorbidity=noted\nSections retrieved: radiology_report, psa_trend, previous_notes",
       "data": {
         "case_id": "PT-pseudo_acad53162dba",
         "task": 1,
@@ -476,16 +725,16 @@
           "psa_trend",
           "previous_notes"
         ],
-        "reasoning": "65y male, PSA 4.0, PI-RADS 4, biopsy-naive. PI-RADS 4 mandates biopsy per guidelines, despite low PSA density of 0.07. No prior biopsy grade is recorded. Biopsy indicated based on imaging finding and lack of prior pathology.",
+        "reasoning": "65y male, PSA 4.0, PSAD 0.07, biopsy-naive, PI-RADS 4. Biopsy is indicated due to PI-RADS 4 finding, despite low PSA density. No prior pathology to weigh against the imaging finding. Initial ISUP not recorded.",
         "audit": {
-          "digest_chars": 1576,
+          "digest_chars": 1877,
           "attempts": 1,
           "prose_challenged": false,
           "prose_offenders": [],
           "fallback_note": false,
           "fallback_form": false,
           "schema_ok": true,
-          "note_words": 36,
+          "note_words": 34,
           "note_violations": []
         },
         "gist": "decision BIOPSY, confidence clear"

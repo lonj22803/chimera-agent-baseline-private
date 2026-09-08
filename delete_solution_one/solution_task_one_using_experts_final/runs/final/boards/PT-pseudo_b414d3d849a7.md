@@ -153,11 +153,16 @@ SUGGESTION: BIOPSY   p(biopsy) = 0.52
   uncertainty  +/- 0.10 epistemic (95% band 0.32-0.72); among patients I cannot tell apart the outcome was 1.00 of 1.00 mixed
   reliability  LOW ('discuss' tier) — out-of-fold it was right 55% of the time over the 38 labelled cases in this tier
 
-What moved me most, across the labelled series: prior positive biopsy, PI-RADS >= 4, no prior biopsy, pmhx_hypercholesterolaemia, suspicious DRE, number of comorbidities. I read 39 variables, all
-from the panel — nothing from the mpMRI prose, the PSA trajectory, the previous notes or the
-laboratory. Out-of-fold over 91 labelled cases: AUC 0.758, balanced
-accuracy 0.625.
+VARIABLES I WEIGHED — in the form's vocabulary, with this man's values (panel only; the levels are what moved my prediction across the series, not what a urologist would mark)
+  decisive   prior biopsy = Positive (43% of my signal; from bx_positive, bx_none)
+  important  comorbidity = none recorded (21% of my signal; from pmhx_hypercholesterolaemia, n_comorbidities)
+  noted      age = 68 (2% of my signal; from age) · DRE = Nodus (10% of my signal; from dre_suspicious) · PSA = 5 ng/mL (3% of my signal; from log_psa, psav) · prostate volume = 35.45 mL (1% of my signal; from log_vol, vol) · PSA density = 0.141 (0% of my signal; from psad_calc, log_psad) · csPCa probability = 0.74 (1% of my signal; from cspca) · PI-RADS = 4 (20% of my signal; from pirads_ge4, pirads_ge3)
+  not used   family history
+CONFIDENCE: uncertain — 'discuss' tier; out-of-fold it was right 55% of the time over the 38 labelled cases in this tier
 
+I read 39 raw variables, all from the panel — nothing from the mpMRI prose, the PSA
+trajectory, the previous notes or the laboratory. Out-of-fold over 91 labelled cases: AUC
+0.758, balanced accuracy 0.625.
 The final call is the chair's.
 
 ## Intervención 4 — EXPERT-COHORT
@@ -175,6 +180,12 @@ biopsy (Gleason or ISUP), the number of biopsy sessions and their dates, and whe
 surveillance protocol with a confirmatory biopsy due. Do not read this as 'defer' and do not read it
 as 'biopsy'.
 
+VARIABLES I WEIGHED — in the form's vocabulary, with this man's values (panel only; 'decisive' marks the variable the rule turns on)
+  important  prior biopsy = Positive
+  noted      age = 68 · DRE = Nodus · PSA = 5 ng/mL · prostate volume = 35.45 mL · PSA density = 0.141 · PI-RADS = 4 · comorbidity = none recorded
+  not used   family history, csPCa probability
+CONFIDENCE: uncertain — none of my three panel rules applies; the fact that would settle it — the documented prior grade — lives in the notes, not on the panel
+
 ## Intervención 5 — EXPERT-LIBRARY
 
 *case library; the closest labelled precedents and what the reading urologist did with them* · vuelta 1
@@ -188,6 +199,11 @@ PRECEDENT: DEFER (weighted vote 0.40 for biopsy). Distance-weighted precedent is
 
 What the precedents are FOR: they show what this urologist looks at and how he phrases the call. What they are NOT: facts about this patient. Nobody may cite a precedent's grade, PSA or MRI as if it were his.
 
+WHAT THE READING UROLOGIST WEIGHED IN THESE PRECEDENTS — in the form's vocabulary, with this man's values (weighted majority of the 3 nearest labelled traces; the distance itself is on PI-RADS, prior biopsy first)
+  important  prior biopsy = Positive · age = 68 · PSA = 5 ng/mL · PI-RADS = 4
+  noted      family history = not opened (0 of 91) · DRE = Nodus · prostate volume = 35.45 mL · PSA density = 0.141 · csPCa probability = 0.74 · comorbidity = none recorded
+CONFIDENCE: uncertain — in this situation the library is no better than chance (47% out of fold)
+
 ## Intervención 6 — EXPERT-TRACE
 
 *Expert 4, trace model; which documents the reading urologist opens and what he weighs in this situation* · vuelta 1
@@ -195,8 +211,12 @@ What the precedents are FOR: they show what this urologist looks at and how he p
 Expert 4 here — the model of how the reading urologist works a case like this. Predicted from his 49 labelled traces in this situation (Positive prior biopsy): a per-field model where it beats the mode out of fold (prior-biopsy weight, DRE weight, PI-RADS weight, and whether he opens the laboratory), the mode elsewhere.
 
 WHAT HE OPENS: radiology_report, psa_trend, previous_notes, laboratory_results.
-WHAT HE WEIGHS: bx=important, fh=noted, age=important, dre=important, psa=important, vol=noted, psad=noted, pirads=important, comorbidity=noted.
-HOW SURE HE USUALLY IS: clear.
+
+WHAT HE WEIGHS — in the form's vocabulary, with this man's values (these are the levels that go on the form, unless a colleague shows a reason to move one)
+  important  prior biopsy = Positive · age = 68 · DRE = Nodus · PSA = 5 ng/mL · PI-RADS = 4
+  noted      family history = not opened (0 of 91) · prostate volume = 35.45 mL · PSA density = 0.141 · comorbidity = none recorded
+  not used   csPCa probability
+CONFIDENCE: clear — the level the reading urologist records in this situation, from his labelled traces
 
 MODERATOR: that list of documents is the plan — exactly those, no more. Every document opened beyond what
 he would open is scored against the conference as an unnecessary reveal; every document left closed
@@ -207,68 +227,53 @@ leaves a variable he weighed without its source. Attach the question each one mu
 *EAU guideline specialist; speaks only from the guideline text he retrieved* · vuelta 1
 
 GUIDELINE
-The guideline discusses using the PI-RADS score and PSA density to guide the decision to perform a biopsy. "linking PI-RADS score (1-2, 3, and 4-5) to PSA-D categories (< 0.10, 0.10-0.15, 0.15-0.20ng/mL) (Table 5.5) [230]. This risk-adapted matrix table may guide the decision to perform a biopsy." This requires assessing the patient's PI-RADS score and PSA density against established risk-adapted matrices.
+The retrieved guideline discusses using the PI-RADS score and PSA density to guide the decision to perform a biopsy. It states, "linking PI-RADS score (1-2, 3, and 4-5) to PSA-D categories (< 0.10, 0.10-0.15, 0.15-0.20 and > 0.20ng/mL) (Table 5.5) [230]." This matrix table may guide the decision to perform a biopsy.
 
 WHAT THE EXPERTS' BIDS DO NOT SETTLE
-EXPERT-STRUCTURED's suggestion of biopsy is not settled because the guideline emphasizes that the decision relies on a risk-adapted matrix involving PI-RADS and PSA density, which is not fully resolved by the panel variables alone. EXPERT-COHORT's finding that the prior positive biopsy means the decision hinges on the documented grade and surveillance history, which is not captured by the panel rules, is a point the guideline makes decisive.
+EXPERT-STRUCTURED, I note that the guideline treats the PSA density as a variable that can be used in a risk-adapted matrix. EXPERT-COHORT marks the prior biopsy as decisive, which the guideline treats as context. EXPERT-LIBRARY suggests that the guideline's focus on thresholds does not account for the documented prior biopsy status, which is a fact the guideline needs that no panel variable represents.
 
 WHAT THE DOCUMENTS MUST SETTLE
-previous_notes - the documented grade of the prior biopsy: at ISUP 2 or above the guideline sends him to treatment, not to more tissue; if it is unrecorded the indication stands
+previous_notes - the documented prior biopsy status: at Positive the guideline suggests the decision depends on the documented grade and surveillance history.
 radiology_report - whether the lesion is compared against an earlier study: unchanged does not support re-sampling, new or larger does
-psa_trend - the PSA velocity: the rate of change in PSA is a factor that must be considered in the risk-adapted matrix.
-laboratory_results - the PSA density: this value is a key component in the risk-adapted matrix that determines the biopsy decision.
+psa_trend - the PSA velocity: the guideline suggests the PSA trend is a factor in risk stratification.
+laboratory_results - the PSA density: the guideline suggests the PSA density is a factor in the risk-adapted matrix.
 
 ## Intervención 8 — MODERATOR
 
 *chairs the discussion; sets the open questions and assigns the documents* · vuelta 1
 
-This case hinges on establishing the grade of the prior biopsy and the PSA density to apply the EAU risk-adapted matrix.
+This case hinges entirely on the documented grade of the prior biopsy and the surveillance plan detailed in the previous notes.
 
 The documents for this session were fixed by EXPERT-TRACE; what I add is the question each one has to answer, and the open questions for the room.
 
 REGISTRAR — pull these up, and answer exactly the question attached to each:
-  radiology_report (get_mri_report) -> Does the lesion size or extraprostatic extension differ from an earlier study?
-  psa_trend (get_psa_trend) -> What is the PSA velocity and how does it factor into the risk-adapted matrix?
-  previous_notes (get_previous_notes) -> What is the documented grade (ISUP) of the prior biopsy, and is there an active surveillance protocol?
-  laboratory_results (get_lab_results) -> What is the PSA density value, and how does it relate to the risk-adapted matrix?
+  radiology_report (get_mri_report) -> Does the mpMRI prose indicate whether the lesion is compared against an earlier study?
+  psa_trend (get_psa_trend) -> What is the PSA velocity?
+  previous_notes (get_previous_notes) -> What is the documented grade of the prior biopsy and the surveillance history?
+  laboratory_results (get_lab_results) -> What is the PSA density?
 
 OPEN QUESTIONS for this conference — these are what the decision hangs on:
-  Q1. What is the documented grade (ISUP) of the prior biopsy?
-  Q2. Does the PSA velocity factor into the risk-adapted matrix assessment?
-
-On the plan itself: Dropped 1 question(s) that asked for a value already printed on the panel: "Does the PSA density value place the patient within a specific risk category according to the EAU matrix?".
+  Q1. What is the documented grade (Gleason or ISUP) of the prior biopsy?
+  Q2. Is the patient currently on a surveillance protocol with a confirmatory biopsy due?
 
 ## Intervención 9 — REGISTRAR
 
 *the registrar who pulls up documents; reports what they say, nothing else* · vuelta 1
 
 WHAT I FOUND
-radiology_report
-COMPARISON: new
-LESION: size 12-millimeter focus occupies the posterior peripheral zone of the right mid-gland.
-
-psa_trend
-What is the PSA velocity and how does it factor into the risk-adapted matrix?
-PSA velocity is 0.67 ng/mL/yr.
-
-previous_notes
-What is the documented grade (ISUP) of the prior biopsy, and is there an active surveillance protocol?
-PRIOR GRADE: ISUP GG 4 histology, and there is no mention of an active surveillance protocol.
-
-laboratory_results
-What is the PSA density value, and how does it relate to the risk-adapted matrix?
-The PSA density value is 0.141 ng/mL/mL.
+radiology_report: Radboudumc Radiology | 19 February 2025 | mpMRI Prostate. The mpMRI prose indicates that the lesion is compared against an earlier study because it states: "Follow-up assessment for previously diagnosed prostate carcinoma". LESION: A 12-millimeter focus occupies the posterior peripheral zone of the right mid-gland, with a PI-RADS 4 lesion.
+psa_trend: The PSA velocity is 0.67 ng/mL/yr.
+previous_notes: The documented grade of the prior biopsy is "not recorded" and the surveillance history is "not recorded".
+laboratory_results: The PSA density is 0.141 ng/mL/mL.
 
 WHAT I DID NOT OPEN
-family-history anamnesis, because the previous notes already provided the necessary information regarding the prior biopsy status.
+family-history anamnesis, because it was not requested by the moderator and is not required to answer the open questions.
 
 WHAT THIS SUPPORTS
-FOR sampling this patient now
-PI-RADS score of 4, as per the mpMRI report.
-PSA density of 0.141 ng/mL/mL, which falls into the 0.10-0.15 ng/mL² category according to the EAU guideline context.
-
-AGAINST sampling this patient now
-Prior positive biopsy, as per the previous notes, suggests the decision hinges on the documented grade and surveillance history.
+FOR sampling this patient now:
+- The PI-RADS score is 4 (from radiology_report).
+AGAINST sampling this patient now:
+- The documented grade of the prior biopsy is "not recorded" (from previous_notes).
 
 WHERE THIS LEANS
 LEAN: unclear
@@ -286,6 +291,11 @@ Read the band before the point: it is wide by construction, and I only call a di
 band clears the last value. This does not vote on the biopsy — a rising PSA in a man with a known
 diagnosis is the disease behaving as known — it tells the chair how fast the number is moving.
 
+VARIABLES I WEIGHED — in the form's vocabulary, with this man's values (the serial PSA only)
+  noted      PSA = 5 ng/mL
+  not used   prior biopsy, family history, age, DRE, prostate volume, PSA density, csPCa probability, PI-RADS, comorbidity
+CONFIDENCE: borderline — the conformal band does not clear the last value
+
 ## Intervención 11 — EXPERT-FUSION
 
 *Expert 3, Extra-Trees on panel + laboratory + MRI prose; speaks only on documents that were opened* · vuelta 1
@@ -296,8 +306,16 @@ SUGGESTION: NO BIOPSY   p(biopsy) = 0.46
   uncertainty  +/- 0.11 epistemic (95% band 0.25-0.68), of which 0.00 comes from values that had to be imputed
   reliability  LOW ('discuss' tier) — out-of-fold it was right 61% of the time over the 31 labelled cases in this tier
 
-What moved me most across the labelled series: prior positive biopsy, no prior biopsy, free PSA < 15%, DWI restriction in the report, lesion >= 15 mm in the report, suspicious DRE. Out-of-fold AUC 0.794. I am the only expert that has read the report's wording, and I still cannot see the prior grade or the
-surveillance history: those are in the notes, and the registrar has to carry them.
+VARIABLES I WEIGHED — in the form's vocabulary, with this man's values (panel + the documents that were opened; PI-RADS here means the report's own wording — DWI restriction, lesion size — not the score)
+  decisive   prior biopsy = Positive (43% of my signal; from bx_positive, bx_none)
+  important  PI-RADS = 4 (22% of my signal; from rad_dwi_restriction, rad_lesion_ge15mm)
+  noted      DRE = Nodus (5% of my signal; from dre_suspicious) · PSA = 5 ng/mL (21% of my signal; from fpsa_lt15, psa_delta_prev) · prostate volume = 35.45 mL (4% of my signal; from log_vol, vol) · PSA density = 0.141 (0% of my signal; from psad_calc) · comorbidity = none recorded (4% of my signal; from n_comorbidities, on_alpha_blocker)
+  not used   family history, age, csPCa probability
+CONFIDENCE: uncertain — 'discuss' tier; out-of-fold it was right 61% of the time over the 31 labelled cases in this tier
+
+Out-of-fold AUC 0.794. I am the only expert that has read the report's
+wording, and I still cannot see the prior grade or the surveillance history: those are in the notes, and
+the registrar has to carry them.
 
 ## Intervención 12 — PANEL-PROTOCOL
 
@@ -315,7 +333,20 @@ RULE THAT FIRED: weighted vote of the trained experts, p = 0.49 — carried by w
 PANEL ANSWER: BIOPSY. EXPERT-FUSION carried the most weight ('discuss' tier, fusion_full). In this bucket no rule applied and the documents did not record the prior grade, so the trained experts decide.
 Dissenting on the board: EXPERT-FUSION, EXPERT-LIBRARY. Their bids are recorded above; they did not carry because a higher rung of the protocol applied.
 
-Confidence the trace model expects here: uncertain. Weights it expects: bx=important, fh=noted, age=important, dre=important, psa=important, vol=noted, psad=noted, pirads=important, comorbidity=noted.
+THE BOARD'S VARIABLES — value · what each expert marked · what goes on the form
+  bx           Positive                     E1:DEC E3:DEC cohort:IMP library:IMP E2:—            -> important
+  fh           not opened (0 of 91)         E1:— E3:— cohort:— library:not E2:—                  -> not_used (raised from noted by the board)
+  age          68                           E1:not E3:— cohort:not library:IMP E2:—              -> important
+  dre          Nodus                        E1:not E3:not cohort:not library:not E2:—            -> important
+  psa          5 ng/mL                      E1:not E3:not cohort:not library:IMP E2:not          -> important
+  vol          35.45 mL                     E1:not E3:not cohort:not library:not E2:—            -> noted
+  psad         0.141                        E1:not E3:not cohort:not library:not E2:—            -> noted
+  cspca        0.74                         E1:not E3:— cohort:— library:not E2:—                -> not_used
+  pirads       4                            E1:not E3:IMP cohort:not library:IMP E2:—            -> important
+  comorbidity  none recorded                E1:IMP E3:not cohort:not library:not E2:—            -> noted
+  (DEC decisive · IMP important · not noted · — not used; the last column is the level recorded, from the trace of the reading urologist)
+
+Confidence to record: uncertain.
 
 CHAIR: this is the panel's position. You sign it, and you write why in the room's words — naming what the registrar retrieved. If you believe a retrieved finding overturns it, name that finding with its value; the burden is on the finding, not on the panel.
 
@@ -324,24 +355,24 @@ CHAIR: this is the panel's position. You sign it, and you write why in the room'
 *second EAU reader; checks against the guideline whether this can be decided yet* · vuelta 1
 
 SUFFICIENCY
-The documents retrieved by the registrar appear to have answered the moderator's questions. The `previous_notes` stated the prior grade was ISUP GG 4 histology, and the `psa_trend` provided the PSA velocity of 0.67 ng/mL/yr.
+The documents the registrar opened (radiology_report, psa_trend, previous_notes, laboratory_results) address the moderator's questions to some extent, but not fully. The `previous_notes` explicitly state the documented grade of the prior biopsy is "not recorded" and the surveillance history is "not recorded," directly answering Q1 and Q2 by stating the information is missing.
 
 ALIGNMENT WITH THE PANEL
-The panel protocol concluded with a weighted vote of 0.49 for BIOPSY, driven by EXPERT-FUSION's suggestion. The retrieved information, specifically the prior grade (ISUP GG 4) and the PSA velocity, are key variables that the panel relies upon, even if the protocol notes that the prior grade was "none recorded" in the opened documents.
+The panel protocol concluded BIOPSY based on a weighted vote, despite the lack of the documented prior grade. The retrieved evidence, specifically the `previous_notes` stating "not recorded," aligns with the panel's finding that the documented prior grade is missing, which contributed to the final decision.
 
 THE OPEN QUESTIONS, ONE BY ONE
-Q1. What is the documented grade (ISUP) of the prior biopsy? Answered by the `previous_notes`: ISUP GG 4 histology.
-Q2. Does the PSA velocity factor into the risk-adapted matrix assessment? Answered by the `psa_trend`: PSA velocity is 0.67 ng/mL/yr.
+Q1. What is the documented grade (Gleason or ISUP) of the prior biopsy? Answered by `previous_notes`: "not recorded".
+Q2. Is the patient currently on a surveillance protocol with a confirmatory biopsy due? Answered by `previous_notes`: "not recorded".
 
 WHAT CARRIES WEIGHT, AND WHY
-The documented prior biopsy grade (ISUP GG 4) is critical because the EAU guideline states that a grade of ISUP 2 or above sends the patient to treatment, not further tissue sampling. The PSA velocity (0.67 ng/mL/yr) is also relevant as it factors into the risk-adapted matrix as per the EAU guideline.
+<prior biopsy>: not_used / not recorded (not_used because the documented grade is missing, which is the key missing piece) with the value "not recorded" and the clause that justifies the level: The panel protocol weighted the lack of documented prior grade heavily, leading to the BIOPSY suggestion. I would move this to 'decisive' if the guideline strongly mandated biopsy when the prior grade is unknown, but I agree with the panel's reliance on this missing data. My confidence in the record as it stands is borderline.
 
 MY SUGGESTION TO THE CHAIR
-Given the retrieved information, the documented prior grade of ISUP GG 4 suggests that the indication for further biopsy may be low according to the guideline's logic. I suggest deferring the biopsy, pending a full review of the ISUP grading against the guideline's threshold for treatment initiation.
+Given that the critical information regarding the prior biopsy grade and surveillance status is explicitly "not recorded" in the retrieved notes, the guideline suggests the decision depends on this missing data. Therefore, the record is not in a state to be definitively decided by the panel's protocol alone.
 
-VERDICT: ready | SUGGEST: defer | MISSING: none
+VERDICT: not-ready | SUGGEST: defer | MISSING: none
 
-[The conference closes after pass 1: the verifier called the record ready. The chair decides on the record as it stands.]
+[The conference closes after pass 1: every document on the plan is open; nothing outside the plan is ever opened. The chair decides on the record as it stands.]
 
 ## Intervención 14 — CHAIR
 
@@ -349,7 +380,7 @@ VERDICT: ready | SUGGEST: defer | MISSING: none
 
 MY DECISION: BIOPSY   (confidence: uncertain)
 
-68y male, PSA 5.0, PSAD 0.141, PI-RADS 4, prior positive biopsy, no prior ISUP grade recorded. The lack of prior grade makes sampling necessary for management planning. PI-RADS 4 and rising PSA suggest need for tissue confirmation. Plan is confirmatory biopsy.
+68y male, PSA 5.0, PSAD 0.141, PI-RADS 4, prior biopsy grade not recorded. The lack of prior grade mandates sampling to determine management pathway. The PI-RADS 4 lesion is new relative to the prior assessment, making biopsy necessary for definitive staging.
 
 What carried weight: bx=important, age=important, dre=important, psa=important, vol=noted, psad=noted, pirads=important, comorbidity=noted
 Sections retrieved: radiology_report, psa_trend, previous_notes, laboratory_results

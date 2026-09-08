@@ -21,6 +21,9 @@ NB = HERE / "analisis_final.ipynb"
 
 
 def main() -> None:
+    global NB
+    if len(sys.argv) > 2 and sys.argv[1] == "--notebook":
+        NB = HERE / sys.argv[2]
     nb = nbformat.read(NB, as_version=4)
     client = NotebookClient(nb, timeout=1800, kernel_name="python3", resources={"metadata": {"path": str(REPO)}},
                             allow_errors=True)

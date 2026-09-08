@@ -541,6 +541,39 @@ print("Por eso no votan: aportan lo que RECUPERAN, que es lo que alimenta las re
 # --------------------------------------------------------------------------- #
 M(r"""
 ---
+# 7-bis. Las variables de la sala
+
+Cada experto declara sus variables en el vocabulario del formulario y el
+protocolo las consolida en una tabla. Aquí, sobre los 91 etiquetados: cuánto se
+parece cada fuente al urólogo en lo que marca `important`/`decisive`, y la
+razón medida de que los pesos entregados sigan siendo los del Experto 4.
+""")
+
+C(r"""
+EXPERTS = ["EXPERT-STRUCTURED", "EXPERT-FUSION", "EXPERT-COHORT", "EXPERT-LIBRARY", "EXPERT-PSA"]
+STRONG = ("important", "decisive")
+rows = []
+for r in ok:
+    cid = r["case_id"]
+    if cid not in gt or not r.get("variable_view"):
+        continue
+    for vv in r["variable_view"]:
+        g = gt[cid]["variable_weights"].get(vv["variable"]) in STRONG
+        rows.append({"variable": vv["variable"], "entregado": (vv["record"] in STRONG) == g,
+                     **{e.replace("EXPERT-", ""): ((vv["levels"].get(e) in STRONG) == g) for e in EXPERTS if e in vv["levels"]}})
+if rows:
+    agree = pd.DataFrame(rows).groupby("variable").mean().round(2)
+    display(agree)
+    print("acuerdo medio con el urólogo:", agree.mean().round(3).to_dict())
+    print("\nSubir al formulario una variable por acuerdo de ≥2 expertos se midió con el evaluador oficial:")
+    print("0.8390 (pesos del Experto 4) frente a 0.8365. Las variables de los expertos alimentan el")
+    print("razonamiento —lo que critica el EAU, lo que pregunta el moderador, lo que verifica el verificador—")
+    print("y el formulario sigue al modelo entrenado contra la traza del urólogo.")
+""")
+
+# --------------------------------------------------------------------------- #
+M(r"""
+---
 # 8. Las herramientas
 
 Cinco documentos y una búsqueda en la guía. `tool_score` es **precisión** contra
@@ -665,8 +698,7 @@ print()
 print("El criterio de la primera columna es el que el sistema usa en producción para tirar preguntas")
 print("del moderador: distingue «¿cuál es la densidad de PSA?» —que pide un número ya impreso— de")
 print("«¿comparan las notas el grado previo?», que pide algo que sólo vive dentro de un documento.")
-print("Queda un residuo del 12 %, y no se ha insistido más: desde que el plan lo fija el Experto 4,")
-print("ese apartado ya no manda a abrir ningún documento, así que el residuo no cuesta puntuación.")
+print("Con el apartado reescrito como una línea por documento, de una lista cerrada, el 40 % cae al 1 %.")
 """)
 
 C(r"""

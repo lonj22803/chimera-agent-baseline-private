@@ -17,6 +17,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from . import vocab as V
+
 _TIER_WORD = {"firm": "HIGH", "supports": "MODERATE", "discuss": "LOW"}
 _READABLE = {
     "bx_positive": "prior positive biopsy", "bx_none": "no prior biopsy", "fpsa_lt15": "free PSA < 15%",
@@ -27,7 +29,8 @@ _READABLE = {
 }
 
 
-def render(panel: Any, case_id: str, mode: str, opened: list[str]) -> tuple[str, dict[str, Any]]:
+def render(panel: Any, case_id: str, mode: str, opened: list[str],
+           payload: dict[str, Any] | None = None) -> tuple[str, dict[str, Any]]:
     if "radiology_report" not in opened:
         return ("The mpMRI report was not opened in this session. I was trained on its prose and I will "
                 "not score a document nobody put on the table, so I abstain.",
@@ -49,6 +52,16 @@ def render(panel: Any, case_id: str, mode: str, opened: list[str]) -> tuple[str,
     read = "the panel, the mpMRI report" + (" and the laboratory panel" if with_labs else
                                             " — the laboratory panel was not opened, so that block is imputed and my band is wider for it")
     m = meta.get("metrics") or {}
+    weights = dict(meta.get("form_weights") or {})
+    if not with_labs:
+        # sin la analítica sobre la mesa, el DRE y lo que viene del laboratorio
+        # no se pueden declarar como leídos: se imputaron.
+        weights["dre"] = "not_used"
+    block = V.variable_block(
+        weights, V.case_values(payload or {}), v["confidence"],
+        f"'{v['tier']}' tier; {track}",
+        share=meta.get("variable_importance_share"), features=meta.get("variable_features"),
+        scope="panel + the documents that were opened; PI-RADS here means the report's own wording — DWI restriction, lesion size — not the score")
     body = f"""Expert 3 here — the fusion classifier. I read {read}; nothing from the previous notes or the PSA series.
 
 SUGGESTION: {verdict}   p(biopsy) = {v["p"]:.2f}
@@ -56,9 +69,13 @@ SUGGESTION: {verdict}   p(biopsy) = {v["p"]:.2f}
 of which {v["sigma_missing"]:.2f} comes from values that had to be imputed
   reliability  {word} ('{v["tier"]}' tier) — {track}
 
-What moved me most across the labelled series: {top}. Out-of-fold AUC {m.get("cv_auc", float("nan")):.3f}. \
-I am the only expert that has read the report's wording, and I still cannot see the prior grade or the
-surveillance history: those are in the notes, and the registrar has to carry them."""
-    data = {**v, "available": True, "mode": mode, "variant": key, "tier_track": row,
-            "gist": f"Expert 3 suggests {verdict}, p={v['p']:.2f} +/- {v['sigma']:.2f}, {word} reliability ({v['tier']}, {key})"}
+{block}
+
+Out-of-fold AUC {m.get("cv_auc", float("nan")):.3f}. I am the only expert that has read the report's
+wording, and I still cannot see the prior grade or the surveillance history: those are in the notes, and
+the registrar has to carry them."""
+    data = {**v, "available": True, "mode": mode, "variant": key, "tier_track": row, "variable_weights": weights,
+            "variable_importance_share": meta.get("variable_importance_share"),
+            "gist": f"Expert 3 suggests {verdict}, p={v['p']:.2f} +/- {v['sigma']:.2f}, {word} reliability ({v['tier']}, {key}); "
+                    f"weighs {', '.join(k for k, l in weights.items() if l in ('decisive', 'important')) or 'nothing above noted'}"}
     return body, data

@@ -12,6 +12,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from . import vocab as V
+
 _TIER_WORD = {"firm": "HIGH", "supports": "MODERATE", "discuss": "LOW"}
 _READABLE = {
     "bx_positive": "prior positive biopsy", "bx_none": "no prior biopsy", "bx_negative": "prior negative biopsy",
@@ -30,7 +32,7 @@ def _track(ladder: dict, tier: str) -> tuple[str, dict]:
     return f"out-of-fold it was right {acc:.0%} of the time over the {n} labelled cases in this tier", row
 
 
-def render(panel: Any, case_id: str, mode: str) -> tuple[str, dict[str, Any]]:
+def render(panel: Any, case_id: str, mode: str, payload: dict[str, Any] | None = None) -> tuple[str, dict[str, Any]]:
     if panel is None or not panel.has(case_id):
         return ("No trained classifier scored this case, so there is no opening bid to react to.",
                 {"available": False})
@@ -42,6 +44,12 @@ def render(panel: Any, case_id: str, mode: str) -> tuple[str, dict[str, Any]]:
     verdict = "BIOPSY" if v["decision"] == "yes" else "NO BIOPSY"
     top = ", ".join(_READABLE.get(f, f) for f, _ in (meta.get("top_features") or [])[:6])
     m = meta.get("metrics") or {}
+    weights = dict(meta.get("form_weights") or {})
+    block = V.variable_block(
+        weights, V.case_values(payload or {}), v["confidence"],
+        f"'{v['tier']}' tier; {track}",
+        share=meta.get("variable_importance_share"), features=meta.get("variable_features"),
+        scope="panel only; the levels are what moved my prediction across the series, not what a urologist would mark")
     body = f"""Expert 1 here — the classifier that reads the structured panel and nothing else. My bid:
 
 SUGGESTION: {verdict}   p(biopsy) = {v["p"]:.2f}
@@ -49,12 +57,14 @@ SUGGESTION: {verdict}   p(biopsy) = {v["p"]:.2f}
 among patients I cannot tell apart the outcome was {v["entropy"]:.2f} of 1.00 mixed
   reliability  {word} ('{v["tier"]}' tier) — {track}
 
-What moved me most, across the labelled series: {top}. I read {meta.get("n_features")} variables, all
-from the panel — nothing from the mpMRI prose, the PSA trajectory, the previous notes or the
-laboratory. Out-of-fold over 91 labelled cases: AUC {m.get("cv_auc", float("nan")):.3f}, balanced
-accuracy {m.get("cv_balanced_accuracy", float("nan")):.3f}.
+{block}
 
+I read {meta.get("n_features")} raw variables, all from the panel — nothing from the mpMRI prose, the PSA
+trajectory, the previous notes or the laboratory. Out-of-fold over 91 labelled cases: AUC
+{m.get("cv_auc", float("nan")):.3f}, balanced accuracy {m.get("cv_balanced_accuracy", float("nan")):.3f}.
 The final call is the chair's."""
-    data = {**v, "available": True, "mode": mode, "tier_track": row,
-            "gist": f"Expert 1 suggests {verdict}, p={v['p']:.2f} +/- {v['sigma']:.2f}, {word} reliability ({v['tier']})"}
+    data = {**v, "available": True, "mode": mode, "tier_track": row, "variable_weights": weights,
+            "variable_importance_share": meta.get("variable_importance_share"),
+            "gist": f"Expert 1 suggests {verdict}, p={v['p']:.2f} +/- {v['sigma']:.2f}, {word} reliability ({v['tier']}); "
+                    f"weighs {', '.join(k for k, l in weights.items() if l in ('decisive', 'important')) or 'nothing above noted'}"}
     return body, data

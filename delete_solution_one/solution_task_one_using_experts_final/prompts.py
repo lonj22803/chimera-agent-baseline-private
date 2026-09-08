@@ -69,6 +69,14 @@ Who is in the room, in the order they speak:
                      yet, or what is still missing.
   CHAIR              the senior urologist. Signs the decision.
 
+One vocabulary for the whole room. Every expert declares the variables it
+weighed in the form's own words — bx, fh, age, dre, psa, vol, psad, cspca,
+pirads, comorbidity, each at not_used / noted / important / decisive — and its
+confidence as clear / borderline / uncertain, with this man's values alongside.
+Use those words when you refer to a variable, and compare levels across experts:
+"EXPERT-COHORT marks pirads decisive and EXPERT-FUSION only important" is a
+sentence this room can act on; "the imaging is concerning" is not.
+
 How to speak here:
   - Open by addressing, by role, the colleague whose intervention bears on
     yours, and say whether you agree with them and why. One sentence.
@@ -118,11 +126,14 @@ THEN SPEAK, under these three headings and nothing else:
 
   WHAT THE EXPERTS' BIDS DO NOT SETTLE
   Two or three sentences addressed to EXPERT-STRUCTURED, EXPERT-COHORT or
-  EXPERT-LIBRARY. Criticise on guideline grounds only: a fact the guideline
-  makes decisive that no panel variable represents (the prior grade, a
-  comparison MRI, a due confirmatory biopsy, a treatment already agreed), or a
-  precedent that resembles this man on the panel but may differ on exactly
-  that fact. Do NOT argue about whether a probability is right.
+  EXPERT-LIBRARY, in the variable vocabulary. Each of them declared its
+  variables and levels: name the one where the guideline disagrees with the
+  level — a variable an expert marked decisive that the guideline treats as
+  context, or one marked not_used / noted that the guideline makes decisive
+  for a man in this situation — and say what the guideline says instead. Then
+  name the fact the guideline needs that no panel variable represents (the
+  prior grade, a comparison MRI, a due confirmatory biopsy, a treatment already
+  agreed). Do NOT argue about whether a probability is right.
 
   WHAT THE DOCUMENTS MUST SETTLE
   Exactly one line per document, at most four lines, each beginning with the
@@ -187,9 +198,12 @@ Two things come out of your turn:
 
   1. THE OPEN QUESTIONS — two to four. The questions this decision hangs on:
      the ones where a different answer would give a different recommendation.
-     Take them from what EXPERT-EAU said the guideline requires, from what
-     EXPERT-COHORT said the panel cannot settle, and from where the precedents
-     of EXPERT-LIBRARY differ from this man.
+     Start from the variables the experts marked important or decisive whose
+     supporting fact lives inside a document and is not yet on the table —
+     bx marked decisive while the prior grade is unrecorded, pirads marked
+     decisive while nobody has said whether the lesion changed — and from what
+     EXPERT-EAU said the guideline requires. Each question should name the
+     variable it serves, in the form's word for it.
 
      NEVER ASK FOR A VALUE THAT IS ALREADY ON THE PANEL. Age, PSA, PI-RADS, PSA
      density, prostate volume, the DRE finding, the prior-biopsy status and the
@@ -381,7 +395,12 @@ Check four things, in this order:
      a precedent's fact.
   3. THE OPEN QUESTIONS, one by one: answered by which intervention, or not.
   4. WHAT CARRIES WEIGHT: the two to four variables the guideline makes
-     relevant for THIS man, and why each matters here.
+     relevant for THIS man, each written as `<variable>: <level>` in the
+     form's vocabulary (not_used / noted / important / decisive) with the
+     value and the clause that justifies the level. Say where you agree with
+     the levels on PANEL-PROTOCOL's table and where you would move one, and
+     why. Then your own confidence in the record as it stands — clear /
+     borderline / uncertain — in one clause.
 
 Then suggest — suggest, not decide — which way this should go and how firmly.
 
@@ -393,7 +412,7 @@ Write it as prose to the room, under these headings and nothing else:
   WHAT CARRIES WEIGHT, AND WHY
   MY SUGGESTION TO THE CHAIR
 
-Maximum 260 words. End with a FINAL LINE of exactly this shape and nothing else
+Maximum 280 words. End with a FINAL LINE of exactly this shape and nothing else
 on that line:
 
     VERDICT: <ready | not-ready> | SUGGEST: <biopsy | defer> | MISSING: <a document name, or none>
@@ -626,7 +645,9 @@ the box carries the assessment.
 `confidence` — clear / borderline / uncertain, as given to you. `clear` means
 the case answers itself; `borderline` that it went either way and one finding
 settled it; `uncertain` that a fact the decision turns on is missing and you
-could not tell which way to answer without it.
+could not tell which way to answer without it. The note should read at that
+level of certainty: a `clear` note states, a `borderline` note weighs, an
+`uncertain` note names what is missing.
 
 `variable_weights` — one of not_used / noted / important / decisive per
 variable, as given to you. Change a level only if this work-up genuinely used
@@ -673,6 +694,7 @@ def clinical_digest(
     confidence: str,
     weights: dict[str, str],
     alternative: str | None = None,
+    variable_view: list[dict[str, Any]] | None = None,
 ) -> str:
     """El parte clínico: todo lo que el presidente necesita, sin un solo locutor.
 
@@ -716,6 +738,24 @@ def clinical_digest(
         lines += ["  " + ln for ln in _clean_speaker_text(guideline).splitlines() if ln.strip()][:6]
         lines.append("")
 
+    # AL PRESIDENTE NO SE LE DA NADA DE LA TABLA DE VARIABLES, y esto se midió
+    # tres veces sobre los 195 casos antes de decidirlo. La nota entregada debe
+    # nombrar las variables que el formulario registra como motores; se midió qué
+    # fracción de ellas llega a nombrar, y cuántas de las que nombra están de
+    # verdad registradas:
+    #
+    #     parte del presidente          recall   precisión   F1
+    #     sin bloque de variables        0.932     0.757     0.836   <- se entrega
+    #     la tabla entera de la sala     0.890     0.760     0.820
+    #     sólo la lista de variables     0.900     0.733     0.808
+    #
+    # La dirección es consistente: darle la lista de variables NO le ayuda a
+    # nombrarlas; le ayuda razonar sobre los hechos clínicos y llegar a ellas.
+    # Un modelo de este tamaño gasta atención en cualquier lista que se le ponga
+    # delante. `variable_view` se sigue recibiendo —el protocolo lo calcula y va
+    # entero al acta y al `summary.jsonl`— pero no se renderiza aquí: la tabla es
+    # para la sala (intervención 13) y para el verificador, que sí la usan.
+    _ = variable_view
     lines.append("THE ASSESSMENT YOU ARE SIGNING")
     lines.append(f"  {'BIOPSY' if decision == 'yes' else 'NO BIOPSY'} — {because}")
     if against:

@@ -92,7 +92,124 @@
      "pirads_ge3",
      0.007012987012987026
     ]
-   ]
+   ],
+   "form_weights": {
+    "bx": "decisive",
+    "fh": "not_used",
+    "age": "noted",
+    "dre": "noted",
+    "psa": "noted",
+    "vol": "noted",
+    "psad": "noted",
+    "cspca": "noted",
+    "pirads": "noted",
+    "comorbidity": "important"
+   },
+   "variable_importance_share": {
+    "bx": 0.4299,
+    "fh": 0.0,
+    "age": 0.0224,
+    "dre": 0.0965,
+    "psa": 0.0252,
+    "vol": 0.0077,
+    "psad": 0.0029,
+    "cspca": 0.0097,
+    "pirads": 0.196,
+    "comorbidity": 0.2098
+   },
+   "variable_features": {
+    "bx": [
+     [
+      "bx_positive",
+      0.0719
+     ],
+     [
+      "bx_none",
+      0.035
+     ]
+    ],
+    "fh": [],
+    "age": [
+     [
+      "age",
+      0.0056
+     ]
+    ],
+    "dre": [
+     [
+      "dre_suspicious",
+      0.024
+     ]
+    ],
+    "psa": [
+     [
+      "log_psa",
+      0.0039
+     ],
+     [
+      "psav",
+      0.0017
+     ],
+     [
+      "psa_ratio_prev",
+      0.0007
+     ]
+    ],
+    "vol": [
+     [
+      "log_vol",
+      0.0017
+     ],
+     [
+      "vol",
+      0.0002
+     ]
+    ],
+    "psad": [
+     [
+      "psad_calc",
+      0.0005
+     ],
+     [
+      "log_psad",
+      0.0002
+     ]
+    ],
+    "cspca": [
+     [
+      "cspca",
+      0.0024
+     ]
+    ],
+    "pirads": [
+     [
+      "pirads_ge4",
+      0.0358
+     ],
+     [
+      "pirads_ge3",
+      0.007
+     ],
+     [
+      "pirads",
+      0.0059
+     ]
+    ],
+    "comorbidity": [
+     [
+      "pmhx_hypercholesterolaemia",
+      0.0243
+     ],
+     [
+      "n_comorbidities",
+      0.0132
+     ],
+     [
+      "bmi",
+      0.0094
+     ]
+    ]
+   }
   },
   "fusion": {
    "name": "expert_three_fusion",
@@ -186,7 +303,110 @@
      "log_vol",
      0.005216450216450219
     ]
-   ]
+   ],
+   "form_weights": {
+    "bx": "decisive",
+    "fh": "not_used",
+    "age": "not_used",
+    "dre": "noted",
+    "psa": "noted",
+    "vol": "noted",
+    "psad": "noted",
+    "cspca": "not_used",
+    "pirads": "important",
+    "comorbidity": "noted"
+   },
+   "variable_importance_share": {
+    "bx": 0.4309,
+    "fh": 0.0,
+    "age": 0.0,
+    "dre": 0.0502,
+    "psa": 0.2111,
+    "vol": 0.0407,
+    "psad": 0.0007,
+    "cspca": 0.0,
+    "pirads": 0.2216,
+    "comorbidity": 0.0447
+   },
+   "variable_features": {
+    "bx": [
+     [
+      "bx_positive",
+      0.0608
+     ],
+     [
+      "bx_none",
+      0.0282
+     ]
+    ],
+    "fh": [],
+    "age": [],
+    "dre": [
+     [
+      "dre_suspicious",
+      0.0104
+     ]
+    ],
+    "psa": [
+     [
+      "fpsa_lt15",
+      0.0213
+     ],
+     [
+      "psa_delta_prev",
+      0.0047
+     ],
+     [
+      "log_psa",
+      0.0038
+     ]
+    ],
+    "vol": [
+     [
+      "log_vol",
+      0.0052
+     ],
+     [
+      "vol",
+      0.0032
+     ]
+    ],
+    "psad": [
+     [
+      "psad_calc",
+      0.0002
+     ]
+    ],
+    "cspca": [],
+    "pirads": [
+     [
+      "rad_dwi_restriction",
+      0.0173
+     ],
+     [
+      "rad_lesion_ge15mm",
+      0.0118
+     ],
+     [
+      "rad_dwi_severity",
+      0.0095
+     ]
+    ],
+    "comorbidity": [
+     [
+      "n_comorbidities",
+      0.0039
+     ],
+     [
+      "on_alpha_blocker",
+      0.0023
+     ],
+     [
+      "lab_haemoglobin",
+      0.0017
+     ]
+    ]
+   }
   },
   "psa": {
    "champion": "extra_trees_anchored"

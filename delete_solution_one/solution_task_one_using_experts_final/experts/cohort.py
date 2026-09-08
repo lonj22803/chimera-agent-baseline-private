@@ -39,6 +39,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from . import vocab as V
+
 
 def _num(x: Any) -> float | None:
     try:
@@ -46,6 +48,17 @@ def _num(x: Any) -> float | None:
     except (TypeError, ValueError):
         return None
 
+
+#: Qué variables sostienen cada regla, en el vocabulario del formulario. El resto
+#: queda en ``noted``: el criterio las lee pero no decide con ellas.
+RULE_VARIABLES: dict[str, dict[str, str]] = {
+    "pirads_ge_3": {"pirads": "decisive", "bx": "important", "psad": "noted", "psa": "noted"},
+    "pirads_le_2": {"pirads": "decisive", "bx": "important", "psa": "noted", "psad": "noted"},
+    "pirads_ge_4": {"pirads": "decisive", "bx": "important", "psad": "noted", "psa": "noted"},
+    "pirads_le_3": {"pirads": "decisive", "bx": "important", "psad": "noted", "psa": "noted"},
+    "psa_ge_20": {"psa": "decisive", "bx": "important", "pirads": "noted"},
+    "age_ge_78": {"age": "decisive", "bx": "important", "pirads": "noted", "psa": "noted"},
+}
 
 #: Reglas de panel del cubo con biopsia previa positiva, con su acierto medido.
 POSITIVE_PANEL_RULES = (
@@ -93,8 +106,27 @@ def criterion(payload: dict[str, Any]) -> dict[str, Any]:
             "hits": None, "n": 0, "fired": None}
 
 
+def variables_for(c: dict[str, Any]) -> tuple[dict[str, str], str, str]:
+    """(pesos, confianza, por qué) del criterio en el vocabulario del formulario."""
+    weights = {v: "noted" for v in V.VARIABLES}
+    weights["fh"] = "not_used"
+    weights["cspca"] = "not_used"
+    if c.get("fired") and c["fired"] in RULE_VARIABLES:
+        weights.update(RULE_VARIABLES[c["fired"]])
+        conf, why = V.confidence_from_rate(c.get("hits"), c.get("n"))
+        return weights, conf, why
+    # el cubo positivo sin regla: sabe qué variables NO deciden, y cuál decidiría
+    weights.update({"bx": "important", "pirads": "noted", "psa": "noted"})
+    return weights, "uncertain", ("none of my three panel rules applies; the fact that would settle it — the "
+                                  "documented prior grade — lives in the notes, not on the panel")
+
+
 def render(payload: dict[str, Any]) -> tuple[str, dict[str, Any]]:
     c = criterion(payload)
+    weights, conf, why = variables_for(c)
+    block = V.variable_block(weights, V.case_values(payload), conf, why,
+                             scope="panel only; 'decisive' marks the variable the rule turns on")
+    c["variable_weights"], c["confidence"] = weights, conf
     if c["verdict"] is None:
         body = f"""This patient's situation: {c["bucket"]}. The panel alone does not answer, and that is the finding.
 
@@ -105,7 +137,9 @@ rules I carry for this situation (PSA >= 20, age >= 78, PI-RADS <= 2) applies to
 REGISTRAR: the previous notes are where this case is decided. Read them for the grade of the prior
 biopsy (Gleason or ISUP), the number of biopsy sessions and their dates, and whether he is on a
 surveillance protocol with a confirmatory biopsy due. Do not read this as 'defer' and do not read it
-as 'biopsy'."""
+as 'biopsy'.
+
+{block}"""
         c["gist"] = f"cohort criterion abstains ({c['bucket']}): decided on the documented grade and the notes"
     else:
         verdict = "BIOPSY" if c["verdict"] == "yes" else "DEFER"
@@ -119,7 +153,9 @@ The criterion: {c["rule"]}. {track}
 
 Like Expert 1, I have read ONLY the visible panel — not the mpMRI prose, the PSA trajectory, the
 previous notes or the laboratory panel. Departing from me needs a specific finding from a document
-somebody actually opened, named out loud; not a restatement of the panel numbers I already used."""
+somebody actually opened, named out loud; not a restatement of the panel numbers I already used.
+
+{block}"""
         c["gist"] = (f"cohort criterion answers {verdict} ({c['bucket']}, rule {c['fired']}"
                      + (f", {c['hits']}/{c['n']} in the labelled series)" if c["hits"] is not None else ")"))
     return body, c

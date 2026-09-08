@@ -15,12 +15,12 @@ enuncia y se puede comprobar, se comprueba después en código
 
 | prompt de sistema | tokens | palabras | cota que impone |
 |---|---:|---:|---|
-| cabecera común (quién está en la sala) | 604 | 393 | — |
-| EXPERT-EAU | 1 273 | 857 | 200 palabras |
-| MODERATOR | 1 154 | 759 | un objeto JSON |
-| REGISTRAR | 1 256 | 854 | 320 palabras |
-| VERIFIER | 1 140 | 757 | 260 palabras |
-| CHAIR | 1 043 | 729 | 40–90 palabras |
+| cabecera común (quién está en la sala) | 742 | 482 | — |
+| EXPERT-EAU | 1 537 | 1023 | 200 palabras |
+| MODERATOR | 1 336 | 888 | un objeto JSON |
+| REGISTRAR | 1 546 | 1050 | 320 palabras |
+| VERIFIER | 1 365 | 905 | 280 palabras |
+| CHAIR | 1 080 | 753 | 40–90 palabras |
 
 Los cuatro primeros incluyen la cabecera común, de ahí que ronden todos los
 1 200 tokens. El quinto **no la incluye**, y esa es la corrección principal de
@@ -42,14 +42,72 @@ quién debe rebatir.
 
 **Qué NO hace.** No la ve el presidente. Ver §5.
 
+**Lo que añade esta revisión: un vocabulario.** La cabecera dice ahora que
+*todo* experto declara las variables que pesó en las palabras del formulario
+—`bx`, `fh`, `age`, `dre`, `psa`, `vol`, `psad`, `cspca`, `pirads`,
+`comorbidity`, cada una a `not_used` / `noted` / `important` / `decisive`— y su
+confianza como `clear` / `borderline` / `uncertain`, con el valor del paciente al
+lado; y pide a los papeles LLM que hablen con esas mismas palabras. La razón es
+de comparabilidad: «EXPERT-COHORT marca `pirads` decisive y EXPERT-FUSION sólo
+important» es una frase sobre la que la sala puede actuar; «la imagen es
+preocupante» no lo es.
+
+---
+
+## 0-bis. Lo que declaran los expertos entrenados (no son prompts, pero hablan)
+
+Hasta esta revisión los expertos decían «lo que más me movió» como una lista de
+rasgos internos —`pirads_ge4`, `pmhx_hypercholesterolaemia`— que ningún colega
+podía comparar con nada. Ahora cada uno emite el mismo bloque
+([`experts/vocab.py`](experts/vocab.py)):
+
+```
+VARIABLES I WEIGHED — in the form's vocabulary, with this man's values (panel only; …)
+  decisive   prior biopsy = Positive (43% of my signal; from bx_positive, bx_none)
+  important  comorbidity = 3 on the problem list (21% of my signal; …)
+  noted      PI-RADS = 4 (20% of my signal) · PSA = 6.7 ng/mL (3%) · age = 67 · …
+  not used   family history
+CONFIDENCE: clear — 'firm' tier; out-of-fold it was right 88% of the time over the 33 labelled cases in this tier
+```
+
+De dónde sale cada nivel, porque no es lo mismo en todos:
+
+| experto | nivel de cada variable | confianza |
+|---|---|---|
+| E1 estructurado, E3 fusión | cuantiles de su **importancia de permutación out-of-fold** agregada a las 10 variables del formulario, con la parte de la señal que explica cada una | su tramo de fiabilidad medido (`firm`→clear, `supports`→borderline, `discuss`→uncertain) |
+| cohorte | la variable sobre la que gira la regla que disparó es `decisive`; el estado de biopsia previa, `important` | del acierto medido de la regla (≥ 0.95 clear, ≥ 0.85 borderline) |
+| biblioteca | **lo que el urólogo marcó en los 3 precedentes más cercanos**, por mayoría ponderada por distancia | del margen del voto y del acierto leave-one-out en ese cubo (0.47 en el positivo → uncertain) |
+| E2 proyector de PSA | sólo `psa`; `important` si la banda conforme sostiene la dirección | la firmeza de la dirección |
+| E4 traza | el nivel que el urólogo registra en esta situación | la moda de la situación |
+
+Y el protocolo lo junta en **la tabla de variables de la sala** (intervención
+13): una fila por variable con el valor, lo que marcó cada experto y el nivel
+que se registra. Esa tabla —no el acta— es lo que llega al presidente.
+
+**Lo que se midió antes de decidir qué va al formulario.** Los niveles de los
+clasificadores miden *cuánto movió su predicción* una variable; para ellos el
+estado de biopsia previa parte la cohorte (43 % de la señal) y PI-RADS apenas
+varía en esta serie. Para el urólogo, PI-RADS es la puerta de entrada. Las dos
+lecturas divergen (ρ = 0.26 entre ambos órdenes, medido por el autor de los
+expertos), y subir al formulario una variable a `important` cuando dos expertos
+coinciden **baja la nota**: 0.8390 → 0.8365 con el evaluador oficial
+(`analysis/simulate.py --grid`, bloque «pesos del formulario»). Así que los
+pesos que se entregan siguen siendo los del Experto 4, entrenado contra la traza
+del urólogo, y las variables de los demás alimentan el razonamiento: el
+especialista en la guía critica niveles, el moderador pregunta por variables, el
+verificador contesta con niveles, y el presidente escribe con los valores de las
+que se registran `important` o `decisive`.
+
 ---
 
 ## 1. EXPERT-EAU — el especialista en la guía
 
 **Lo que se le pide.** Una única búsqueda `search_guidelines` *antes* de escribir
 una palabra; después, tres apartados en 200 palabras: qué dice la guía (con cita
-literal entre comillas), qué es lo que las apuestas de los expertos no zanjan, y
-qué falta por establecer.
+literal entre comillas), qué es lo que las apuestas de los expertos no zanjan
+—**en el vocabulario de variables**: la variable que un experto marcó `decisive`
+y la guía trata como contexto, o la marcada `not_used` que la guía hace decisiva
+para un hombre en esta situación—, y qué deben resolver los documentos.
 
 **Los tres acotamientos, y el fallo que corrige cada uno.**
 
@@ -87,12 +145,12 @@ de la forma exacta. Las actas de antes del ajuste se conservan en
 [`runs/_antes_del_ajuste_prompts/`](runs/_antes_del_ajuste_prompts) para poder
 comparar.
 
-**Y el arreglo es parcial, que es lo que hay que decir.** Con el formato cerrado
-el 40 % baja al **12 %**, pero no a cero: algunas líneas siguen apoyándose en un
-valor del panel (*«laboratory_results - the PSA density…»*). El cuaderno mide las
-dos cifras y publica la tabla. No se ha insistido más porque el residuo no cuesta
-puntuación: desde que el plan lo fija el Experto 4, ese apartado ya no manda a
-abrir ningún documento.
+**Y el arreglo funcionó.** Con el apartado reescrito como **una línea por
+documento**, de una lista cerrada y con un ejemplo de la forma exacta, la
+fracción de líneas que piden un valor ya impreso cae del **40 % al 1 %**
+(4 de 717 líneas sobre los 195 casos). El cuaderno mide las dos cifras y publica
+la tabla. La lección se repite en los tres prompts que se acotaron: **prohibir no
+basta, hay que dar la forma**.
 
 Merece decirse por qué el fallo no costaba puntuación: desde que el plan de
 documentos lo fija el Experto 4, un «lo que falta» mal escrito ya no manda a
@@ -119,6 +177,13 @@ urólogo abre es un problema supervisado con 91 ejemplos, y un modelo entrenado
 lo hace mejor que un LLM razonando sobre el caso. La corrida completa lo
 confirma: la frecuencia con que esta solución abre cada sección coincide con la
 del urólogo dentro del ruido (§3 del README).
+
+**Las preguntas abiertas salen de las variables.** El prompt le dice de dónde:
+de las variables que algún experto marcó `important` o `decisive` y cuyo hecho
+de apoyo vive dentro de un documento y aún no está sobre la mesa —`bx` marcado
+decisive con el grado sin registrar, `pirads` decisive sin que nadie haya dicho
+si la lesión cambió— y de lo que la guía exige. Cada pregunta nombra la variable
+a la que sirve.
 
 **Los dos acotamientos.**
 
@@ -201,9 +266,14 @@ nada.
 
 ## 4. VERIFIER — ¿se puede decidir ya?
 
-**Lo que se le pide.** Cuatro comprobaciones en 260 palabras —suficiencia,
+**Lo que se le pide.** Cuatro comprobaciones en 280 palabras —suficiencia,
 alineamiento con la posición del panel, las preguntas abiertas una a una, y qué
-variables pesan según la guía— y una línea mecánica de cierre:
+variables pesan según la guía— y una línea mecánica de cierre. El cuarto apartado
+se contesta ahora **por variable y en el vocabulario del formulario**
+(`<variable>: <nivel>` con el valor y la cláusula que lo justifica), diciendo
+dónde coincide con la tabla de la sala y dónde movería un nivel, y cierra con la
+confianza propia (`clear` / `borderline` / `uncertain`). Es la segunda lectura de
+los pesos, y queda en el acta al lado de la primera. La línea de cierre:
 
 ```
 VERDICT: <ready | not-ready> | SUGGEST: <biopsy | defer> | MISSING: <documento | none>
@@ -264,11 +334,34 @@ Con eso delante, copiar los nombres es lo que se le pidió.
 1. **El presidente no ve el acta ni la lista de participantes.** Recibe un
    *parte clínico* construido en código (`prompts.clinical_digest`): la ficha del
    paciente, lo que dijeron los documentos —el informe del registrador, filtrado
-   línea a línea de cualquier mención a un colega—, la cita de la guía, y la
-   valoración con su justificación **en palabras clínicas**
-   (`protocol.clinical_reason`), no por el nombre de la regla. El acta sigue
-   existiendo entera y es la traza auditable; lo que cambia es que el modelo que
-   redacta no la tiene delante. Coste del prompt: **de ~7 800 tokens a ~2 100**.
+   línea a línea de cualquier mención a un colega y de cualquier grado que ningún
+   documento recoja—, la cita de la guía, **la tabla de variables** (valor, nivel
+   a registrar, y cuántas de las cinco valoraciones la marcaron `important` o
+   `decisive`), y la valoración con su justificación **en palabras clínicas**
+   (`protocol.clinical_reason`), no por el nombre de la regla.
+
+   **Y de la tabla de variables no recibe nada, que es el resultado de medirlo
+   tres veces.** La nota entregada tiene que nombrar las variables que el
+   formulario registra como motores; sobre los 195 casos se midió qué fracción
+   de ellas llega a nombrar (*recall*) y cuántas de las que nombra están de
+   verdad registradas (*precisión*):
+
+   | qué ve el presidente de la tabla | recall | precisión | F1 |
+   |---|---|---|---|
+   | **nada** — sólo los hechos clínicos | **0.932** | 0.757 | **0.836** |
+   | la tabla entera de la sala | 0.890 | 0.760 | 0.820 |
+   | sólo la lista de variables a nombrar | 0.900 | 0.733 | 0.808 |
+
+   La dirección es consistente en los tres puntos y va en contra de la
+   intuición: **darle la lista de variables no le ayuda a nombrarlas**. Le ayuda
+   razonar sobre los hechos clínicos y llegar a ellas solo. Un modelo de este
+   tamaño gasta atención en cualquier lista que se le ponga delante, y la nota
+   se le vuelve un inventario en vez de un razonamiento. La tabla completa vive
+   donde sí se usa: en el acta (intervención 13) y en el turno del verificador,
+   que la contesta variable por variable. Las tres corridas están archivadas en
+   `runs/_v1_sin_tabla_de_variables/`, `runs/_v2_tabla_en_el_parte/` y
+   `runs/_v3_lista_en_el_parte/`.
+
 2. **Una lista negra explícita** de lo que no puede escribir: protocolo, panel,
    criterio, regla, modelo, clasificador, probabilidad, tramo, experto, revisor,
    registrador, moderador, colega, junta, acta, intervención, precedente, serie,
@@ -322,3 +415,5 @@ medidas, el acta debe decir eso y no simular una deliberación que no decide.
 | declarar qué secciones se abrieron | no | se deriva de las llamadas reales |
 | leer el grado de la biopsia previa | no | expresión regular sobre el texto crudo: el modelo lo copia mal |
 | **escribir la nota clínica** | **sí** | es exactamente para lo que sirve, y es lo que el juez puntúa |
+| declarar qué variables pesó cada experto, y cuánto | no | importancia medida, reglas y trazas: todo en código, en el vocabulario del formulario |
+| criticar, preguntar y verificar **por variable** | **sí** | es razonamiento sobre una tabla que el código construyó |

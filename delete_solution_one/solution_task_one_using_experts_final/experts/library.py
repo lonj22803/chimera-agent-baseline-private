@@ -37,6 +37,8 @@ from typing import Any
 
 import numpy as np
 
+from . import vocab as V
+
 FEATURES = ("pirads", "log_psa", "log_psad", "log_vol", "age", "dre", "cspca")
 WEIGHTS = np.array([1.5, 1.0, 1.0, 0.5, 1.0, 0.7, 0.5])
 VARIABLES = ["bx", "fh", "age", "dre", "psa", "vol", "psad", "cspca", "pirads", "comorbidity"]
@@ -162,8 +164,31 @@ def _short(text: str, n: int = 170) -> str:
     return text if len(text) <= n else text[: n - 1].rstrip() + "…"
 
 
-def render(result: dict[str, Any]) -> tuple[str, dict[str, Any]]:
+#: Cómo pesa la distancia cada variable del panel, en el vocabulario del formulario.
+DISTANCE_WEIGHTS: dict[str, str] = {"pirads": "important", "psa": "noted", "psad": "noted", "age": "noted",
+                                    "dre": "noted", "vol": "noted", "cspca": "noted", "bx": "decisive",
+                                    "fh": "not_used", "comorbidity": "not_used"}
+
+
+def render(result: dict[str, Any], payload: dict[str, Any] | None = None) -> tuple[str, dict[str, Any]]:
     neigh = result["neighbours"]
+    # Dos cosas distintas que la sala debe ver por separado: con qué variables
+    # se buscó el precedente (la distancia, fija), y qué pesó el urólogo en los
+    # precedentes que salieron (su traza, por mayoría ponderada) — que es la
+    # lectura clínica de hombres parecidos, y por eso es la que se declara.
+    loo = {"None": 0.92, "Negative": 0.78, "Positive": 0.47}.get(result["bucket"])
+    margin = abs(result["p_yes"] - 0.5) * 2
+    if result["self_match"]:
+        conf, why = "clear", "the nearest precedent is this very patient"
+    elif loo is not None and loo >= 0.85 and margin >= 0.5:
+        conf, why = "clear", f"the precedents agree ({result['p_yes']:.2f}) and the library is right {loo:.0%} of the time in this situation out of fold"
+    elif loo is not None and loo >= 0.7:
+        conf, why = "borderline", f"the library is right {loo:.0%} of the time in this situation out of fold"
+    else:
+        conf, why = "uncertain", f"in this situation the library is no better than chance ({loo:.0%} out of fold)" if loo else "unvalidated situation"
+    block = V.variable_block(result["variable_weights"], V.case_values(payload or {}), conf, why,
+                             heading="WHAT THE READING UROLOGIST WEIGHED IN THESE PRECEDENTS",
+                             scope=f"weighted majority of the {result['k']} nearest labelled traces; the distance itself is on {', '.join(V.LABEL[v] for v, l in DISTANCE_WEIGHTS.items() if l in ('decisive', 'important'))} first")
     lines = [f"The case library holds {result['pool']} labelled men in this same situation ({result['bucket']} "
              f"prior biopsy). The {result['k']} closest by panel distance, and what the reading urologist did:"]
     for i, n in enumerate(neigh, 1):
@@ -189,7 +214,10 @@ def render(result: dict[str, Any]) -> tuple[str, dict[str, Any]]:
     lines.append("What the precedents are FOR: they show what this urologist looks at and how he phrases the "
                  "call. What they are NOT: facts about this patient. Nobody may cite a precedent's grade, PSA "
                  "or MRI as if it were his.")
+    lines.append("")
+    lines.append(block)
     body = "\n".join(lines)
-    data = {**result, "gist": (f"library precedent {verdict} (p={result['p_yes']:.2f}"
-                               + (", identical panel in the series" if result["self_match"] else "") + ")")}
+    data = {**result, "confidence": conf,
+            "gist": (f"library precedent {verdict} (p={result['p_yes']:.2f}"
+                     + (", identical panel in the series" if result["self_match"] else "") + f"; {conf})")}
     return body, data

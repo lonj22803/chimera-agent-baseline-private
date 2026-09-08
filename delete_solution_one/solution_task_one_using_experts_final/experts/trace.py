@@ -25,6 +25,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from . import vocab as V
+
 VARIABLES = ["bx", "fh", "age", "dre", "psa", "vol", "psad", "cspca", "pirads", "comorbidity"]
 SECTION_ORDER = ["radiology_report", "psa_trend", "previous_notes", "laboratory_results", "family_history"]
 NEVER = ("family_history",)
@@ -58,9 +60,13 @@ def predict(panel: Any, case_id: str, mode: str, library_result: dict[str, Any] 
             "source": "trace model + bucket mode"}
 
 
-def render(trace: dict[str, Any], bucket: str, n_pool: int) -> tuple[str, dict[str, Any]]:
-    marks = ", ".join(f"{k}={v}" for k, v in trace["variable_weights"].items() if v != "not_used")
+def render(trace: dict[str, Any], bucket: str, n_pool: int,
+           payload: dict[str, Any] | None = None) -> tuple[str, dict[str, Any]]:
     docs = ", ".join(trace["reveal_sequence"]) or "nothing — he decides this kind of case on the panel"
+    block = V.variable_block(trace["variable_weights"], V.case_values(payload or {}), trace["confidence"],
+                             "the level the reading urologist records in this situation, from his labelled traces",
+                             heading="WHAT HE WEIGHS",
+                             scope="these are the levels that go on the form, unless a colleague shows a reason to move one")
     if trace["source"] == "identical precedent":
         how = ("This patient is in the labelled series, so what follows is the reading urologist's own "
                "trace for him, not a prediction.")
@@ -71,8 +77,8 @@ def render(trace: dict[str, Any], bucket: str, n_pool: int) -> tuple[str, dict[s
     body = f"""Expert 4 here — the model of how the reading urologist works a case like this. {how}
 
 WHAT HE OPENS: {docs}.
-WHAT HE WEIGHS: {marks}.
-HOW SURE HE USUALLY IS: {trace["confidence"]}.
+
+{block}
 
 MODERATOR: that list of documents is the plan — exactly those, no more. Every document opened beyond what
 he would open is scored against the conference as an unnecessary reveal; every document left closed

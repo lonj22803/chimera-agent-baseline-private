@@ -257,7 +257,7 @@ def create_conference_graph(
                 panel.ensure(state["case_id"], state.get("case_files") or {})
             except Exception as exc:  # noqa: BLE001 — la junta corre igual sin los expertos
                 log.exception("No se pudo puntuar en vivo %s: %s", state["case_id"], exc)
-        body, data = structured_expert.render(panel, state["case_id"], mode)
+        body, data = structured_expert.render(panel, state["case_id"], mode, state["prompt_payload"])
         return {"interventions": [_say(state, "EXPERT-STRUCTURED", body, data)]}
 
     def expert_cohort(state: BoardState) -> dict[str, Any]:
@@ -270,7 +270,7 @@ def create_conference_graph(
                                            "No case library is loaded for this session; no precedent to offer.",
                                            {"available": False, "gist": "no library"})], "library": {}}
         result = library.precedents(state["case_id"], state["prompt_payload"])
-        body, data = library_expert.render(result)
+        body, data = library_expert.render(result, state["prompt_payload"])
         return {"interventions": [_say(state, "EXPERT-LIBRARY", body, data)], "library": result}
 
     def expert_trace(state: BoardState) -> dict[str, Any]:
@@ -280,7 +280,7 @@ def create_conference_graph(
             if library is not None else None
         trace = trace_expert.predict(panel, state["case_id"], mode, state.get("library"), bucket_mode,
                                      weights_policy=weights_policy)
-        body, data = trace_expert.render(trace, bx, (bucket_mode or {}).get("n", 0))
+        body, data = trace_expert.render(trace, bx, (bucket_mode or {}).get("n", 0), payload)
         planned = [s for s in trace["reveal_sequence"] if roster.tool_for(s) and s not in R.NEVER]
         return {"interventions": [_say(state, "EXPERT-TRACE", body, data)], "trace": trace, "planned": planned}
 
@@ -442,11 +442,13 @@ def create_conference_graph(
     # -- ESTADO 5: los expertos que leen documentos, y el protocolo ----------
 
     def expert_psa(state: BoardState) -> dict[str, Any]:
-        body, data = psa_expert.render(panel, state["case_id"], list(state.get("revealed") or []))
+        body, data = psa_expert.render(panel, state["case_id"], list(state.get("revealed") or []),
+                                       state["prompt_payload"])
         return {"interventions": [_say(state, "EXPERT-PSA", body, data)]}
 
     def expert_fusion(state: BoardState) -> dict[str, Any]:
-        body, data = fusion_expert.render(panel, state["case_id"], mode, list(state.get("revealed") or []))
+        body, data = fusion_expert.render(panel, state["case_id"], mode, list(state.get("revealed") or []),
+                                          state["prompt_payload"])
         return {"interventions": [_say(state, "EXPERT-FUSION", body, data)]}
 
     def panel_protocol(state: BoardState) -> dict[str, Any]:
@@ -454,8 +456,8 @@ def create_conference_graph(
         grade = documented_grade("\n".join(state.get("corpus") or []))
         result = protocol_mod.consolidate(
             state["prompt_payload"], _data_of(state, "EXPERT-COHORT"), _data_of(state, "EXPERT-STRUCTURED"),
-            _data_of(state, "EXPERT-FUSION"), state.get("library") or None, state.get("trace") or {},
-            grade, opened, params=protocol_params)
+            _data_of(state, "EXPERT-FUSION"), _data_of(state, "EXPERT-LIBRARY") or None, state.get("trace") or {},
+            grade, opened, params=protocol_params, psa=_data_of(state, "EXPERT-PSA"))
         body, data = protocol_mod.render(result)
         return {"interventions": [_say(state, "PANEL-PROTOCOL", body, data)], "protocol": result, "grade": grade}
 
@@ -554,7 +556,8 @@ def create_conference_graph(
         guideline = _section_of(_body_of(state, "EXPERT-EAU"), "GUIDELINE",
                                 ("WHAT THE EXPERTS", "WHAT WE STILL NEED"))
         digest = prompts.clinical_digest(payload, revealed, found, grade, guideline, because, against,
-                                         decision, confidence, weights, alternative)
+                                         decision, confidence, weights, alternative,
+                                         proto.get("variable_view"))
 
         elig = eligible_variables(1, called)
         Dynamic = build_dynamic_model(1, called)  # noqa: N806
