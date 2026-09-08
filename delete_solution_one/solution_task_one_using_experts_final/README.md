@@ -1,0 +1,418 @@
+# Junta clínica con expertos entrenados — tarea 1, versión final
+
+Decisión de biopsia de próstata (CHIMERA-Agent, tarea 1). Una **pizarra** con
+quince intervenciones donde cuatro expertos entrenados, una biblioteca de
+precedentes, un especialista en la guía EAU y un registrador que abre documentos
+construyen el expediente; un **protocolo escrito** toma la decisión por reglas de
+acierto medido; y un urólogo consultor —el modelo de lenguaje— redacta la nota
+clínica que va al registro.
+
+Es la cuarta generación de esta pizarra y la que se entrega. Las tres anteriores
+están en [`../solution_task_one`](../solution_task_one) (0.6749),
+[`../solution_task_one_correction_claude`](../solution_task_one_correction_claude)
+(0.7125) y [`../solution_task_one_correction_II`](../solution_task_one_correction_II)
+(0.7069). Ésta es **independiente**: no importa nada de ellas.
+
+> ## Resultado
+>
+> Evaluador **oficial** de los organizadores, juez de razonamiento desactivado,
+> **91 casos etiquetados**, temperatura 0, casos sin salida contados como fallo.
+> Corrida completa de los 195 casos en [`runs/final`](runs/final).
+>
+> | | baseline T=0 | pizarra v1 | pizarra v2 | junta | **ENTREGA** |
+> |---|---|---|---|---|---|
+> | `ranking_score` | 0.6428 | 0.6749 | 0.7125 | 0.7069 | **0.8390** |
+> | `mean_case_score` | 0.4913 | 0.5499 | 0.6006 | 0.6068 | **0.7470** |
+> | puerta de decisión | 0.6813 | 0.6923 | 0.7473 | 0.7582 | **0.9121** |
+> | F1(`yes`) | 0.7943 | 0.8000 | 0.8244 | 0.8070 | **0.9310** |
+> | `confidence_score` | 0.7661 | 0.7063 | 0.7500 | 0.7536 | 0.7651 |
+> | `variable_weight_score` | 0.6516 | 0.8365 | 0.8088 | 0.7977 | **0.8506** |
+> | `important_decisive_factor_score` | 0.5609 | 0.7421 | 0.7264 | 0.7295 | **0.7723** |
+> | `tool_score` | 0.6468 | 0.7698 | 0.8664 | 0.8816 | 0.8685 |
+> | `section_grounding_score` | 0.9960 | 0.9138 | 0.8887 | 0.8653 | 0.8431 |
+>
+> **+0.196 sobre el baseline a la misma temperatura** (76 casos suben, 9 bajan,
+> 6 empatan; prueba de signos p = 2·10⁻¹⁴) y **+0.132 sobre la mejor generación
+> anterior** (58 suben, 30 bajan, p = 0.004).
+>
+> ### Dónde se gana: el cubo clínico difícil
+>
+> | cubo | n | pizarra v2 | junta | **ENTREGA** |
+> |---|---|---|---|---|
+> | `bx = None` | 24 | 1.000 | 1.000 | **1.000** |
+> | `bx = Negative` | 18 | 0.889 | 0.889 | **0.889** |
+> | `bx = Positive` | 49 | 0.571 | 0.592 | **0.878** |
+> | **total** | 91 | 0.747 | 0.758 | **0.912** |
+>
+> Los 49 casos con biopsia previa positiva son el problema que ninguna generación
+> anterior resolvió. Pasan de 0.59 a 0.88, y ahí está toda la ganancia.
+>
+> ### Integridad de la entrega, sobre los 195 casos
+>
+> | | |
+> |---|---|
+> | casos entregados | **195/195**, 0 fallos |
+> | salidas que validan contra `Task1Output` | **195/195** |
+> | notas que describen el procedimiento en vez del paciente | **0/195** (generación anterior: 187/195) |
+> | notas con un grado de biopsia que ningún documento recoge | **0/195** (sin la guardia: 5/195; la guardia actuó en 10 casos) |
+> | lo abierto coincide con el plan | **195/195** |
+> | `family_history` abierta (el urólogo: 0/91) | **0/195** |
+> | respaldo determinista del formulario | 0 · de la nota, 2 |
+> | precedente idéntico (imposible en el test) | 0 |
+> | tiempo por caso, modelo ya cargado | 24 s (p90 27 s) |
+>
+> ### La cifra honesta, al lado
+>
+> | configuración | `ranking_score` | qué mide |
+> |---|---|---|
+> | **entrega** | **0.8390** | lo que se entrega. Los expertos vieron las etiquetas de estos 91 casos, así que es optimista respecto al test |
+> | *techo* | 0.9469 | dejando que la biblioteca devuelva el caso idéntico. Imposible en el test; sólo mide el mecanismo |
+> | *honesto* | 0.7607 | expertos reentrenados out-of-fold: la cota inferior de generalización |
+>
+> Sobre el conjunto de test las tres son **el mismo programa**. La corrida con LLM
+> dio 0.8390 y la simulación sin LLM predecía 0.8390: el modelo de lenguaje no
+> movió la nota ni una milésima, que es exactamente lo que el diseño pretendía.
+
+
+---
+
+## 1. Las tres cosas que definen esta versión
+
+**1. El modelo de lenguaje no decide.** Hace lo que sabe hacer —recuperar, leer,
+resumir, redactar— y no hace lo que se midió tres veces que hace mal. En los 49
+casos con biopsia previa positiva, que es el cubo donde se gana o se pierde la
+tarea, los votos del LLM están en el azar: el registrador acierta 0.47 y el
+verificador 0.49. La decisión la toma una cascada de reglas cuyo acierto está
+medido y escrito en el acta, y la sala aporta **lo que recupera**, que es
+justamente lo que alimenta esas reglas. No es una renuncia: es el reparto que los
+datos sostienen, y hay una tabla que lo mide en el cuaderno.
+
+**2. La nota clínica describe al paciente, no al procedimiento.** El `free_text`
+que el reto puntúa es la traza de razonamiento de un clínico. En la generación
+anterior, 187 de 195 notas (96 %) nombraban un participante de la junta o un
+mecanismo del sistema, porque el prompt del presidente le enumeraba los
+participantes, le entregaba el acta entera y le daba la decisión como
+«PANEL-PROTOCOL respondió … por la regla …». Aquí el presidente **no ve el acta ni
+la lista de participantes**: recibe un parte clínico construido en código, con la
+justificación en palabras de urólogo, y lo que escribe se comprueba con una lista
+de patrones que da **0 falsos positivos sobre los 91 textos reales del urólogo**.
+El análisis completo está en [`PROMPTS.md`](PROMPTS.md).
+
+**2-bis. Ningún hecho clínico sin documento que lo sostenga.** La guardia de
+procedencia miraba números con decimales, y a propósito ignoraba los enteros de
+una cifra porque aparecen en cualquier texto. Eso dejaba fuera justo el hecho más
+decisivo de esta tarea: el grado de la biopsia previa. Medido sobre una corrida
+completa de 195 casos, el registrador escribió un grado que **no está en el
+fichero clínico** en 13 informes (6.7 %) —entrecomillado, como si lo citara— y 5
+de esas invenciones llegaron a la nota entregada. El protocolo nunca se dejó
+engañar, porque lee el texto crudo de la herramienta y no el resumen; la nota
+clínica sí. Ahora se comprueba en las tres capas donde puede colarse: se le reta
+al registrador, se borra del parte del presidente y se verifica la nota final.
+La corrida anterior se conserva en
+[`runs/_sin_guardia_de_grados/`](runs/_sin_guardia_de_grados) como evidencia.
+
+**3. Lo que se mide es lo que se entrega.** La biblioteca de precedentes, cuando
+el caso que se decide está en la serie etiquetada, encuentra su propio panel a
+distancia cero y devuelve la decisión que el urólogo tomó con él. En el test eso
+**no puede ocurrir nunca**, así que no aporta un solo punto en el reto y a cambio
+convierte la nota local en un espejismo. Va apagado. Se puede encender
+(`--self-match`) para ver el techo del mecanismo, y el cuaderno publica las tres
+cifras juntas.
+
+---
+
+## 2. La sesión, intervención por intervención
+
+```
+ESTADO 0   pizarra en blanco
+   │
+   ├─ 1  INTAKE ............... structured-prompt.json, campo por campo        ─┐ ESTADO 1
+   ├─ 2  INTAKE ............... el mismo, con templates/prompts/agent_prompt.j2 │
+   ├─ 3  EXPERT-STRUCTURED .... Experto 1: Extra-Trees sobre el panel           │
+   ├─ 4  EXPERT-COHORT ........ el criterio medido de esta situación clínica    │
+   ├─ 5  EXPERT-LIBRARY ....... los 3 precedentes etiquetados más cercanos      │
+   ├─ 6  EXPERT-TRACE ......... Experto 4: qué abre y qué pesa el urólogo      ─┘ → FIJA EL PLAN
+   │
+   ├─ 7  EXPERT-EAU ........... RAG sobre la guía; critica a los expertos         → ESTADO 2
+   ├─ 8  MODERATOR ............ preguntas abiertas; una pregunta por documento    → ESTADO 3
+   ├─ 9  EXPERT-IMAGE ......... sólo si el moderador lo convoca
+   ├─ 10 REGISTRAR ............ abre exactamente el plan; grado, sesiones, RM     → ESTADO 4
+   │
+   ├─ 11 EXPERT-PSA ........... Experto 2: proyecta la serie que se abrió       ─┐ ESTADO 5
+   ├─ 12 EXPERT-FUSION ........ Experto 3: sobre los documentos abiertos          │
+   ├─ 13 PANEL-PROTOCOL ....... la cascada, con la regla que disparó            ─┘ → DECIDE
+   │
+   ├─ 14 VERIFIER ............. ¿decidible ya? ¿falta un documento del plan?      → ESTADO 6
+   │        ├─ falta uno ──► vuelve al MODERATOR (pase 2: intervenciones 15, 16…)
+   │        └─ listo ──►
+   │
+   └─ 15 CHAIR ................ la nota clínica y el formulario validado          → ESTADO 7
+```
+
+La numeración es **global y monótona**: si el verificador reabre, la segunda
+vuelta no es «ronda 2 · intervención 8», son las intervenciones 15, 16 y 17.
+Citar «intervención 10» identifica un turno único, y eso es lo que hace que el
+acta sea una traza y no un adorno. Se persiste entera, en JSON y en Markdown,
+para los 195 casos.
+
+### Quién es quién
+
+| # | interviene | qué es | qué lee | qué aporta |
+|---|---|---|---|---|
+| 3 | EXPERT-STRUCTURED | Experto 1, Extra-Trees + bagging × imputación múltiple | el panel (39 variables) | apuesta con barra de error y tramo de fiabilidad medido |
+| 4 | EXPERT-COHORT | reglas | el panel | el criterio que la serie confirma para esta situación |
+| 5 | EXPERT-LIBRARY | kNN por cubo | panel + las 91 trazas | precedentes con lo que el urólogo decidió y escribió |
+| 6 | EXPERT-TRACE | Experto 4, logística por casilla con puerta LOOCV | el panel | qué documentos abre el urólogo y qué pesa → **el plan** |
+| 7 | EXPERT-EAU | LLM + RAG | la guía EAU | qué exige la guía, con cita literal |
+| 8 | MODERATOR | LLM | el acta | las preguntas abiertas y la de cada documento |
+| 9 | EXPERT-IMAGE | código | los embeddings congelados | qué dan los vectores (medido: nada en T1) |
+| 10 | REGISTRAR | LLM + MCP | los documentos del plan | qué dicen, con sus valores y sus citas |
+| 11 | EXPERT-PSA | Experto 2, Extra-Trees anclado + jackknife+ | la serie de PSA abierta | trayectoria con banda conforme |
+| 12 | EXPERT-FUSION | Experto 3, Extra-Trees sobre A+B+D | panel + analítica + RM **abiertas** | la mejor apuesta del panel (AUC 0.794) |
+| 13 | PANEL-PROTOCOL | código | todo lo anterior | **la decisión**, por regla escrita |
+| 14 | VERIFIER | LLM + RAG | el acta y la guía | si el expediente está en condiciones |
+| 15 | CHAIR | LLM | un parte clínico sin locutores | **la nota clínica** y el formulario |
+
+Los cuatro expertos entrenados vienen de
+[`../../delete_expert_modelate/task_one`](../../delete_expert_modelate/task_one)
+y se cargan de sus artefactos. Los que leen documentos (2 y 3) hablan **después**
+del registrador y **sólo sobre lo que se abrió**: si el informe de RM no está
+sobre la mesa, el Experto 3 se abstiene; si falta la analítica, habla con ese
+bloque en blanco y su incertidumbre por datos ausentes lo refleja. Es la
+diferencia entre un experto que cita un documento y uno que lo lee por debajo de
+la mesa.
+
+---
+
+## 3. El protocolo: cómo se decide
+
+Una cascada ordenada por acierto medido. Cada peldaño se lee en el acta con la
+regla que disparó y el historial que la sostiene.
+
+```
+1. criterio de cohorte    sin biopsia previa:  PI-RADS >= 3                      24/24
+                          biopsia negativa:    PI-RADS >= 4                      16/18
+                          biopsia positiva:    PSA >= 20 · edad >= 78 · PI-RADS <= 2 → diferir   9/10
+2. grado documentado      GG >= 2 → tratar, no re-biopsiar    7/8
+                          GG 1 en vigilancia → confirmatoria  3/4
+3. voto ponderado         Experto 3 × tramo × 1.5  +  Experto 1 × tramo
+                          tramo: firm 3 · supports 2 · discuss 1 ;  biopsia si p >= 0.45
+```
+
+**De dónde salen las reglas del cubo difícil.** Los 49 casos con biopsia previa
+positiva son el problema que ninguna generación anterior resolvió: kNN sobre el
+panel acierta 0.43–0.47, el clasificador en su tramo bajo 0.55, y los votos del
+LLM 0.47–0.49. Lo que sí hay es el propio urólogo, que en su `free_text` explica
+el criterio con todas las letras. Leídos los 49:
+
+| lo que escribe | regla | n | acierto |
+|---|---|---|---|
+| «start treatment and do a PSMA-PET» | PSA ≥ 20 → diferir | 6 | 5 |
+| «stop checking PSA, no need for diagnostics» | edad ≥ 78 → diferir | 2 | 2 |
+| «now normal MRI» | PI-RADS ≤ 2 → diferir | 2 | 2 |
+| «needs treatment without repeat biopsy as earlier biopsy showed ISUP4» | grado documentado GG ≥ 2 → diferir | 8 | 7 |
+| «only one previous biopsy… would lean toward one confirmatory biopsy» | GG 1 en vigilancia → biopsiar | 4 | 3 |
+| «need to know initial ISUP», «has the lesion grown» | el resto: información ausente | ~28 | 0.64 por defecto «sí» |
+
+Las tres primeras son criterio de guía —enfermedad de alto riesgo va a
+estadificación, expectativa de vida limitada no necesita más diagnóstico, sin
+lesión no hay nada que muestrear— y la serie las confirma. **El grado documentado
+vive en las notas previas**, y sólo llega ahí si el registrador las abre: es el
+punto donde la deliberación del LLM sí decide el caso. Y como un modelo pequeño
+lo copia mal («ISUP 2» donde el documento dice «Gleason 3+4»), el grado se extrae
+con expresión regular del **texto crudo que devolvió la herramienta**, se traduce
+Gleason→ISUP y se escribe en el acta con la cita.
+
+**La biblioteca no vota.** Fuera del caso idéntico su acierto en el cubo positivo
+es 0.47 —azar—, y darle medio voto costaba 0.033 de ranking. Sigue hablando: sus
+precedentes son evidencia para la sala y su moda por cubo alimenta los pesos. Lo
+que se le quita es el voto, que es lo que no se ganó.
+
+---
+
+## 4. Las guardias: lo verificable se verifica en código
+
+| guardia | qué comprueba | qué hace si falla |
+|---|---|---|
+| `decide.process_language` | la nota describe al paciente, no el procedimiento | devuelve el turno con la lista; si reincide, redacta la nota de forma determinista |
+| `decide.unsourced_values` | todo número del informe está en una herramienta, el panel o el acta | devuelve el turno una vez con la lista |
+| `decide.unsourced_grades` | **ningún grado de biopsia afirmado sin documento** que lo recoja | reta al registrador, lo borra del parte del presidente y lo comprueba en la nota entregada |
+| `decide.documented_grade` | el grado de la biopsia previa, sobre el texto crudo | lo escribe en el acta con su cita y lo pasa al protocolo |
+| `decide.enforce_grounding` | ninguna variable pesada sin su sección abierta | la baja a `not_used` y lo anota |
+| `decide.validate_output` | el registro valida contra `Task1Output` | rehace la nota y revalida; se anota `schema_ok` |
+| plan fijo | el registrador abre exactamente lo que el Experto 4 listó | lo que se pida de más se cae con motivo escrito |
+| plan vacío | sin plan, no se le enlazan herramientas de documento | mecánicamente no puede abrir nada |
+| línea `VERDICT` | reabrir exige una afirmación explícita y un documento del plan sin abrir | si no la escribe, la sesión se cierra |
+| respaldo determinista | el presidente no entrega JSON válido | nota clínica construida desde los hechos; ningún caso se pierde |
+
+---
+
+## 5. Los parámetros, y el sesgo que llevan dentro
+
+Cinco parámetros del protocolo se eligieron con
+[`analysis/simulate.py`](analysis/simulate.py), que evalúa una configuración sin
+cargar el modelo en segundos, **sobre los mismos 91 casos con los que después se
+puntúa**. Eso es sesgo de selección y hay que decirlo: la rejilla completa (128
+combinaciones) mueve el `ranking_score` entre **0.77 y 0.84**, así que el número
+que se publica está en el extremo alto de una distribución que se exploró.
+
+| parámetro | elegido | alternativas medidas |
+|---|---|---|
+| umbral del voto ponderado | **0.45** | 0.50 → 0.8215 · 0.45 → 0.8384 · 0.40 → 0.8222 · 0.35 → 0.8064 |
+| peso de la biblioteca | **0.0** | 0.5 → 0.8054 · 0.0 → 0.8384 |
+| regla del grado documentado | **activa** | inactiva → −0.001 aquí, −0.031 en la configuración honesta |
+| política de confianza | **acuerdo** | acuerdo 0.8390 · traza 0.8384 (la traza da `clear` constante: empata y no informa) |
+| política de pesos | **modelo + moda** | moda pura → 0.8344 |
+| k de la biblioteca | **3** | 1, 5, 7 dentro de ±0.008 |
+
+Dos de los seis se eligieron por principio y no por la tercera cifra decimal: la
+biblioteca no vota porque su acierto en el cubo difícil es el azar, y la
+confianza sale del acuerdo porque produce una señal por caso en vez de una
+constante. Los otros cuatro son ajuste, y por eso se publica la rejilla.
+
+---
+
+## 6. Cómo se corre
+
+```bash
+source .venv/bin/activate
+
+# 1. el panel de expertos, una vez (~30 min con el out-of-fold; --no-oof: 3 min)
+PYTHONPATH=src:. python -m delete_solution_one.solution_task_one_using_experts_final.experts.panel
+
+# 2. la nota esperada sin LLM, y la rejilla de parámetros
+PYTHONPATH=src:. python -m delete_solution_one.solution_task_one_using_experts_final.analysis.simulate --grid
+
+# 3. la corrida de entrega: los 195 casos
+delete_solution_one/solution_task_one_using_experts_final/runs/launch.sh final "--all-cases"
+
+# 4. el cuaderno de verificación
+python delete_solution_one/solution_task_one_using_experts_final/analysis/_build_notebook.py
+jupyter nbconvert --to notebook --execute --inplace --ExecutePreprocessor.timeout=1800 \
+    delete_solution_one/solution_task_one_using_experts_final/analysis/analisis_final.ipynb
+
+# 5. la nota oficial, por si se quiere sin cuaderno
+python dev/score_local.py --tasks 1 --count-missing \
+    --output-root delete_solution_one/solution_task_one_using_experts_final/runs/final/output
+```
+
+Cada caso escribe: los dos ficheros de Grand Challenge, el acta completa en JSON
+y Markdown, una línea en `summary.jsonl` con la telemetría, y las filas de
+`telemetry.jsonl` (una por llamada al modelo y por llamada a herramienta).
+
+---
+
+## 7. Qué falta para subirlo a Grand Challenge
+
+En el reto **cada caso es un contenedor**: `inference.py` recibe en `/input` los
+tres ficheros de un paciente, arranca el modelo y escribe dos ficheros en
+`/output`. Esta solución se desarrolló con un runner por lotes, y quedan tres
+cosas por hacer. No son de diseño, son de empaquetado.
+
+1. **`inference.py` llama al ReAct del baseline.** El adaptador ya está escrito,
+   dentro de este paquete y sin tocar el upstream:
+   [`gc_entry.run_task1_case`](gc_entry.py) monta el caso en un directorio
+   temporal con el layout que el MCP espera, arranca el servidor, construye el
+   grafo, valida contra `Task1Output` y escribe los dos ficheros; si algo falla
+   escribe igualmente una salida válida, porque un caso sin salida no es un cero
+   sino un caso perdido. Integrarlo es sustituir el cuerpo de `interf0_handler`
+   por:
+
+   ```python
+   from delete_solution_one.solution_task_one_using_experts_final.gc_entry import run_task1_case
+
+   return run_task1_case(
+       structured_prompt=input_structured_prompt,
+       clinical_data=input_prostate_biopsy_decision_clinical_data,
+       neural_representations=input_prostate_modality_level_neural_representations,
+       output_path=OUTPUT_PATH,
+       embedding_model_dir=EMBEDDING_MODEL_PATH,
+   )
+   ```
+
+   Queda por hacer la prueba en contenedor (`./do_test_run.sh`): el adaptador
+   está verificado en sus partes —el respaldo produce una salida que valida— pero
+   no se ha ejecutado dentro de la imagen.
+2. **La imagen no lleva lo que hace falta.** `Dockerfile_Baseline` copia `src/`,
+   `templates/`, `resources/` y `configs/`. Hay que añadir este paquete y
+   `delete_expert_modelate/chimera_experts`, y meter en el **tarball del modelo**
+   los cuatro `.joblib` (~80 MB) y los 91 casos etiquetados (~3 MB), porque la
+   biblioteca de precedentes y la moda por cubo los leen en tiempo de ejecución.
+3. **Fijar `scikit-learn==1.9.0`**, `scipy` y `joblib` en `requirements.txt`: los
+   artefactos se deserializan con esa versión.
+
+Y dos avisos: el tiempo por contenedor es carga del modelo (~90 s) + servicio de
+embeddings (~30 s) + la junta (~25 s) ≈ **2–3 min**, que hay que contrastar con
+el límite del reto; y un caso que no esté en `artifacts/panel_cache.json` —todo
+caso de test— se puntúa en vivo con `Panel.ensure()`, verificado contra el caché,
+lo que añade 30–80 s.
+
+---
+
+## 8. Mapa de ficheros
+
+| fichero | qué contiene |
+|---|---|
+| [`board.py`](board.py) | el acta: intervenciones numeradas, render, hilo, volcado |
+| [`roster.py`](roster.py) | el catálogo desde la lista MCP viva; el plan por secciones |
+| [`prompts.py`](prompts.py) | los cinco prompts y el **parte clínico** del presidente |
+| [`PROMPTS.md`](PROMPTS.md) | el análisis de los cinco prompts, uno por uno |
+| [`graph.py`](graph.py) | el grafo LangGraph con las quince intervenciones |
+| [`protocol.py`](protocol.py) | la cascada, y la justificación clínica de cada regla |
+| [`decide.py`](decide.py) | las guardias, el parser del grado, la nota determinista, la validación |
+| [`telemetry.py`](telemetry.py) | tokens, tiempo, memoria y herramientas, por papel |
+| [`gc_entry.py`](gc_entry.py) | el adaptador de un caso para Grand Challenge |
+| [`sampling.py`](sampling.py) | muestreo por papel (temperatura y tope de tokens) |
+| [`experts/panel.py`](experts/panel.py) | carga de los cuatro artefactos, precálculo en lote, puntuación en vivo |
+| [`experts/*.py`](experts/) | cómo habla cada experto |
+| [`analysis/report.py`](analysis/report.py) | lectura y puntuación con el evaluador oficial |
+| [`analysis/simulate.py`](analysis/simulate.py) | el protocolo sin LLM; la rejilla de parámetros |
+| [`analysis/analisis_final.ipynb`](analysis/analisis_final.ipynb) | **el cuaderno de verificación** |
+| [`runs/launch.sh`](runs/launch.sh) | lanza una corrida en tmux |
+
+El paquete es autocontenido y borrable. Importa de `chimera_agent_baseline` sin
+modificarlo y de `delete_expert_modelate/chimera_experts` para deserializar los
+artefactos de los expertos.
+
+---
+
+## 9. Bibliografía
+
+**Arquitectura de pizarra**
+- Erman, Hayes-Roth, Lesser, Reddy (1980). *The Hearsay-II Speech-Understanding System.* ACM Computing Surveys 12(2).
+- Hayes-Roth (1985). *A blackboard architecture for control.* Artificial Intelligence 26(3).
+- Nii (1986). *Blackboard Systems.* AI Magazine 7(2).
+
+**Razonamiento basado en casos**
+- Aamodt, Plaza (1994). *Case-Based Reasoning: Foundational Issues, Methodological Variations, and System Approaches.* AI Communications 7(1).
+- Kolodner (1993). *Case-Based Reasoning.* Morgan Kaufmann.
+
+**Colaboración entre LLM, y sus límites**
+- Du, Li, Torralba, Tenenbaum, Mordatch (2023). *Improving Factuality and Reasoning in Language Models through Multiagent Debate.* arXiv:2305.14325.
+- Chen, Saha, Bansal (2023). *ReConcile: Round-Table Conference Improves Reasoning via Consensus among Diverse LLMs.* arXiv:2309.13007.
+- Tang et al. (2023). *MedAgents: LLMs as Collaborators for Zero-shot Medical Reasoning.* arXiv:2311.10537.
+- Kim et al. (2024). *MDAgents: An Adaptive Collaboration of LLMs for Medical Decision-Making.* NeurIPS 2024.
+- Wang et al. (2024). *Rethinking the Bounds of LLM Reasoning: Are Multi-Agent Discussions the Key?* ACL 2024.
+- Huang et al. (2024). *Large Language Models Cannot Self-Correct Reasoning Yet.* ICLR 2024.
+- Turpin, Michael, Perez, Bowman (2023). *Language Models Don't Always Say What They Think.* NeurIPS 2023.
+
+**Combinar expertos por fiabilidad medida**
+- Dietterich (2000). *Ensemble Methods in Machine Learning.* MCS 2000.
+- Kuncheva (2004). *Combining Pattern Classifiers.* Wiley.
+- Chow (1970). *On Optimum Recognition Error and Reject Tradeoff.* IEEE Trans. Inf. Theory.
+
+**Incertidumbre, calibración e imputación**
+- Breiman (2001). *Random Forests.* Machine Learning 45(1). · Geurts, Ernst, Wehenkel (2006). *Extremely randomized trees.* Machine Learning 63(1).
+- Lakshminarayanan, Pritzel, Blundell (2017). *Simple and Scalable Predictive Uncertainty Estimation using Deep Ensembles.* NeurIPS 2017.
+- Depeweg, Hernández-Lobato, Doshi-Velez, Udluft (2018). *Decomposition of Uncertainty in Bayesian Deep Learning.* ICML 2018.
+- Rubin (1987). *Multiple Imputation for Nonresponse in Surveys.* Wiley. · van Buuren, Groothuis-Oudshoorn (2011). *mice.* J Stat Softw 45(3).
+- Guo, Pleiss, Sun, Weinberger (2017). *On Calibration of Modern Neural Networks.* ICML 2017.
+- Barber, Candès, Ramdas, Tibshirani (2021). *Predictive inference with the jackknife+.* Annals of Statistics 49(1).
+- Varma, Simon (2006). *Bias in error estimation when using cross-validation for model selection.* BMC Bioinformatics 7:91.
+
+**Recuperación y guía clínica**
+- Lewis et al. (2020). *Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.* NeurIPS 2020.
+- EAU-EANM-ESTRO-ESUR-ISUP-SIOG Guidelines on Prostate Cancer (2024): biopsia dirigida sobre PI-RADS ≥ 3; re-biopsia tras negativa sobre PI-RADS 4-5; biopsia confirmatoria en vigilancia activa; PSA > 20 ng/mL como alto riesgo.
+
+> Las referencias van por autor, año, título y sede. Si van a un artículo,
+> conviene verificar páginas y DOI en la fuente original.
