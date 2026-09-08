@@ -1,0 +1,35 @@
+{
+  "model_id": "google/gemma-4-E2B-it",
+  "temperature": 0.0,
+  "token_scale": 1.0,
+  "classifier": {
+    "feature_set": "A-core",
+    "model": "RF",
+    "n_bags": 30,
+    "seed": 0,
+    "extra": {}
+  },
+  "classifier_metrics": {
+    "n": 91,
+    "acc": 0.714,
+    "auc": 0.789,
+    "f1_yes": 0.78,
+    "majority": 0.615,
+    "protocol": "5x5 StratifiedKFold, out-of-fold"
+  },
+  "max_passes": 3,
+  "max_reveals": 3,
+  "n_cases": 91,
+  "sample": null,
+  "seed": 0,
+  "split": "labelled",
+  "mcp_tools": [
+    "get_psa_trend",
+    "get_lab_results",
+    "get_mri_report",
+    "get_previous_notes",
+    "get_family_history",
+    "search_guidelines"
+  ],
+  "design": "conference: intake -> classifier -> cohort -> EAU -> moderator -> [image] -> registrar -> verifier -> [reopen] -> chair"
+}

@@ -1,0 +1,218 @@
+{
+  "name": "expert_three_fusion",
+  "blocks": "ABDG",
+  "model_name": "extra_trees",
+  "feature_names": [
+    "psa",
+    "log_psa",
+    "psa_prev",
+    "psa_ratio_prev",
+    "psa_delta_prev",
+    "psav",
+    "psav_positive",
+    "vol",
+    "log_vol",
+    "psad",
+    "psad_calc",
+    "log_psad",
+    "age",
+    "pirads",
+    "pirads_ge4",
+    "pirads_ge3",
+    "dre_suspicious",
+    "cspca",
+    "months_since_mri",
+    "bmi",
+    "ipss",
+    "n_comorbidities",
+    "charlson_like",
+    "comorbidity_reported",
+    "n_meds",
+    "on_alpha_blocker",
+    "bx_none",
+    "bx_negative",
+    "bx_positive",
+    "pmhx_hypertension",
+    "pmhx_hypercholesterolaemia",
+    "pmhx_benign_prostatic_hyperplasia",
+    "pmhx_osteoarthritis",
+    "pmhx_chronic_kidney_disease",
+    "pmhx_type_2_diabetes",
+    "pmhx_obesity_bmi_30",
+    "pmhx_copd",
+    "pmhx_coronary_artery_disease",
+    "pmhx_atrial_fibrillation",
+    "lab_psa",
+    "lab_free_psa",
+    "lab_pct_free_psa",
+    "lab_haemoglobin",
+    "lab_wbc",
+    "lab_platelets",
+    "lab_creatinine",
+    "lab_testosterone",
+    "lab_alp",
+    "lab_ldh",
+    "lab_hba1c",
+    "fpsa_lt15",
+    "log_lab_alp",
+    "log_lab_ldh",
+    "lab_n_flagged",
+    "lab_n_reported",
+    "lab_anaemia",
+    "rad_dwi_restriction",
+    "rad_dce_early_focal",
+    "rad_epe",
+    "rad_bph_nodularity",
+    "rad_dwi_severity",
+    "rad_t2_severity",
+    "rad_lesion_max_mm",
+    "rad_lesion_vol_ml",
+    "rad_lesion_ge15mm",
+    "rad_has_measurement",
+    "rad_zone_peripheral",
+    "rad_zone_transition",
+    "rad_loc_apex",
+    "rad_loc_mid",
+    "rad_loc_base",
+    "rad_bilateral",
+    "rad_adverse_count",
+    "rad_adverse_reported",
+    "rad_report_len_chars",
+    "e2_log_projected_psa",
+    "e2_log_change_vs_last",
+    "e2_projected_over_last",
+    "e2_direction_is_clear",
+    "e2_fit_r2_log"
+  ],
+  "threshold": 0.5,
+  "n_cases": 91,
+  "n_positive": 56,
+  "seed": 20260907,
+  "metrics": {
+    "cv_auc": 0.7923469387755103,
+    "cv_auc_ci": [
+      0.6964965362608371,
+      0.8808802710081909
+    ],
+    "cv_balanced_accuracy": 0.6464285714285715,
+    "cv_bal_acc_ci": [
+      0.556051635586858,
+      0.741501946711699
+    ],
+    "cv_brier": 0.17938583207075065,
+    "cv_ece": 0.0697855216103193,
+    "cv_sensitivity": 0.8928571428571429,
+    "cv_specificity": 0.4,
+    "loo_auc": 0.7841836734693878,
+    "loo_balanced_accuracy": 0.675,
+    "loo_brier": 0.1815887533457461,
+    "ensemble_oof": {
+      "auc": 0.8015306122448979,
+      "ap": 0.8727720353886965,
+      "accuracy": 0.7362637362637363,
+      "balanced_accuracy": 0.6785714285714286,
+      "f1": 0.8125,
+      "sensitivity": 0.9285714285714286,
+      "specificity": 0.42857142857142855,
+      "ppv": 0.7222222222222222,
+      "npv": 0.7894736842105263,
+      "brier": 0.18737929471904113,
+      "ece": 0.0895258681812614
+    }
+  },
+  "ladder": [
+    {
+      "rung": "firm",
+      "confidence": "clear",
+      "n": 38,
+      "coverage": 0.4175824175824176,
+      "accuracy": 0.8157894736842105
+    },
+    {
+      "rung": "supports",
+      "confidence": "borderline",
+      "n": 23,
+      "coverage": 0.25274725274725274,
+      "accuracy": 0.7391304347826086
+    },
+    {
+      "rung": "discuss",
+      "confidence": "uncertain",
+      "n": 30,
+      "coverage": 0.32967032967032966,
+      "accuracy": 0.6333333333333333
+    }
+  ],
+  "reliability": [
+    {
+      "bin_lo": 0.0,
+      "bin_hi": 0.1,
+      "n": 0,
+      "mean_predicted": NaN,
+      "observed_rate": NaN
+    },
+    {
+      "bin_lo": 0.1,
+      "bin_hi": 0.2,
+      "n": 0,
+      "mean_predicted": NaN,
+      "observed_rate": NaN
+    },
+    {
+      "bin_lo": 0.2,
+      "bin_hi": 0.30000000000000004,
+      "n": 1,
+      "mean_predicted": 0.29888247293447295,
+      "observed_rate": 0.0
+    },
+    {
+      "bin_lo": 0.30000000000000004,
+      "bin_hi": 0.4,
+      "n": 6,
+      "mean_predicted": 0.348281423020089,
+      "observed_rate": 0.16666666666666666
+    },
+    {
+      "bin_lo": 0.4,
+      "bin_hi": 0.5,
+      "n": 12,
+      "mean_predicted": 0.4554440176918284,
+      "observed_rate": 0.25
+    },
+    {
+      "bin_lo": 0.5,
+      "bin_hi": 0.6000000000000001,
+      "n": 16,
+      "mean_predicted": 0.5494073892286685,
+      "observed_rate": 0.5625
+    },
+    {
+      "bin_lo": 0.6000000000000001,
+      "bin_hi": 0.7000000000000001,
+      "n": 23,
+      "mean_predicted": 0.6375563699861225,
+      "observed_rate": 0.6086956521739131
+    },
+    {
+      "bin_lo": 0.7000000000000001,
+      "bin_hi": 0.8,
+      "n": 22,
+      "mean_predicted": 0.7497666594961422,
+      "observed_rate": 0.8181818181818182
+    },
+    {
+      "bin_lo": 0.8,
+      "bin_hi": 0.9,
+      "n": 11,
+      "mean_predicted": 0.8259506356335596,
+      "observed_rate": 1.0
+    },
+    {
+      "bin_lo": 0.9,
+      "bin_hi": 1.0,
+      "n": 0,
+      "mean_predicted": NaN,
+      "observed_rate": NaN
+    }
+  ]
+}
