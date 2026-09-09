@@ -74,6 +74,52 @@ watchful_waiting                0           0           2           0     2
 pred n                         25          14          33           0
 ```
 
+## La escalera de fiabilidad
+
+| tramo | `confidence` | n | acierto | margen medio |
+|---|---|---|---|---|
+| `firm` | `clear` | 56 | **0.8750** | 0.683 |
+| `supports` | `borderline` | 13 | 0.8462 | 0.381 |
+| `discuss` | `uncertain` | 3 | 0.6667 | 0.239 |
+
+Cae de forma monótona, como la del [Experto 1](../expert_one/) y a diferencia de
+las de los [Expertos 2](../expert_two/), [3](../expert_three/) y
+[4](../expert_four/). Es la propiedad que justifica que exista una escalera: si
+el acierto no cayera al bajar de tramo, la incertidumbre no estaría midiendo
+nada.
+
+**Medida con validación cruzada estratificada repetida 4×2, no con
+leave-one-out.** Los otros cuatro expertos usan LOO. La diferencia es de coste y
+está medida: cada miembro del envoltorio es una cascada de tres tuberías, de
+modo que un LOO de 25 miembros son 5400 ajustes con imputación iterativa sobre
+184 columnas —se dejó correr más de dos horas sin terminar—, frente a los 600 de
+4×2 pliegues. Las dos estimaciones son fuera de muestra; ésta entrena con el
+75 % de los casos en vez del 98.6 %, así que si difiere de un LOO será por ser
+algo **más pesimista**, no al revés. Se declara aquí y en el informe
+(`ladder_protocol`) para que esta fila no se compare con las de los demás como
+si fuera la misma medida.
+
+## La escalera de fiabilidad
+
+| tramo | `confidence` | n | acierto | margen medio |
+|---|---|---|---|---|
+| `firm` | `clear` | 56 | **0.8750** | 0.683 |
+| `supports` | `borderline` | 13 | 0.8462 | 0.381 |
+| `discuss` | `uncertain` | 3 | 0.6667 | 0.239 |
+
+Cae de forma monótona, como la del [Experto 1](../expert_one/) y a diferencia de
+las de los Expertos 2, 3 y 4.
+
+**Se mide con un protocolo distinto y hay que decirlo:** validación cruzada
+estratificada repetida 4×2, no leave-one-out. El motivo es de coste y está
+medido: cada miembro del envoltorio es una cascada de tres tuberías, de modo que
+un LOO de 25 miembros son 5400 ajustes con imputación iterativa sobre 184
+columnas —más de dos horas sin terminar— frente a los 600 de 4×2 pliegues. Las
+dos estimaciones son fuera de muestra, pero ésta entrena con el 75 % de los
+casos en vez del 98.6 %, así que si difiere será por ser algo más **pesimista**.
+El bundle guarda el protocolo en `ladder_protocol` para que esta fila no se
+compare con las de los otros expertos como si fuera la misma medida.
+
 ## Nota de implementación
 
 Los miembros del envoltorio de incertidumbre llevan el bosque adelgazado a 200

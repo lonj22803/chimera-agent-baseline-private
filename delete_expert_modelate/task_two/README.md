@@ -48,8 +48,7 @@ quinto es significativamente peor.
 Lo que sí separa a los cuatro empatados es la **calidad de la probabilidad**:
 
 - el **Experto 1** es el mejor calibrado del panel (ECE 0.0425 frente a 0.1152
-  de la regla, casi un tercio) y el único con la escalera de fiabilidad
-  monótona (0.875 → 0.833 → 0.750);
+  de la regla, casi un tercio);
 - el **Experto 5** es el peor en Brier de los cuatro, y es el que hay que
   conservar igualmente, porque es el único que entrega el veredicto **abierto en
   sus tres pasos**.
@@ -82,11 +81,36 @@ Por eso el panel elige portavoz por fiabilidad medida en lugar de votar: una
 votación entre tres copias y un experto malo tiene un resultado conocido de
 antemano.
 
-Sobre la monotonía de la escalera conviene no adornar nada: se cumple en uno de
-cinco expertos, y con 72 casos repartidos en tres tramos esa ordenación es en sí
-misma una cantidad ruidosa. Que el Experto 1 la cumpla no demuestra que su
-incertidumbre esté mejor ordenada; su ECE, medido sobre los 72 casos y no sobre
-tramos de 12, sí es un argumento.
+### Las escaleras de fiabilidad
+
+Todas fuera de muestra. El acierto debería caer al bajar de tramo; si no cae, la
+incertidumbre de ese experto no está midiendo nada.
+
+| experto | `firm` / `clear` | `supports` / `borderline` | `discuss` / `uncertain` | ¿monótona? |
+|---|---|---|---|---|
+| **1** — grado | **0.875** (n=56) | 0.833 (n=12) | 0.750 (n=4) | **sí** |
+| **5** — cascada | **0.875** (n=56) | 0.846 (n=13) | 0.667 (n=3) | **sí** |
+| 4 — fusión | 0.855 (n=55) | 0.909 (n=11) | 0.833 (n=6) | no |
+| 2 — patología | 0.846 (n=52) | 0.944 (n=18) | 0.500 (n=2) | no |
+| 3 — aptitud | 0.857 (n=14) | 0.571 (n=21) | 0.622 (n=37) | no |
+
+Conviene no adornarlo: con 72 casos repartidos en tres tramos —y el más bajo con
+entre 2 y 6 casos en cuatro de los cinco— la ordenación es en sí misma una
+cantidad ruidosa, y que se cumpla en dos de cinco es perfectamente compatible
+con el azar. Lo que sí está medido sobre los 72 casos, y no sobre tramos de
+doce, es el ECE. Ése es el argumento para que el Experto 1 lleve la voz del
+panel; no la forma de su escalera.
+
+Dos observaciones sobre la tabla:
+
+- El **Experto 3** manda 37 de 72 casos a `discuss`. Medido con honestidad,
+  declara que no sabe en la mitad de la cohorte — que es exactamente lo que su
+  nodo de aptitud (AUC 0.565 con dos negativos) permite afirmar.
+- La escalera del **Experto 5** se midió con **validación cruzada estratificada
+  4×2** y no con leave-one-out como las otras cuatro. Un LOO de su envoltorio
+  son 5400 ajustes con imputación iterativa sobre 184 columnas: se dejó correr
+  más de dos horas sin terminar. Las dos estimaciones son fuera de muestra, pero
+  no son la misma medida, y su informe lo declara en `ladder_protocol`.
 
 ---
 
@@ -411,6 +435,55 @@ dice y deja la decisión abierta.
 
 ---
 
+## La inferencia sobre los 153 casos
+
+`python run_experts.py --all --out ./outputs` procesa los 153 casos y escribe
+por cada uno los dos ficheros del reto más el `expert-panel.json`.
+
+Reparto de tramos del portavoz:
+
+| | n | `firm` | `supports` | `discuss` |
+|---|---|---|---|---|
+| etiquetados (vistos en entrenamiento) | 72 | 65 | 7 | 0 |
+| sin etiqueta (los que el reto evaluará) | 81 | 71 | 10 | 0 |
+
+Ningún caso llega a `discuss` **a nivel de panel**, y no es un fallo: el
+portavoz se elige por el tramo más alto que alcance *algún* experto, de modo que
+el panel sólo declara la decisión abierta cuando los cinco se abstienen a la vez.
+Con cinco expertos eso no ocurre en esta cohorte. Los tramos individuales sí
+están en el `expert-panel.json`, que es donde el deliberador los tiene que leer.
+
+> **Aviso.** El acierto de esas 153 salidas sobre los 72 casos etiquetados es
+> **0.9028**, y eso **no es rendimiento**: son los mismos casos con los que se
+> ajustaron los expertos. La cifra honesta es el 0.8611 leave-one-out de las
+> tablas de arriba. El modo `--all` está para generar salidas, no para evaluar.
+
+### Los tres casos en que el experto peor rescata al panel
+
+El Experto 3 —acierto 0.6389, el peor con diferencia— es portavoz en tres casos.
+En los tres, **los otros cuatro expertos están en `discuss`** y él llega a
+`supports`:
+
+| caso | exp. 1 | exp. 2 | exp. 4 | exp. 5 | exp. 3 | real |
+|---|---|---|---|---|---|---|
+| T2-024 | AT `discuss` | AT `discuss` | AS `discuss` | AT `discuss` | **AS `supports`** | `active_surveillance` |
+| T2-030 | AS `discuss` | AT `discuss` | AT `discuss` | AT `discuss` | **AT `supports`** | `active_treatment` |
+| T2-110 | AS `discuss` | AT `discuss` | AT `discuss` | AT `discuss` | **AT `supports`** | `active_treatment` |
+
+Acierta los tres. Y los tres son **excepciones a la regla de guía**: T2-024 es
+un riesgo intermedio favorable que va a vigilancia, T2-030 un ISUP 1 con LUTS
+graves (IPSS 33) que va a tratamiento, T2-110 un ISUP 1 con PI-RADS 5 y nódulo
+al tacto que también.
+
+Es exactamente el mecanismo para el que existe la escalera: la abstención
+informada deja hablar a un especialista débil justo donde los fuertes no
+deberían. Ahora bien, **son tres casos y están dentro de muestra** —los expertos
+se ajustaron con ellos—, así que esto ilustra que el diseño hace lo que
+pretende, no que vaya a generalizar. Con `watchful_waiting` en dos casos y las
+excepciones de la regla en diez, esta cohorte no permite afirmar lo segundo.
+
+---
+
 ## Limitaciones, dichas de frente
 
 1. **n = 72, y una clase con 2 casos.** Los intervalos de acierto miden ±0.09. Ninguna diferencia entre modelos razonables es significativa.
@@ -422,4 +495,95 @@ dice y deja la decisión abierta.
 7. **El grado que predice la patología digital está descalibrado** respecto del clínico: 43 casos con *grade group* 5 frente a 0 de ISUP 5 clínico, e incluso *grade group* 5 en biopsias negativas (T2-018). Se usa como variable, no como grado.
 8. **El corpus es sintético o pseudonimizado.** Nada de lo medido aquí es evidencia clínica.
 
-El protocolo completo y la bibliografía están en [`train/README.md`](train/README.md).
+## Un defecto encontrado en la incertidumbre por datos ausentes
+
+El envoltorio pide `n_imputations` pasadas por miembro y separa la varianza
+*between* de Rubin como término de incertidumbre por datos ausentes. **No estaba
+funcionando.** Un `IterativeImputer` ya ajustado es determinista en `transform`:
+pedirle diez imputaciones del mismo caso devuelve diez copias idénticas.
+Comprobado sobre T2-024, un caso con 11 de 28 variables ausentes:
+
+```
+filas de imputación distintas: 1 de 10
+desviación entre imputaciones (max): 1.3e-16
+```
+
+Es decir, `epistemic_missing` salía **exactamente cero por construcción**, no
+porque el caso estuviera completo, y encima costaba diez veces el trabajo de
+inferencia. Dos cambios en `models_multiclass.MulticlassUncertaintyExpert`:
+
+1. **`sample_posterior=True`** en los `IterativeImputer` de cada miembro, que es
+   lo que la imputación múltiple pide (Rubin 1987; van Buuren y
+   Groothuis-Oudshoorn 2011). Verificado tras el arreglo: 10 filas distintas de
+   10, y `epistemic_missing = 0.0146` donde antes había un cero.
+2. **Un cortocircuito** que detecta si el ensemble cargado imputa de forma
+   determinista y, en ese caso, pide **una** pasada en vez de diez. El resultado
+   es idéntico —eran copias— con la décima parte del trabajo.
+
+**Los cinco expertos publicados se entrenaron antes del arreglo**, así que sus
+imputadores son deterministas y su `epistemic_missing` es cero en todos los
+casos. El cortocircuito hace que eso sea honesto y barato en lugar de caro y
+engañoso. Los otros dos términos —`aleatoric` y `epistemic_model`— sí funcionan
+y son los que sostienen la escalera.
+
+Para recuperar el término hay que reentrenar:
+
+```bash
+for e in one two three four five; do python expert_$e/train_expert_$e.py; done
+```
+
+Son unas tres horas. Cambia sólo la columna `margin_sigma` y con ella las filas
+de la escalera; el acierto, el Brier y el ECE se calculan sobre el estimador
+base y no se mueven.
+
+## La corrida completa, y un aviso sobre la abstención
+
+`run_experts.py --all` sobre los 153 casos, con los cinco expertos:
+
+| tramo del portavoz | total | de los 81 **sin** etiqueta |
+|---|---|---|
+| `firm` | 136 | 71 |
+| `supports` | 17 | 10 |
+| `discuss` | **0** | **0** |
+
+| conducta recomendada | n |
+|---|---|
+| `active_treatment` | 82 |
+| `active_surveillance` | 45 |
+| `continued_surveillance` | 26 |
+| `watchful_waiting` | **0** |
+
+Dos cosas que conviene mirar de frente antes de conectar esto a la pizarra:
+
+**El panel no se abstiene nunca.** `elect` recorre los tramos de arriba abajo y
+se queda con el primero que tenga a alguien: con cinco expertos —tres de ellos
+con decisiones idénticas— casi siempre hay uno en `firm`. La escalera existe
+para permitir abstención informada, y así montada no la permite: `discuss` sale
+0 veces en 153. Si la junta quiere una abstención real, la condición debería
+mirar el tramo del **Experto 1** —el único con ECE bajo y escalera monótona— o
+exigir acuerdo entre los dos ejes independientes, no bastar con que alguno de
+los cinco esté seguro.
+
+**`watchful_waiting` no se recomienda nunca.** Es coherente con todo lo medido
+—2 casos de 72, nodo de aptitud en AUC 0.565— y bajo acierto exacto es la
+decisión correcta. Pero significa que, si el conjunto de test del reto tiene
+casos de esa clase en la misma proporción, se pierden enteros: cada uno puntúa
+cero. No hay nada en esta cohorte que permita hacerlo mejor; conviene saberlo en
+vez de descubrirlo en el leaderboard.
+
+> **Aviso.** La corrida incluye los 72 casos con ground truth, que son los
+> mismos con los que se ajustaron los expertos. Comparar esas predicciones con
+> sus etiquetas no mide rendimiento: mide memorización. Las cifras válidas son
+> las leave-one-out de las tablas anteriores.
+
+## Coste de inferencia
+
+`run_experts.py --all` procesa los 153 casos con los cinco expertos en torno a
+una hora, unos 25 s por caso. El coste está en el envoltorio de incertidumbre:
+25 miembros por experto, cada uno con su propia imputación. Si el presupuesto de
+tiempo del reto lo exige, `--members` lo baja de forma proporcional, a costa de
+un `margin_sigma` más ruidoso y por tanto de una escalera menos fiable.
+
+El protocolo completo y la bibliografía están en [`train/README.md`](train/README.md),
+y el criterio con el que se construyó cada bloque de variables en
+[`VARIABLES.md`](VARIABLES.md).

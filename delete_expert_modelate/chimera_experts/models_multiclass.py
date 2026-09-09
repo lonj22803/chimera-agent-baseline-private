@@ -22,7 +22,8 @@ from sklearn.ensemble import (
     HistGradientBoostingClassifier,
     RandomForestClassifier,
 )
-from sklearn.impute import SimpleImputer
+from sklearn.experimental import enable_iterative_imputer  # noqa: F401
+from sklearn.impute import IterativeImputer, SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
@@ -185,6 +186,17 @@ class MulticlassUncertaintyExpert(BaseEstimator, ClassifierMixin):
         self.stratified_bootstrap = stratified_bootstrap
         self.random_state = random_state
 
+    @staticmethod
+    def _iterative_imputers(est):
+        """Los ``IterativeImputer`` del estimador, buscando dentro de cascadas."""
+        found = []
+        for name, step in getattr(est, "named_steps", {}).items():
+            if isinstance(step, IterativeImputer):
+                found.append(step)
+        for head in (getattr(est, "heads", None) or {}).values():
+            found.extend(MulticlassUncertaintyExpert._iterative_imputers(head))
+        return found
+
     def _member(self, k: int):
         est = clone(self.base_estimator)
         # Cada miembro recibe su propia semilla de imputación: si todos imputan
@@ -195,9 +207,34 @@ class MulticlassUncertaintyExpert(BaseEstimator, ClassifierMixin):
                 step.set_params(random_state=self.random_state + 1000 * k)
             if name.startswith("impute") and isinstance(step, SimpleImputer):
                 continue
+        # Y cada **pasada** tiene que poder diferir de la anterior. Un
+        # ``IterativeImputer`` ajustado es determinista en ``transform``:
+        # pedirle diez imputaciones del mismo caso devuelve diez copias
+        # idénticas, la varianza *between* de Rubin sale exactamente cero y el
+        # término de incertidumbre por datos ausentes deja de medir nada
+        # mientras multiplica el coste de inferencia por diez. ``sample_posterior``
+        # hace que cada pasada muestree de la posterior predictiva de la
+        # ``BayesianRidge`` interna, que es lo que la imputación múltiple pide
+        # (Rubin 1987; van Buuren y Groothuis-Oudshoorn, J Stat Softw 2011).
+        for imp in self._iterative_imputers(est):
+            imp.set_params(sample_posterior=True)
         if hasattr(est, "random_state"):
             est.set_params(random_state=self.random_state + k)
         return est
+
+    def _stochastic_imputation(self) -> bool:
+        """¿Difieren de verdad las pasadas de imputación de este ensemble?
+
+        Un modelo entrenado antes de activar ``sample_posterior`` sigue siendo
+        determinista en ``transform``. Pedirle varias pasadas no aporta
+        dispersión: sólo tiempo. Se comprueba en el propio ensemble en vez de
+        asumirlo, para que un artefacto antiguo se abarate en lugar de mentir.
+        """
+        for est in getattr(self, "members_", []):
+            for imp in self._iterative_imputers(est):
+                if getattr(imp, "sample_posterior", False):
+                    return True
+        return False
 
     def _resample(self, rng, y):
         n = len(y)
@@ -236,6 +273,11 @@ class MulticlassUncertaintyExpert(BaseEstimator, ClassifierMixin):
         """Tensor ``(imputaciones, miembros, clases)``."""
         X = np.asarray(X, dtype=float)
         n_imp = self.n_imputations if np.isnan(X).any() else 1
+        # Sin imputación estocástica las pasadas son copias exactas: se pide
+        # una sola y el resultado es idéntico a diez, con la décima parte del
+        # trabajo.
+        if n_imp > 1 and not self._stochastic_imputation():
+            n_imp = 1
         out = np.empty((n_imp, len(self.members_), len(self.classes_), len(X)))
         for i in range(n_imp):
             for k, est in enumerate(self.members_):

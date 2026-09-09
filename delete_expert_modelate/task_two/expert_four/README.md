@@ -50,16 +50,17 @@ pred n                         25          14          33           0
 | `discuss` | `uncertain` | 6 | 0.8333 | 0.175 |
 
 Como en los [Expertos 2](../expert_two/) y [3](../expert_three/), el tramo medio
-acierta más que el alto. De los cinco expertos, **sólo el Experto 1 tiene una
-escalera monótona** (0.875 → 0.833 → 0.750), y por eso es el que debe llevar la
-voz cuando el panel elige portavoz por tramo.
+acierta más que el alto. De los cinco, sólo los Expertos [1](../expert_one/)
+(0.875 → 0.833 → 0.750) y [5](../expert_five/) (0.875 → 0.846 → 0.667) tienen la
+escalera monótona.
 
-Es una observación incómoda y conviene no adornarla: con 72 casos repartidos en
-tres tramos, la ordenación de la escalera es en sí misma una cantidad ruidosa.
-Que se cumpla en uno de cinco expertos no es evidencia de que ese experto tenga
-una incertidumbre mejor calibrada; es compatible con el azar. Lo que sí está
-medido con más muestra es su ECE (0.0425, el mejor del panel), y ése es el
-motivo defendible para darle prioridad.
+Conviene no adornarlo: con 72 casos repartidos en tres tramos —y el más bajo con
+3 a 6 casos— la ordenación de la escalera es en sí misma una cantidad ruidosa.
+Que se cumpla en dos de cinco expertos no demuestra que esos dos tengan la
+incertidumbre mejor ordenada; es compatible con el azar. Lo que sí está medido
+sobre los 72 casos y no sobre tramos de doce es el ECE, y ahí el Experto 1 (0.0425)
+es el mejor del panel. Ése es el motivo defendible para darle prioridad, no la
+forma de su escalera.
 
 ## Por qué el modelo va fijado
 

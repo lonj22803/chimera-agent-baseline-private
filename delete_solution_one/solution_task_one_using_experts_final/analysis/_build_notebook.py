@@ -436,6 +436,67 @@ print("Sobre el test las tres son el mismo programa. La diferencia mide cuánto 
 
 # --------------------------------------------------------------------------- #
 M(r"""
+## 5.1 Con el juez de razonamiento encendido
+
+Todo lo anterior va con el juez apagado, que es el modo determinista. Encendido
+—el `build_rationale_judge()` de los organizadores: un `GEval` de DeepEval sobre
+Ollama con `gemma4:e4b` y su rúbrica literal— **los pesos cambian**: el
+razonamiento entra con 0.20 y el aterrizaje baja de 0.175 a 0.05. Las cifras de
+esta sección no son comparables con las de arriba, sólo entre sí.
+
+Se produce con `dev/score_with_judge.py`, que importa el mismo `evaluate.py` y
+adjunta el `clinical_data` al registro de predicción igual que hace
+`process_interf0` en el pipeline real.
+""")
+
+C(r"""
+JUDGE = PKG / "runs" / "judge"
+if not (JUDGE / "entrega.json").exists():
+    print("No hay puntuación con juez todavía; ver README §6 para reproducirla.")
+else:
+    W = {"rationale_score": 0.20, "variable_weight_score": 0.25, "confidence_score": 0.20,
+         "important_decisive_factor_score": 0.15, "tool_score": 0.15, "section_grounding_score": 0.05}
+    filas, dist = [], {}
+    for key, label in (("baseline_t0", "baseline T=0"), ("junta", "junta (3ª gen.)"), ("entrega", "ENTREGA")):
+        f = JUDGE / f"{key}.json"
+        if not f.exists():
+            continue
+        d = json.loads(f.read_text()); a = d["aggregate"]; rs = d["rows"]
+        passed = [r for r in rs if r.get("decision_score") == 1.0]
+        j = [r["rationale_score"] for r in rs if r.get("rationale_score") is not None]
+        dist[label] = j
+        fila = {"corrida": label, "ranking": round(a["ranking_score"], 4),
+                "mean_case": round(a["mean_case_score"], 4), "F1(yes)": round(a["decision_f1_yes"], 4),
+                "puerta": f"{len(passed)}/{len(rs)}", "razonamiento": round(np.mean(j), 4) if j else None}
+        for k in W:
+            if k != "rationale_score":
+                v = [r[k] for r in passed if r.get(k) is not None]
+                fila[k.replace("_score", "")] = round(np.mean(v), 4) if v else None
+        filas.append(fila)
+    display(pd.DataFrame(filas).set_index("corrida"))
+    print("El juez confirma la corrección de la nota clínica: la tercera generación —187 de 195 notas")
+    print("nombraban un participante o un mecanismo— saca 0.61; la de entrega, 0.80. Son +0.19 en el")
+    print("componente que pesa 0.20, y salen de reescribir un prompt, no de cambiar ninguna decisión.")
+    print()
+    print("El baseline saca 0.797, casi lo mismo que la entrega: su prosa nunca fue el problema, escribe")
+    print("como un clínico porque no tiene una junta que describir. Lo que falla es la decisión, y el juez")
+    print("sólo puntúa la nota de los casos que pasan la puerta — 62 de 91 frente a nuestros 83.")
+""")
+
+C(r"""
+if dist:
+    fig, ax = plt.subplots(figsize=(9, 3.4))
+    bins = np.arange(0, 1.1, 0.1)
+    for (label, j), c in zip(dist.items(), ("#b9c0c9", "#d99", "#2f6f4f")):
+        ax.hist(j, bins=bins, alpha=0.65, label=f"{label} (media {np.mean(j):.2f})", color=c)
+    ax.set_xlabel("rationale_score del juez oficial"); ax.set_ylabel("casos")
+    ax.set_title("Cómo puntúa el juez la nota clínica de cada generación")
+    ax.legend(fontsize=8, frameon=False); ax.spines[["top", "right"]].set_visible(False)
+    plt.tight_layout(); plt.show()
+""")
+
+# --------------------------------------------------------------------------- #
+M(r"""
 ---
 # 6. Los 104 casos sin etiqueta
 

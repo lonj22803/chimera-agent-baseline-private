@@ -63,6 +63,38 @@ están en [`../solution_task_one`](../solution_task_one) (0.6749),
 > | precedente idéntico (imposible en el test) | 0 |
 > | tiempo por caso, modelo ya cargado | 30 s (p90 34 s) |
 >
+> ### Con el juez de razonamiento encendido
+>
+> Todo lo anterior está medido con el juez apagado, que es el modo determinista.
+> Encendido —el `build_rationale_judge()` de los organizadores, un `GEval` de
+> DeepEval sobre Ollama con `gemma4:e4b` y su rúbrica literal— los pesos cambian
+> (el razonamiento entra con 0.20 y el aterrizaje baja de 0.175 a 0.05), así que
+> **estas cifras no son comparables con las de arriba**, sólo entre sí:
+>
+> | | baseline T=0 | junta (3ª gen.) | **ENTREGA** |
+> |---|---|---|---|
+> | `ranking_score` | 0.6378 | 0.6907 | **0.8368** |
+> | `mean_case_score` | 0.4813 | 0.5743 | **0.7426** |
+> | **`rationale_score`** | 0.7968 | 0.6116 | **0.8012** |
+> | casos juzgados (los que pasan la puerta) | 62/91 | 69/91 | **83/91** |
+>
+> **El juez confirma la corrección de la nota clínica.** La tercera generación
+> —aquella en la que 187 de 195 notas nombraban un participante de la junta o un
+> mecanismo del sistema— saca **0.6116**; la de entrega, **0.8012**. Son +0.19 en
+> el componente que pesa 0.20, y salen de reescribir el prompt del presidente,
+> no de cambiar ninguna decisión. De las 83 notas juzgadas, **29 obtienen un 1.00
+> redondo** y sólo 4 bajan de 0.5.
+>
+> Un matiz honesto: el baseline saca 0.7968 de razonamiento, prácticamente lo
+> mismo que la entrega. Su prosa nunca fue el problema —escribe como un clínico
+> porque no tiene una junta que describir—; lo que falla es la decisión, y por
+> eso sólo llega a la puerta en 62 de 91 casos frente a nuestros 83. El juez
+> puntúa la nota de los casos que pasan, así que un buen razonamiento sobre una
+> decisión equivocada no se llega a puntuar nunca.
+>
+> Se reproduce con `.venv-eval/bin/python dev/score_with_judge.py` (§6). Una sola
+> pasada del juez; a temperatura 0 pero un LLM juzgando sigue teniendo varianza.
+>
 > ### La cifra honesta, al lado
 >
 > | configuración | `ranking_score` | qué mide |
@@ -327,6 +359,14 @@ PYTHONPATH=src:. python delete_solution_one/solution_task_one_using_experts_fina
 # 5. la nota oficial, por si se quiere sin cuaderno
 python dev/score_local.py --tasks 1 --count-missing \
     --output-root delete_solution_one/solution_task_one_using_experts_final/runs/final/output
+
+# 6. y con el JUEZ DE RAZONAMIENTO encendido, que es como puntúa Grand Challenge.
+#    Necesita Ollama con gemma4:e4b y DeepEval, que va en un venv aparte para no
+#    tocar el entorno de entrega (mcp y vLLM están fijados ahí).
+uv venv .venv-eval --python 3.12 && uv pip install --python .venv-eval/bin/python deepeval ollama scikit-learn
+.venv-eval/bin/python dev/score_with_judge.py \
+    --output-root delete_solution_one/solution_task_one_using_experts_final/runs/final/output \
+    --json-out .../runs/judge/entrega.json
 ```
 
 Cada caso escribe: los dos ficheros de Grand Challenge, el acta completa en JSON
@@ -404,6 +444,8 @@ lo que añade 30–80 s.
 | [`analysis/analisis_final.ipynb`](analysis/analisis_final.ipynb) | **el cuaderno de verificación**: mide |
 | [`analysis/anatomia_del_agente.ipynb`](analysis/anatomia_del_agente.ipynb) | **el cuaderno de anatomía**: qué entra, qué sale, los prompts que vio el modelo, el diagrama, y las variables de la sala |
 | [`runs/launch.sh`](runs/launch.sh) | lanza una corrida en tmux |
+| [`runs/judge/`](runs/judge) | la puntuación con el juez encendido: log y JSON por corrida |
+| `dev/score_with_judge.py` | puntúa con el evaluador oficial **y el juez**; corre con `.venv-eval` |
 
 El paquete es autocontenido y borrable. Importa de `chimera_agent_baseline` sin
 modificarlo y de `delete_expert_modelate/chimera_experts` para deserializar los
