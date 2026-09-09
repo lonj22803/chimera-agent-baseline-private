@@ -1,0 +1,24 @@
+{
+  "model_id": "google/gemma-4-E2B-it",
+  "temperature": 0.0,
+  "token_scale": 1.0,
+  "max_passes": 2,
+  "n_cases": 72,
+  "seed": 0,
+  "split": "labeled",
+  "mcp_tools": [
+    "get_psa_trend",
+    "get_lab_results",
+    "get_mri_report",
+    "get_pathology_report",
+    "get_previous_notes",
+    "get_family_history",
+    "search_guidelines"
+  ],
+  "model_load_seconds": 67.1,
+  "vram_after_load_mb": 30977.9,
+  "confidence_policy": "constant_clear",
+  "confidence_rationale": "La compuerta 1.2 mide que ninguna politica por peldano bate a la constante en task2 (forms_report.json). Se entrega la constante.",
+  "reveal_sequence_policy": "empty_on_delivery",
+  "design": "task2 conference: intake -> E1 grade -> E2 pathology -> E5 cascade -> E4 trace (fixes the plan) -> EAU -> moderator -> registrar -> E4 fusion -> [E3 fitness] -> protocol (guideline cascade + reliability spokesperson) -> verifier -> [reopen] -> chair"
+}

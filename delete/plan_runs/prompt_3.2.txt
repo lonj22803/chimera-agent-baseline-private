@@ -1,0 +1,34 @@
+Repo: /home/jjlondono/PycharmProjects/chimera-agent-baseline
+
+Lee primero AGENTS.md (raiz del repo): interpretes de Python, servicios del host y zonas intocables.
+
+Plan completo en delete/PLAN_CODEX.md. NO lo leas entero (se trunca a 14k tokens). Lee solo:
+  sed -n '580,639p' delete/PLAN_CODEX.md      <- el paso 3.2, que es lo que tienes que ejecutar
+  sed -n '571,579p' delete/PLAN_CODEX.md      <- criterio de diseno, leelo antes
+
+VEREDICTO DE LA COMPUERTA 1.2 — obligatorio respetarlo
+delete_final_versions_task/common/analysis/forms_report.json ya esta medido. Leelo
+(python3 -c "import json;d=json.load(open('delete_final_versions_task/common/analysis/forms_report.json'))")
+antes de disenar nada. Solo se adopta lo que tenga "adoptar": true:
+  - task1: arbitrate_cells y aprendido_entero en variable_weight_score; arbitrate_cells en important_decisive.
+  - task1: expected_f1_set NO se adopta (pierde contra la moda).
+  - task2: NINGUNA politica bate al suelo. Para la tarea 2 se publica la moda / la constante.
+  - confidence_from_rung no fue medible en ninguna tarea: no lo presentes como validado.
+No adoptes una politica con "adoptar": false por mucho que el plan la proponga; el plan
+mismo dice que lo que no bate al suelo se reporta como no adoptado.
+
+Ejecuta UNICAMENTE el paso 3.2. El bloque del plan trae la especificacion exacta
+(API publica, tests y criterio de aceptacion): siguela al pie de la letra.
+
+RESTRICCIONES
+- No toques delete_solution_one/ ni delete_expert_modelate/.
+- Sin dependencias nuevas: numpy y stdlib salvo que el paso diga otra cosa.
+- No avances al paso siguiente aunque el plan lo tenga. Al terminar 3.2, PARA.
+
+
+VERIFICACION (obligatoria antes de reportar)
+- Corre la aceptacion que indique el propio paso en el plan.
+- Comprueba ademas que la suite existente sigue verde: .venv/bin/python -m pytest -q
+- Si algo no pasa, dilo explicitamente en el informe en vez de darlo por bueno.
+
+Reporta: archivos creados/modificados, un resumen por archivo, y la salida real de cada verificacion.
