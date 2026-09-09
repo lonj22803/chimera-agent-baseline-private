@@ -1,7 +1,15 @@
 FROM --platform=linux/amd64 pytorch/pytorch:2.9.1-cuda12.6-cudnn9-runtime AS example_algorithm_amd64
 
 ENV PYTHONUNBUFFERED=1
-ENV PYTHONPATH=/opt/app/src
+ENV PYTHONPATH=/opt/app:/opt/app/src
+ENV HF_HUB_OFFLINE=1 \
+    TRANSFORMERS_OFFLINE=1 \
+    HF_DATASETS_OFFLINE=1 \
+    ANONYMIZED_TELEMETRY=False \
+    DO_NOT_TRACK=1 \
+    LANGCHAIN_TRACING_V2=false \
+    LANGCHAIN_TRACING=false \
+    TOKENIZERS_PARALLELISM=false
 ENV LD_LIBRARY_PATH=/opt/conda/lib/python3.11/site-packages/torch/lib:/opt/conda/lib/python3.11/site-packages/nvidia/cuda_runtime/lib:$LD_LIBRARY_PATH
 ENV VLLM_USE_FLASHINFER_SAMPLER=0
 ENV CC=/usr/bin/gcc
@@ -40,6 +48,10 @@ COPY --chown=user:user inference.py /opt/app/
 COPY --chown=user:user src/ /opt/app/src/
 
 RUN python3 -m pip install --no-cache-dir --no-deps .
+
+COPY --chown=user:user delete_final_versions_task/ /opt/app/delete_final_versions_task/
+COPY --chown=user:user data/task1/ /opt/app/data/task1/
+RUN ln -sfn /opt/ml/model /opt/app/model
 
 COPY --chown=user:user templates/ /opt/app/templates/
 COPY --chown=user:user resources/ /opt/app/resources/

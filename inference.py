@@ -34,6 +34,7 @@ Happy programming!
 """
 
 import json
+import os
 from pathlib import Path
 
 import torch
@@ -63,6 +64,7 @@ MODEL_PATH = Path("/opt/ml/model/gemma-4-E2B-it")
 EMBEDDING_MODEL_PATH = Path("/opt/ml/model/embedding_model")
 
 RUN_CHIMERA_BASELINE = True
+USE_MERGED_SOLUTION = True  # False restores the upstream handler.
 
 def run():
     # The key is a tuple of the slugs of the input sockets
@@ -107,6 +109,13 @@ def interf0_handler():
     )
     # Run the real CHIMERA baseline. If set to False, the original GC dummy
     # example below can still be used as a minimal reference implementation.
+    if USE_MERGED_SOLUTION:
+        return run_merged_solution(
+            task=1,
+            structured_prompt=input_structured_prompt,
+            clinical_data=input_prostate_biopsy_decision_clinical_data,
+            neural_representations=input_prostate_modality_level_neural_representations,
+        )
     if RUN_CHIMERA_BASELINE:
         return run_baseline_for_gc_interface(
             task=1,
@@ -189,6 +198,13 @@ def interf1_handler():
     )
     # Run the real CHIMERA baseline. If set to False, the original GC dummy
     # example below can still be used as a minimal reference implementation.
+    if USE_MERGED_SOLUTION:
+        return run_merged_solution(
+            task=2,
+            structured_prompt=input_structured_prompt,
+            clinical_data=input_prostate_treatment_decision_clinical_data,
+            neural_representations=input_prostate_modality_level_neural_representations,
+        )
     if RUN_CHIMERA_BASELINE:
         return run_baseline_for_gc_interface(
             task=2,
@@ -272,6 +288,13 @@ def interf2_handler():
 
     # Run the real CHIMERA baseline. If set to False, the original GC dummy
     # example below can still be used as a minimal reference implementation.
+    if USE_MERGED_SOLUTION:
+        return run_merged_solution(
+            task=3,
+            structured_prompt=input_structured_prompt,
+            clinical_data=input_prostate_time_to_recurrence_or_last_follow_up_clin,
+            neural_representations=input_prostate_modality_level_neural_representations,
+        )
     if RUN_CHIMERA_BASELINE:
         return run_baseline_for_gc_interface(
             task=3,
@@ -375,6 +398,21 @@ def load_config(internal_input_root: Path, internal_output_root: Path, task: int
 
     return cfg
 
+
+
+def run_merged_solution(*, task, structured_prompt, clinical_data, neural_representations) -> int:
+    """Dispatch one GC case and write its two validated output files."""
+    os.environ["CHIMERA_MODEL_DIR"] = str(MODEL_PATH)
+    from delete_final_versions_task.common.gc_entry import dispatch
+
+    return dispatch(
+        task=task,
+        structured_prompt=structured_prompt,
+        clinical_data=clinical_data,
+        neural_representations=neural_representations,
+        output_path=OUTPUT_PATH,
+        embedding_model_dir=str(EMBEDDING_MODEL_PATH),
+    )
 
 
 def run_baseline_for_gc_interface(
