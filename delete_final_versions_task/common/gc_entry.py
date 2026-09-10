@@ -110,6 +110,14 @@ def dispatch(task: int, *, structured_prompt, clinical_data, neural_representati
         files = runner.to_gc_outputs(payload, event)
     else:
         decision, reasoning = runner.to_gc_outputs(payload)
+        # The GC output-socket schema requires the full per-task variable set
+        # in variable_weights; pad any omitted key with "not_used".
+        if isinstance(reasoning, dict) and "variable_weights" in reasoning:
+            from chimera_agent_baseline.output.schema import normalise_to_full_shape
+
+            reasoning["variable_weights"] = normalise_to_full_shape(
+                task, {"variable_weights": reasoning["variable_weights"]}
+            )["variable_weights"]
         name = DECISION_FILENAME[task]
         files = {name: decision, name.replace(".json", "-reasoning.json"): reasoning}
     for name, value in files.items():
