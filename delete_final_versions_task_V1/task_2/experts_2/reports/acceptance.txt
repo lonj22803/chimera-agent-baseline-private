@@ -1,0 +1,24 @@
+expert_one accuracy: measured=0.8611111111111112 published=0.8611 delta=1.1111111111183902e-05 PASS
+expert_one brier: measured=0.2619082178341445 published=0.2619 delta=8.217834144452763e-06 PASS
+expert_one ece: measured=0.04251438985919963 published=0.0425 delta=1.438985919962471e-05 PASS
+expert_two accuracy: measured=0.8611111111111112 published=0.8611 delta=1.1111111111183902e-05 PASS
+expert_two brier: measured=0.2732611827146417 published=0.2733 delta=-3.8817285358261344e-05 PASS
+expert_two ece: measured=0.06272776259403079 published=0.0627 delta=2.7762594030783516e-05 PASS
+expert_three accuracy: measured=0.6388888888888888 published=0.6389 delta=-1.1111111111183902e-05 PASS
+expert_three brier: measured=0.4865066977227462 published=0.4865 delta=6.6977227461961775e-06 PASS
+expert_three ece: measured=0.10691174137237022 published=0.1069 delta=1.1741372370227543e-05 PASS
+expert_four accuracy: measured=0.8611111111111112 published=0.8611 delta=1.1111111111183902e-05 PASS
+expert_four brier: measured=0.26515962747362404 published=0.2652 delta=-4.0372526375953566e-05 PASS
+expert_four ece: measured=0.0759556829744332 published=0.076 delta=-4.431702556680073e-05 PASS
+expert_five accuracy: measured=None published=0.8611 delta=None FAIL
+expert_five brier: measured=None published=0.2842 delta=None FAIL
+expert_five ece: measured=None published=0.0857 delta=None FAIL
+expert_five: Faltan loo_probabilities; las métricas agregadas no permiten reproducir el LOO sin reentrenar.
+agreement expert_one/expert_two: 72/72 expected=72 delta=0 PASS
+agreement expert_one/expert_four: 72/72 expected=72 delta=0 PASS
+agreement expert_two/expert_four: 72/72 expected=72 delta=0 PASS
+agreement expert_three/expert_one: 44/72 expected=44 delta=0 PASS
+agreement expert_three/expert_two: 44/72 expected=44 delta=0 PASS
+agreement expert_three/expert_four: 44/72 expected=44 delta=0 PASS
+ISUP LOO: 62/72 = 0.8611111111 PASS
+Checks: 2/5 PASS; report=/home/jjlondono/PycharmProjects/chimera-agent-baseline/delete_final_versions_task/task_2/experts_2/reports/verify.json
