@@ -25,6 +25,20 @@ Cada línea se marca sólo con evidencia en disco. Lo que no se ha comprobado, s
 | Cobertura completa | 423 casos | **✅ 423/423**, exit 0, sin OOM |
 | Smoke de entrega, imagen tal cual | 3 interfaces | **✅ exit 0, 2 ficheros cada una** |
 
+### Smoke final — 11-sep-2026 08:19, imagen `chimera_agent_baseline_v1`
+
+Sin montar código: sólo `/input`, `/output` y el modelo, como hará Grand Challenge.
+
+| interfaz | tarea | exit | ficheros | segundos |
+|---|---|---|---|---:|
+| 0 | biopsia | **0** | los 2 canónicos | 118 |
+| 1 | tratamiento | **0** | los 2 canónicos | 133 |
+| 2 | recurrencia | **0** | los 2 canónicos | 74 |
+
+Contenido verificado contra `contrato.py::GC_OUTPUTS`: T1 con **10** claves de
+`variable_weights`, T2 con **11** —el fallo que tumbó Development, cerrado— y T3 con su
+razonamiento como **cadena JSON suelta**.
+
 ## Artefactos
 
 - **Imagen**: entra por `inference_v1.py`, que importa el `inference.py` real y sustituye
