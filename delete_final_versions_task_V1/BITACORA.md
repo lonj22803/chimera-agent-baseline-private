@@ -843,3 +843,39 @@ Cuando un fichero desaparece, buscarlo va antes que reescribirlo.
 Lo que sí queda como mejora real: **V1 está ahora comprometido en git** con las reglas
 de `.gitignore` que separan código y documentación de las corridas pesadas. Antes se
 trabajaba sin esa red por desconocimiento de que el directorio ya estaba trackeado.
+
+## CIERRE — la entrega (11-sep-2026)
+
+Se cortan las mediciones pendientes y se empaqueta con lo verificado.
+
+**Configuración entregada**, comprobada dentro de la imagen:
+
+| | valor | estado |
+|---|---|---|
+| Portavoz de T3 | `selected` | **ADOPTADO**, +0,017 de OVERALL |
+| Prompts `enhanced` T2/T3 | **apagados** | sin medir; las banderas viajan en la imagen |
+| Slugs | `canonical`, 2 ficheros/interfaz | confirmado contra la página del algoritmo |
+| Entrypoint | `inference_v1.py` | 60 líneas sobre el `inference.py` real |
+
+**Lo que quedó sin medir y por qué.** Las variantes `enhanced` —few-shot, marco clínico
+y dos intervenciones extra en T3— se generaron para T3 (75/75, 13 intervenciones) pero
+su pase pareado del juez se cortó a mitad, y la generación de T2 quedó en 32/72. Se
+retira esa salida parcial. Las banderas quedan en la imagen apagadas: se pueden medir y
+activar más tarde **cambiando variables de entorno, sin reconstruir**.
+
+Lo que sí se verificó de la variante `enhanced` de T3 antes de cortar, y vale la pena
+conservar: el **c-index sale idéntico dígito a dígito** (0,8831858407) con y sin ella.
+Es la confirmación experimental de la separación que sostiene el diseño —los prompts
+tocan la prosa y nunca el número— bajo un cambio de prompt real.
+
+**El modelo no ha cambiado.** Cero ficheros modificados en `model/` desde el 5-sep
+(9,6 GB de Gemma-4-E2B + 1,2 GB de EmbeddingGemma). `do_save_v1.sh` no lo re-empaqueta
+por defecto: son 8,9 GB y veinte minutos para producir un fichero idéntico al ya subido.
+
+**Resultado que se entrega**, medido con el evaluador oficial, comparación pareada, dos
+pases en una sola carga del juez:
+
+| | línea base | V1 |
+|---|---:|---:|
+| OVERALL con juez | 0,8082 | **0,8262** |
+| OVERALL sin juez | 0,7944 | **0,8117** |
