@@ -5,21 +5,58 @@
 > | Fase | Estado |
 > |---|---|
 > | 0 · copia y línea base | **Cerrada** |
-> | 1 · bloqueo de entrega | **Desarrollada.** Smoke de contenedor **PASA** (21 502 MiB < 22 GiB, exit 0, esquema válido en las tres interfaces). **1.2.3 CERRADO**: slugs confirmados en la página del algoritmo. Queda **1.4.1** (cobertura, en marcha) |
-> | 2 · alinear las tres tareas | **Desarrollada**; los cambios de prosa sin adoptar |
+> | 1 · bloqueo de entrega | **CERRADA.** La compuerta pasa entera: **423/423 casos válidos**, 0 errores de contrato, 0 formularios incompletos, slugs confirmados, pico 21 502 MiB < 22 GiB |
+> | 2 · alinear las tres tareas | **CERRADA.** Los prompts de V1 mejoran el rationale en las tres tareas, en los dos pases |
 > | 3 · expertos | **Desarrollada.** La experiencia de T2 se midió y **se rechazó**: empeora en DEV |
-> | 4 · prompts | **Desarrollada, sin medir** — falta el pase pareado del juez |
-> | 5 · tarea 3 alineada | **Desarrollada.** Ruta de entrega (vLLM, expertos desplegados) ejercitada en los 75 casos |
-> | 6 · ciclo de mejora | **Cinco experimentos corridos.** Tres rechazados por medición; **dos elegibles sin adoptar** |
+> | 4 · prompts | **CERRADA.** T1 +0,013 · T2 +0,006 · T3 **+0,073** de rationale, reproducido en dos pases |
+> | 5 · tarea 3 alineada | **CERRADA.** Ruta de entrega ejercitada en los 75 casos; 5.2 medido: rationale 0,3907 → 0,4640 |
+> | 6 · ciclo de mejora | **CERRADA.** 17 candidatos medidos, **4 adoptados** (portavoz T3 + prompts de las tres tareas) |
 > | 7 · `tasks_complete` | **Desarrollada** (4 módulos, 13 tests). Entrypoint sin duplicar: 504 líneas → 60. El `COPY` del Dockerfile espera a 1.4.1 |
 >
-> **Tests: 154 en verde** (142 de V1 + 12 de la fase 7), más las suites originales.
+> **Tests: 157 en verde**, más las suites originales.
+>
+> ### Registro de avance
+>
+> | Fecha | Qué se cerró | Evidencia |
+> |---|---|---|
+> | 10-sep | Fase 0 completa | `verification/phase0.json` |
+> | 10-sep | 1.1 `variable_weights` en la causa, no en el borde | `common/tests/test_v1_contract.py` |
+> | 10-sep | 1.3 presupuesto de recursos: **el smoke pasa**, 21 502 MiB | `verification/gpu_smoke_20260911_002810/` |
+> | 10-sep | Fases 2, 3, 4, 5 desarrolladas | `common/prompt_kit.py`, `experience.py` ×3, `guideline.py`, `LocalChair` |
+> | 10-sep | Fase 6: los cinco experimentos corridos | `experiments/results/*.json` |
+> | 11-sep | **Fase 7**: `tasks_complete/` con sus 4 módulos | `common/tests/test_tasks_complete.py` |
+> | 11-sep | **1.2.3**: slugs confirmados; `canonical` pasa a ser el defecto | `ENTREGA.md`, `contrato.py::GC_OUTPUTS` |
+> | 11-sep | **7.3 (código)**: entrypoint sin duplicar, 504 líneas → 60 | `verification/inference_v1.py` |
+> | 11-sep | **6.3 ADOPTADO**: portavoz de T3, c-index 0,7372 → **0,8235** | `task_3/agent/protocol.py`, `test_invariantes_t3.py` |
+> | 11-sep | **6.1 RECHAZADO**: guardias de cohorte extendidas a los tres cubos (0,9333 → 0,8333 en DEV) | `experiments/results/cohort_guards.json` |
+> | 11-sep | **1.4.1 parcial**: T1 **195/195** y T3 **75/75** válidos en contenedor, 0 errores de contrato, 0 formularios incompletos. T2 corriendo | `verification/coverage_20260911_003530/` |
+> | 11-sep | **6.2.2 RECHAZADO**: `ct` en el conjunto important de T2 (DEV +0,0031, VAL −0,0019) | `experiments/results/t2_form_ct.json` |
+> | 11-sep | **6.1 RECHAZADO**: guardia de PSAD y reordenar la cascada (0,9219 → 0,8438 en DEV) | `experiments/results/t1_cascade_order.json` |
+> | 11-sep | **6.1 CERRADO**: el peldaño 2 es 6/6 en DEV; sus 2 fallos están en VAL y uno es ruido de etiqueta | `BITACORA.md` |
+> | 11-sep | **3.5 RECHAZADO**: experto adicional en T1. Los 3 bloques sin usar (C, E, F) empeoran la fusión | `experiments/results/t1_mri_expert.json` |
+> | 11-sep | **3.2/3.3 RECHAZADO**: experto de otra familia (kNN, RF) en T2 y T3. Nada bate a lo que hay | `experiments/results/nuevas_familias.json` |
+> | 11-sep | **RECHAZADO**: combinar expertos en vez de elegir uno (T1 y T3). **Restricción nueva: el contenedor ve un paciente, así que un conjunto por rangos no es entregable** | `BITACORA.md` |
+> | 11-sep | **RECHAZADO**: unir 2 o 3 expertos en T2. Todo satura en 0,8800; E1+E3 baja a 0,8600 | `BITACORA.md` |
+> | 11-sep | **RECHAZADO**: agrupamiento para detectar dónde falla el protocolo. p=0,22 (T1) y 0,31 (T2) | `experiments/results/deteccion_por_agrupamiento.json` |
+> | 11-sep | **FASE 1 CERRADA — 1.4.1 completa**: 423/423, compuerta en verde en sus cuatro comprobaciones | `verification/contrato_423.json` |
+> | 11-sep | **Puntuación oficial sin juez**: OVERALL honesto **0,8117** (T1 0,8390 · T2 0,7784 · T3 0,8235) | `verification/scores_v1_no_judge.json` |
+> | 11-sep | **4.4 ADOPTADO en T1**: los prompts de V1 mejoran el rationale en los dos pases (+0,0108 y +0,0145) | `experiments/results/paired_judge_task1.json` |
+> | 11-sep | **2.2.1 ADOPTADO en T2**: mejora en los dos pases (+0,0092 y +0,0031); era la arriesgada y no empeoró | `experiments/results/paired_judge_task2.json` |
+> | 11-sep | **5.2 ADOPTADO en T3**: la mayor ganancia de prosa, +0,0627 y +0,0840 | `experiments/results/paired_judge_task3.json` |
+> | 11-sep | **PLAN COMPLETO salvo 7.3 (empaquetado)**. OVERALL con juez **0,8082 → 0,8262** | `experiments/results/paired_judge_task*.json` |
+> | 11-sep | Analizado el informe real de Debug: **12 casos, 4 por tarea**. Su 0,8406 no es comparable | `verification/debug12_comparacion.json` |
+>
+> **Convención:** cada avance se marca aquí y en el bloque de su fase antes de pasar a lo
+> siguiente, con la ruta de la evidencia. Lo que no tenga evidencia en disco no se marca.
+>
+> **OVERALL CON JUEZ (el del leaderboard): 0,8082 → 0,8262**, reproducido en dos pases dentro de una sola
+> carga. Sin juez: 0,7944 → 0,8117** tras adoptar el portavoz de T3. Medido con el evaluador oficial
+> sobre la salida real del contenedor (`verification/scores_v1_no_judge.json`). El evaluador imprime 0,8236
+> porque la corrida de T3 va en modo `deployed`, que es **dentro de muestra**; el número defendible usa la
+> estimación anidada de T3 (0,8235). T1 y T2 salen idénticas a la línea base: no se adoptó nada en ellas.
 >
 > **Lo que exige decisión, no más código:**
-> 1. El portavoz de T3 (`ASGDE`) sube el c-index de **0,7372 a 0,8235** con el protocolo anidado que el
->    propio plan pre-registró — **+0,017 de OVERALL**, el mayor movimiento disponible. Sobrevivió DEV
->    (IC pareado excluye cero) y VAL. Contra: 19 eventos, IC del total rozando cero, y `time_score`
->    cayendo de 0,7540 a 0,7121 (no entra en el ranking de T3, sí en `mean_case_score`).
+> 1. ~~El portavoz de T3~~ → **ADOPTADO el 11-sep**. c-index 0,7372 → 0,8235, **+0,0173 de OVERALL**.
 > 2. El horizonte `a=105` sube `time_score` de 0,7540 a 0,7589 **sin tocar el c-index**. Ganancia limpia.
 > 3. La cobertura 423/423 necesita GPU exclusiva durante horas.
 > 4. ~~El slug de cada socket sigue sin confirmar~~ → **resuelto el 11-sep**: `canonical` es correcto y ya es el defecto. Ver `ENTREGA.md`.
@@ -90,7 +127,7 @@ rm -rf delete_final_versions_task_V1/task_1/runs delete_final_versions_task_V1/t
 
 ## Fase 1 — Bloqueo de entrega (lo primero, porque Development falló)
 
-**Estado de ejecución — Fase 1: DESARROLLADA. Falta cerrar 1.2.3 y 1.4.1.**
+**Estado de ejecución — Fase 1: DESARROLLADA. 1.2.3 CERRADO el 11-sep. Sólo queda 1.4.1.**
 
 - **1.1 HECHO.** `task_2/agent/protocol.py` emite siempre las 11 claves; `common/guards.py::validate_output`
   compara contra `VARIABLES_BY_TASK`; `normalise_to_full_shape` también en la ruta batch. Red de seguridad
@@ -104,7 +141,21 @@ rm -rf delete_final_versions_task_V1/task_1/runs delete_final_versions_task_V1/t
   `CHIMERA_VLLM_MAX_GIB`, telemetría por caso. **El smoke de contenedor pasa**:
   `verification/gpu_smoke_20260911_002810/validation.json` da exit 0, dos ficheros y esquema válido en las
   tres interfaces, con pico **21 502 MiB < 22 GiB** bajo `--memory=32g`. Era el bloqueo de Development.
-- **1.4 EN MARCHA.** Cobertura en contenedor real: **T3 75/75 ✓**, T1 en curso (~27 s/caso), T2 encolada.
+- **1.4 COMPLETA.** Cobertura en contenedor real, con vLLM y expertos desplegados:
+
+  | Tarea | Casos | Tiempo | Contrato | Formularios |
+  |---|---|---:|---|---|
+  | T1 | **195/195** ✓ | 5 216 s | 0 errores | 0 incompletos |
+  | T2 | **153/153** ✓ | 7 048 s | 0 errores | 0 incompletos |
+  | T3 | **75/75** ✓ | 311 s | 0 errores | no aplica |
+  | **Total** | **423/423** | 3 h 30 min | **0** | **0** |
+
+  Las tres con exit 0 y sin OOM. **La compuerta `tasks_complete/contrato.py` pasa entera**: slugs,
+  recursos, cobertura y formularios. Evidencia: `verification/contrato_423.json`.
+
+  Pico estable en **21 502 MiB** en las tres, bajo el techo de 22 GiB, durante 3 h 30 min seguidas. La
+  corrección de `variable_weights` en la causa (1.1) se sostiene sobre los **348 casos de T1 y T2**, no
+  sólo sobre los 163 etiquetados que teníamos medidos: era el fallo que tumbó Development y está cerrado.
   `verification/coverage_gpu.py` recorre `[3, 1, 2]` en serie con la GPU en exclusiva. `1.4.2` (casos degradados) hecho en `verification/fallback_contract/`.
 
 Nada de esta fase busca puntuación. Busca que el contenedor no se caiga y entregue el conjunto completo.
@@ -170,7 +221,10 @@ Que T1 y T2 rendericen documentos recuperados dentro del prompt **sin** adverten
 
 ### 2.2 El CHAIR de T2 y T3
 
-- **Paso 2.2.1.** El CHAIR de T2 tiene 128 tokens contra 1080 de T1 para el mismo peso de juez (0,20), y `task_2/PROMPTS.md` lo declara *"sin medir"*. Llevarlo a la estructura de T1 (few-shot + marco + lista negra) y medir. T2 ya puntúa 0,8431 de rationale, así que **hay riesgo de empeorar**: se adopta sólo si sube en dos pases del juez dentro de la misma carga.
+- **Paso 2.2.1. MEDIDO Y ADOPTADO el 11-sep.** El CHAIR de T2 tenía 128 tokens contra 1080 de T1 para el
+  mismo peso de juez, y `task_2/PROMPTS.md` lo declaraba *"sin medir"*. Se llevó a la estructura de T1 y
+  **sube en los dos pases**: rationale 0,8431 → 0,8523 y 0,8492 → 0,8523. El riesgo declarado —que empeorase
+  el mejor rationale de las tres tareas— no se materializó.
 - **Paso 2.2.2.** El CHAIR de T3 tiene el peso de juez **más alto (0,30)**, juzga los 75 casos sin puerta, y puntúa **0,3987** — el peor número del sistema entero. Aquí sí hay recorrido grande. Ver Fase 5.
 
 ### 2.3 Una anatomía declarada
@@ -214,6 +268,13 @@ Los datos lo permiten: 72 casos etiquetados con `-reasoning.json` completo (`con
 - **Paso 3.2.2.** `exclude_self=True` **desde el primer día**. T2 no tiene hoy ningún mecanismo de exclusión y sus cinco expertos se entrenaron sobre los mismos 72 que evalúan. Cualquier cifra con `self_match` es techo de mecanismo, no rendimiento.
 - **Paso 3.2.3.** **Su valor no es el voto de decisión** — la regla ISUP ya da 0,8611 y el techo de consistencia es 0,931, así que quedan ~5 casos de margen y el detector de "aquí falla la regla" está en el ruido (AUC 0,63 el mejor). **Su valor es el formulario**: reproducir `variable_weights` y `confidence` del urólogo lector, que hoy T2 resuelve con una moda congelada. Eso ataca directamente `important/decisive f1 = 0,6732` (peso 0,15), que es el componente más flojo de T2 después del anclaje.
 - **Paso 3.2.4.** Medir con LOO por cubo, igual que T1, y publicar el acierto por cubo en el acta. Adoptar sólo si bate la moda bajo LOO.
+- **Paso 3.2.5 — ¿otra familia de modelo decidiría mejor? MEDIDO EL 11-SEP: no.** El catálogo ya trae 17
+  familias. Sobre DEV, CV 5×3: **nada bate a la regla ISUP (0,8800)**; Extra Trees la empata, Random Forest
+  queda debajo (0,8533–0,8667) y el **kNN ponderado se hunde a 0,6600**. En T3, con supervivencia en tiempo
+  discreto sobre los mismos 52 casos DEV: **ASGDE adoptado 0,7903** > extra_trees 0,7631 > random_forest
+  0,7515 > CAPRA-S 0,6427 > **kNN 0,5476**, éste cerca del azar. Los árboles sí baten a CAPRA-S, lo que
+  respalda a posteriori el cambio de portavoz, pero no lo mejoran.
+  Evidencia: `experiments/results/nuevas_familias.json`.
 
 ### 3.3 Extender la experiencia a T3 — **sí, pero sólo como narración**
 
@@ -232,13 +293,21 @@ Los datos lo permiten: 72 casos etiquetados con `-reasoning.json` completo (`con
 
 ### 3.5 Auditoría de fundamentación de cada experto
 
-**Paso 3.5.** Para cada experto de cada tarea, escribir una ficha en el README de su tarea con seis campos fijos: **quién es** (la figura clínica), **qué mira**, **cómo decide** (algoritmo y referencia bibliográfica), **cuánto acierta** (métrica medida y su intervalo), **qué autoridad tiene** (vota / aconseja / abstiene / fija el formulario), y **qué NO puede decir**. Registro narrativo, como el que pediste: un médico y su memoria, una herramienta de clasificación que sugiere, un médico que conoce la guía y aporta desde ella.
+**Paso 3.5 — ¿falta algún experto? MEDIDO EL 11-SEP: no.** De los seis bloques de rasgos que `dataset.py`
+define para T1, tres no los usa nadie (C psa_trend, E notes, F embeddings de RM). Barrido con CV
+estratificada 5×3 en DEV: **A+B+D, la fusión actual, es el óptimo** (AUC OOF 0,8214). Añadir notes baja a
+0,8032, psa_trend a 0,7945, y los embeddings hunden la fusión a **0,4877**. El bloque F solo da **0,3791**,
+bajo el azar — y ahora con un modelo ajustado de verdad, no con la cabeza del baseline que publicaba 0,43.
+**No falta un experto: la composición actual es la mejor combinación disponible.**
+Evidencia: `experiments/results/t1_mri_expert.json`.
+
+**Paso 3.5 (fichas).** Para cada experto de cada tarea, escribir una ficha en el README de su tarea con seis campos fijos: **quién es** (la figura clínica), **qué mira**, **cómo decide** (algoritmo y referencia bibliográfica), **cuánto acierta** (métrica medida y su intervalo), **qué autoridad tiene** (vota / aconseja / abstiene / fija el formulario), y **qué NO puede decir**. Registro narrativo, como el que pediste: un médico y su memoria, una herramienta de clasificación que sugiere, un médico que conoce la guía y aporta desde ella.
 
 Los que hay que revisar con lupa porque su fundamentación es hoy débil o su aporte es nulo:
 
 | Experto | Problema medido | Acción |
 |---|---|---|
-| T1 `image.py` | AUC **0,43** — por debajo del azar; umbral de uso 0,60 | Declararlo explícitamente y evaluar retirarlo del contenedor (ahorra VRAM, Fase 1) |
+| T1 `image.py` | **CONFIRMADO 11-sep con modelo ajustado: AUC 0,3791**, no sólo la cabeza del baseline (0,43) | Se conserva declarando que no aporta; añadirlo a la fusión la hunde de 0,8214 a 0,4877 |
 | T2 `expert_two`, `expert_four` | Emiten las **mismas 72 decisiones** que `expert_one` | Ya declarados réplicas; que la ficha lo diga en primera línea, no en una nota al pie |
 | T2 `expert_three` (aptitud) | LOO 0,6389; nodo `fit` AUC **0,5645** = azar; `watchful_waiting` son 2/72 | Mantener con su techo de confianza (nunca `clear` ni `borderline`) y decir por qué existe |
 | T3 `expert_three` (digital) | c-index 0,7106, Δ vs ancla **−0,0265**: no aporta | Mantener como consejo con su Δ negativo escrito |
@@ -292,7 +361,7 @@ misma carga de Ollama, y eso es GPU pendiente.
 
 ## Fase 6 — Ciclo de mejora medido, tarea por tarea
 
-**Estado de ejecución — Fase 6: LOS CINCO EXPERIMENTOS CORRIDOS. Dos quedan elegibles sin adoptar.**
+**Estado de ejecución — Fase 6: LOS CINCO EXPERIMENTOS CORRIDOS. Uno ADOPTADO, uno elegible pendiente.**
 
 | Experimento | DEV | VAL | Veredicto |
 |---|---|---|---|
@@ -300,14 +369,31 @@ misma carga de Ollama, y eso es GPU pendiente.
 | T1 confianza (6.1.4) | 0,75 en las tres políticas | no leído | **Rechazado**: no bate a la moda |
 | T2 formulario (6.2.2) | F1 0,6548 → **0,5834** | no leído | **Rechazado**: empeora en DEV |
 | T3 horizonte (6.3.4) | 0,7699 → 0,7715 | 0,7181 → 0,7305 | **Elegible, sin adoptar** |
-| T3 portavoz (6.3.1-2) | c 0,6427 → **0,7903**, IC [0,0012, 0,3188] | 0,8696 → **0,8870** | **Elegible, sin adoptar** |
+| T3 portavoz (6.3.1-2) | c 0,6427 → **0,7903**, IC [0,0012, 0,3188] | 0,8696 → **0,8870** | **ADOPTADO 11-sep** |
+| T1 guardias por cubo (6.1.1) | 0,9333 → **0,8333** | no leído | **Rechazado**: empeora en DEV |
+| T2 `ct` en el formulario (6.2.2) | 0,3039 → **0,3070** | 0,3208 → **0,3189** | **Rechazado**: no reproduce en VAL |
+| T1 reordenar la cascada (6.1.2) | 0,9219 → **0,8438** | no leído | **Rechazado**: empeora en DEV |
+| T1 experto nuevo sobre bloques C/E/F (3.5) | AUC 0,8214 → 0,8032 / 0,7945 / **0,4877** | no leído | **Rechazado**: ningún bloque aporta |
+| T2 familia nueva (kNN 0,66 · RF 0,85 vs regla **0,88**) | no mejora | no leído | **Rechazado** |
+| T3 familia nueva (kNN 0,55 · RF 0,75 · ET 0,76 vs ASGDE **0,79**) | no mejora | no leído | **Rechazado** |
 
 El único cambio que mueve el ranking de forma grande es el portavoz de T3: nested con selección **dentro**
 de cada pliegue externo da **c-index 0,8235 sobre los 75** frente a 0,7372 (+0,0863 → **+0,017 de OVERALL**).
 Sobrevivió el protocolo que 6.3.2 pre-registró: el IC pareado de DEV excluye cero y VAL reproduce. Contra:
 el IC del total roza cero ([−0,0041, 0,2021]), hay 19 eventos, VAL tiene exposición histórica, y el
 `time_score` cae de 0,7540 a 0,7121 — que no entra en el ranking de T3, pero sí en `mean_case_score`.
-**La adopción es decisión del usuario; el código no la ha tomado.**
+**ADOPTADO el 11-sep-2026.** `CHIMERA_T3_SPOKESPERSON` pasa de `capra` a `selected` por defecto en
+`task_3/agent/protocol.py`. Verificado de punta a punta antes de fijarlo: la cohorte de 75 casos reproduce
+**0,8234513274** con `selected` y **0,7371681416** con `capra`, y ambos valores quedan anclados en
+`test_invariantes_t3.py` para que una regresión silenciosa no pase. La política anterior sigue disponible
+con `spokesperson='capra'`, que es también la vía para volver atrás.
+
+**OVERALL sin juez: 0,7944 → 0,8117 (+0,0173).**
+
+Los límites se publican, no se esconden: 19 eventos en total, el IC pareado del conjunto roza cero
+([−0,0041, 0,2021]), VAL tiene exposición histórica y no es cohorte externa, y el `time_score` cae de
+0,7540 a 0,7121 — que no entra en el ranking de T3 pero sí en `mean_case_score`.
+
 Evidencia: `experiments/results/{task1_protocol,forms,horizon,nested_survival,survival_total}.json`.
 
 Protocolo para **cada** cambio, sin excepción:
@@ -326,8 +412,59 @@ Protocolo para **cada** cambio, sin excepción:
 | 2 · grado documentado | 12 | 0,8333 | `b9f0b7018502`, `d7d26761c714` |
 | 3 · voto ponderado | 27 | 0,8889 | `37d8ae9b27f1`, `3b6ea1920967`, `d217629c323a` |
 
-- **Paso 6.1.1.** Leer las 8 actas (`task_1/boards/<caso>.md`). Cada una dice qué peldaño disparó y con qué evidencia — es el material para saber si el fallo es de la regla, de la lectura o de la etiqueta.
-- **Paso 6.1.2.** El peldaño 2 (grado documentado por regex sobre el texto crudo de la herramienta) falla 2 de 12. Es el punto donde la deliberación del LLM sí decide: revisar si el registrador abrió las notas y si la regex las leyó bien.
+- **Paso 6.1.1. HECHO el 11-sep.** Leídas las 8 actas. **Seis de los ocho fallos son falsos positivos**
+  (predice biopsiar, la referencia dice no); sólo dos son falsos negativos. El sistema sobre-biopsia.
+
+  | caso | bx | PI-RADS | PSA | PSAD | edad | pred | real | peldaño |
+  |---|---|---:|---:|---:|---:|---|---|---|
+  | `0169468160c6` | Positive | 5 | 187,0 | 3,26 | 75 | no | **yes** | cohorte `psa_ge_20` |
+  | `175e6ad47991` | Negative | 5 | 28,0 | 0,28 | 79 | yes | **no** | cohorte `pirads_ge_4` |
+  | `1dc32184cab6` | Negative | 4 | 0,76 | 0,02 | 60 | yes | **no** | cohorte `pirads_ge_4` |
+  | `b9f0b7018502` | Positive | 5 | 8,7 | 0,40 | 54 | no | **yes** | grado GG 4 |
+  | `d7d26761c714` | Positive | 3 | 7,7 | 0,11 | 64 | yes | **no** | grado GG 1 |
+  | `37d8ae9b27f1` | Positive | 4 | 4,8 | 0,053 | 67 | yes | **no** | voto, p=0,53 |
+  | `3b6ea1920967` | Positive | 4 | 6,5 | 0,11 | 64 | yes | **no** | voto, p=0,61 |
+  | `d217629c323a` | Positive | 4 | 3,8 | 0,126 | 70 | yes | **no** | voto, p=0,54 |
+
+  **Hipótesis probada y RECHAZADA:** las tres guardias de abstención (`psa>=20`, `edad>=78`, `pirads<=2`)
+  existen sólo en el cubo Positive porque salieron de leer sus 49 `free_text`; su razonamiento clínico
+  parecía no depender de la biopsia previa. Extenderlas a los tres cubos **empeora**: sobre los mismos
+  30 casos de DEV la exactitud cae de **0,9333 a 0,8333** — arregla uno y rompe cuatro.
+
+  La razón explica por qué eran específicas del cubo, y es clínica: **el mismo PSA significa cosas
+  distintas según haya cáncer confirmado o no.** Con biopsia positiva previa, PSA≥20 pide estadificación
+  en vez de más tejido; sin biopsia previa, PSA≥20 es justamente el motivo para biopsiar. Igual con la
+  edad: el único caso de ≥78 sin biopsia previa está etiquetado `yes`. La asimetría no era un descuido.
+  Evidencia: `experiments/results/cohort_guards.json`.
+- **Paso 6.1.2. HECHO el 11-sep — dos candidatos arquitectónicos, los dos rechazados.**
+
+  **a) Guardia de PSAD en el peldaño 3.** Los tres fallos del voto comparten PSAD bajo (0,053, 0,11, 0,126)
+  con `p` apenas sobre el umbral, y PSAD < 0,15 es criterio de guía. **No separa:** hay ocho casos
+  correctos con PSAD < 0,15 que la guardia rompería, y las `p` de los fallos (0,53–0,61) se entrelazan
+  con las de los aciertos (0,455 a 0,763). El peldaño 3 está en su límite con estas variables.
+
+  **b) Reordenar la cascada.** El diseño declara que los peldaños van *"ordenados por acierto medido"*,
+  pero no lo están: dispara 1 → 2 → 3 mientras el acierto es 1 (0,9423) > 3 (0,8889) > 2 (0,8333). El
+  peldaño menos exacto intercepta 12 casos antes de que hable el voto. Intercambiarlos **empeora**:
+  0,9219 → **0,8438** en DEV, rompiendo cinco casos que el grado documentado acertaba.
+
+  **c) Por qué el peldaño 2 se deja como está.** Al buscar cómo conservar los cinco casos que el
+  intercambio rompía apareció el dato que cierra la pregunta: **en DEV el peldaño 2 es 6/6, y sus dos
+  únicos fallos están en VAL**. La rama que falla —"grado documentado → biopsiar"— no tiene ni un
+  ejemplo en DEV: sus cuatro casos están todos en VAL. Ajustarla exige mirar el conjunto de
+  confirmación, y mirarlo lo inutiliza.
+
+  Leyendo el texto del urólogo (diagnóstico, no ajuste): en `b9f0b7018502` la etiqueta dice `yes` pero
+  él escribió *"**rather than new biopsy**, consider ... PSMA-PET"* con confianza `uncertain` — **su
+  propio texto contradice la etiqueta**, así que es ruido, no error. En `d7d26761c714` sí fallamos, pero
+  su única instancia está en VAL. **Al menos uno de los 8 fallos de T1 es irreducible: el techo honesto
+  de T1 está por debajo de 91/91.**
+
+  **La lección, que evita repetir el intento:** el 0,8889 del voto está medido *sobre los casos que hoy le
+  tocan*, que son otra población. En los 12 casos donde hay grado documentado, el voto lo hace peor.
+  El principio de ordenar por acierto se refiere a la exactitud de cada peldaño **en los casos que
+  reclama**, no a su tasa global. Comparar tasas marginales entre poblaciones distintas es la trampa.
+  **La cascada ya estaba bien ordenada.** Evidencia: `experiments/results/t1_cascade_order.json`.
 - **Paso 6.1.3.** El umbral del peldaño 3 es 0,45. Barrerlo en dev con el `panel_cache.json` OOF ya calculado — es barato, no requiere GPU.
 - **Paso 6.1.4.** El `confidence` de T1 puntúa 0,7651 frente al 0,9000 de T2. T2 lo consigue con una constante (`clear`) que ningún modelo aprendido bate bajo LOO. Medir en T1 si la política de confianza actual bate a la moda por cubo; si no, sustituirla.
 - **Paso 6.1.5.** `tool_score` 0,8685 contra el 1,0000 de T2. La `reveal_sequence` de T1 se deriva de los `ToolMessage` realmente ejecutados (`guards.reveal_sequence_from_messages`), así que es honesta por construcción; el margen está en que el registrador abra exactamente el plan que el EXPERT-TRACE fijó. Medir la brecha entre plan y apertura.
@@ -335,8 +472,39 @@ Protocolo para **cada** cambio, sin excepción:
 ### 6.2 Tarea 2 — 7 fallos, peso 0,4 del OVERALL
 
 - **Paso 6.2.1.** **`watchful_waiting` tiene f1 = 0,00** con 2 casos de soporte (`T2-031`, `T2-032`, ambos predichos `active_treatment`). Al ser F1 **ponderado por soporte**, recuperar los 2 vale poco en ranking directo, pero cada uno abre su puerta de `case_score`. El nodo `fit` de la cascada existe justamente para esta clase y su AUC es 0,5645 — azar. **No forzar la clase con una regla ad hoc**: sería exactamente la trampa que el plan prohíbe. Leer las dos actas y decidir con evidencia clínica (fragilidad, edad, comorbilidad) si hay señal defendible.
-- **Paso 6.2.2.** `important/decisive f1 = 0,6732` (peso 0,15) es el componente flojo atacable. Es lo que la experiencia profesional de T2 (3.2.3) tiene que mejorar sobre la moda congelada.
+- **Paso 6.2.2. HECHO el 11-sep — dos candidatos, los dos rechazados.** `important/decisive f1 = 0,6732`
+  (peso 0,15) es el componente flojo atacable.
+
+  La política actual marca cuatro variables como `important` —age, bx_isup, pirads, psa— y el ground truth
+  pide **4,43 de media**, así que parecía faltar una. Barrido en DEV sobre las siete candidatas: **sólo
+  `ct` mejora** (+0,0225 de F1); las otras seis empeoran, y quitar cualquiera de las cuatro actuales cuesta
+  entre 0,08 y 0,11. **El conjunto actual no es arbitrario: es el óptimo del barrido.**
+
+  Se probó `ct` en dos formas, midiendo el efecto **neto** sobre `mean_case_score` —subirlo de `noted` a
+  `important` también mueve `variable_weight_score`, que pesa 0,25 frente a 0,15—. La variante condicional
+  (`ct` important sólo si no es cT1c) no es un ajuste sino lo que significa el estadiaje: cT1c es tumor
+  impalpable detectado sólo por PSA, cT2a+ es enfermedad palpable. 51 de 72 casos son cT1c.
+
+  | | DEV | VAL |
+  |---|---:|---:|
+  | base | 0,3039 | 0,3208 |
+  | `ct` si palpable | **0,3070** | **0,3189** |
+
+  **Gana en DEV y pierde en VAL: rechazado.** Y aunque hubiera reproducido, la magnitud era +0,0006 de
+  OVERALL. La [experiencia profesional de T2](#) (3.2.3) ya había fallado antes sobre este mismo componente.
+  Evidencia: `experiments/results/t2_form_ct.json`.
 - **Paso 6.2.3.** **`section_grounding = 0,2171`, y NO se toca.** Está medido y escrito: silenciar las nueve casillas restantes sube el grounding a 1,0 y da 0,7896 sin juez, pero **con el juez del leaderboard pierde: 0,7340 frente a 0,7696**, porque apagar el juez redistribuye el peso de 0,05 a 0,175. Y `reveal_sequence` vacío es **la predicción correcta**: el ground truth lo tiene vacío en los 72 casos, y `compute_tool_score` premia precisión, así que declarar cualquier sección lo pondría a 0. Esto no es un defecto que arreglar.
+- **Paso 6.2.4 bis — ¿unir dos o tres expertos? MEDIDO EL 11-SEP: no.** T2 elige portavoz y nunca combina;
+  el voto blando sí sería entregable (es función del caso, a diferencia del conjunto por rangos de T3).
+  Sólo E1, E3 y E5 son diversos —E2 y E4 repiten las 72 decisiones de E1—. En DEV, CV 5×3:
+  **E1 solo 0,8800 · E5 solo 0,8800 · E3 solo 0,7000**; todas las uniones de dos y tres saturan en
+  **0,8800** y **E1+E3 baja a 0,8600**. Igual con producto de expertos.
+
+  E1 y E5 re-expresan la misma regla ISUP, así que combinarlos promedia opiniones idénticas; E3 es el
+  único distinto pero vale 0,70. **Esto justifica la arquitectura actual**: usar a E3 como desempate
+  —hablando sólo cuando los demás están en `discuss`— conserva su aporte sin pagar su error. En la corrida
+  real fue portavoz en 3 casos y acertó los 3; un voto blando permanente habría perdido eso.
+
 - **Paso 6.2.4.** Los 7 fallos son todos de `expert_one`. La regla ISUP acierta 62/72 y el techo de consistencia es 0,931 (5 casos con perfil idéntico y etiqueta contraria). Quedan ~3 casos recuperables. Leer `T2-008`, `T2-011`, `T2-018`, `T2-043`, `T2-108`.
 
 ### 6.3 Tarea 3 — peso 0,2 del OVERALL, ranking = c-index y nada más
@@ -354,6 +522,20 @@ Ningún cambio entra si:
 - Sube sólo con el juez apagado y depende del anclaje a secciones.
 - Sube sólo comparando contra un pase del juez de otra carga.
 - Requiere leer una etiqueta en inferencia, o `exclude_self=False`.
+
+---
+
+### Restricción de despliegue descubierta el 11-sep
+
+**Un proceso/contenedor por paciente** (`gc_entry.py`, línea 4). El rango de un solo valor es siempre 1,0,
+así que **cualquier combinación de expertos por rangos —o por percentiles, o por cualquier estadístico de
+cohorte— no es una función del caso y no se puede entregar.** Una combinación futura tiene que promediar
+riesgos calibrados por caso, no posiciones relativas.
+
+Se descubrió midiendo un conjunto ASGDE 2:1 extra_trees en T3 que mejoraba en DEV (0,7903 → 0,8078) **y**
+en VAL (0,8348 → 0,8783) y aun así empeoraba sobre los 75 (0,8235 → 0,8142): los rangos dentro de cada
+split no componen el mismo orden que los rangos sobre la cohorte entera, así que las dos confirmaciones
+medían un objeto distinto del que se entregaría.
 
 ---
 
@@ -381,6 +563,10 @@ Sólo cuando las tres tareas hayan subido y estén verificadas.
 - `runner.py` — un único punto de entrada para las tres tareas (`--task {1,2,3} --split ... --backend ...`), sustituyendo los tres `run_taskN.py` casi idénticos.
 - `evaluar.py` — las cinco fases de `resultados/run_all.sh` como funciones invocables, con la serialización de GPU (vLLM ~28 GiB + juez ~6,5 GiB no caben en 32,6) y el pase pareado del juez en una sola carga.
 - `experimento.py` — el ciclo de la Fase 6: dev → val → total → `BITACORA.md`, para que probar una idea sea un comando y no un ritual.
+- `experiments/iterar.py` — el **ciclo corto** para ajustar prompts: genera prosa con vLLM sobre una muestra
+  de DEV, libera la tarjeta y juzga, en 5-17 min según la tarea frente a las 1,7 h del pase riguroso.
+  Exploratorio por diseño: con 20 casos el error del `rationale_score` ronda ±0,05, así que dice **a qué**
+  dedicarle el pase completo, no qué adoptar.
 - `contrato.py` — todas las comprobaciones de la Fase 1 (claves completas, slugs, cobertura 423/423, presupuesto de recursos) como una sola compuerta ejecutable antes de empaquetar.
 
 **Paso 7.2.** Los `task_N/` conservan su protocolo, sus expertos y sus prompts. `tasks_complete/` es orquestación, no una cuarta implementación.
