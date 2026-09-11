@@ -94,3 +94,61 @@ def test_to_gc_outputs_devuelve_el_reasoning_como_cadena_suelta():
     out = decide.to_gc_outputs(payload, 0)
     assert isinstance(out[decide.REASONING], str)
     assert out[decide.DECISION] == {"event": 0, "months_to_recurrence": 12.5}
+
+
+# --- El portavoz adoptado el 11-sep-2026 -----------------------------------
+#
+# Se cambió el portavoz de CAPRA-S predeclarado a la selección anidada. El
+# ranking de la tarea 3 es el c-index y nada más, así que este número ES la nota
+# de la tarea: se ancla para que una regresión silenciosa no pase desapercibida.
+# La política anterior sigue disponible en `spokesperson='capra'` para comparar.
+
+C_INDEX_ADOPTADO = 0.8234513274336284
+C_INDEX_CAPRA = 0.7371681415929203
+
+
+def _c_index(months, tiempos, eventos):
+    """Harrell sobre los meses predichos leídos como orden de riesgo inverso."""
+    aciertos = pares = 0.0
+    for i in range(len(tiempos)):
+        for j in range(len(tiempos)):
+            if i == j or eventos[i] != 1:
+                continue
+            comparable = tiempos[i] < tiempos[j] or (tiempos[i] == tiempos[j] and eventos[j] == 0)
+            if not comparable:
+                continue
+            pares += 1
+            aciertos += 1.0 if months[i] < months[j] else 0.5 if months[i] == months[j] else 0.0
+    return aciertos / pares
+
+
+def _meses_de_la_cohorte(spokesperson):
+    from delete_final_versions_task_V1.common.chimera_experts import dataset_task3 as ds
+    from delete_final_versions_task_V1.common.chimera_experts.io import load_cases
+    from delete_final_versions_task_V1.task_3.agent.protocol import Panel
+
+    raiz = Path(__file__).resolve().parents[4] / "data/task3"
+    verdad = {p.name: json.loads((p / "prostate-time-to-recurrence-or-last-follow-up.json").read_text())
+              for p in sorted((raiz / "ground_truth").iterdir()) if p.is_dir()}
+    casos = {c.case_id: c for c in load_cases(raiz, 3)}
+    panel = Panel("oof", spokesperson=spokesperson)
+    ids = sorted(verdad)
+    meses = [panel.horizon(casos[cid], ds._surgical(casos[cid])["capra_s"])["months_to_recurrence"]
+             for cid in ids]
+    return (meses,
+            [verdad[i]["months_to_recurrence"] for i in ids],
+            [verdad[i]["event"] for i in ids])
+
+
+@pytest.mark.skipif(not ART.exists(), reason="faltan los artefactos de experts_3")
+@pytest.mark.parametrize("portavoz,esperado", [("selected", C_INDEX_ADOPTADO),
+                                               ("capra", C_INDEX_CAPRA)])
+def test_el_c_index_de_cada_portavoz_esta_anclado(portavoz, esperado):
+    assert _c_index(*_meses_de_la_cohorte(portavoz)) == pytest.approx(esperado, abs=1e-12)
+
+
+@pytest.mark.skipif(not ART.exists(), reason="faltan los artefactos de experts_3")
+def test_el_portavoz_por_defecto_es_el_adoptado():
+    """Cambiar el defecto cambia la nota entregada: que no ocurra sin querer."""
+    from delete_final_versions_task_V1.task_3.agent.protocol import Panel
+    assert Panel("oof").spokesperson == "selected"

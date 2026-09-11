@@ -65,3 +65,26 @@ def test_el_envoltorio_entrega_la_solucion_v1(monkeypatch, tmp_path):
                                          neural_representations={}) == 0
     assert visto['output_path'] == tmp_path
     assert visto['embedding_model_dir'] == str(inference.EMBEDDING_MODEL_PATH)
+
+
+def test_el_paquete_antiguo_nunca_se_importa(monkeypatch, tmp_path):
+    """La imagen entrega sólo V1: `delete_final_versions_task` no existe dentro.
+
+    `inference.py:406` lo importa, pero desde dentro de `run_merged_solution`, que el
+    envoltorio sustituye antes de cualquier llamada. Si esa sustitución fallara, el
+    contenedor moriría con ModuleNotFoundError en el primer caso — el peor momento.
+    Aquí se simula la ausencia del paquete y se comprueba que la ruta real no lo toca.
+    """
+    import builtins
+    real = builtins.__import__
+
+    def sin_paquete_antiguo(name, *a, **kw):
+        if name.startswith('delete_final_versions_task.'):
+            raise ModuleNotFoundError(f'simulado: {name} no viaja en la imagen')
+        return real(name, *a, **kw)
+
+    monkeypatch.setattr(builtins, '__import__', sin_paquete_antiguo)
+    monkeypatch.setattr(gc_entry, 'dispatch', lambda **kw: 0)
+    monkeypatch.setattr(inference, 'OUTPUT_PATH', tmp_path)
+    assert inference.run_merged_solution(task=1, structured_prompt={}, clinical_data={},
+                                         neural_representations={}) == 0

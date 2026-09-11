@@ -19,8 +19,24 @@ def api(route,data=None):
 
 
 def runners():
-    result=subprocess.run(['pgrep','-f','ollama runner'],text=True,capture_output=True)
-    return sorted(result.stdout.split())
+    """Identidad de la carga del juez, tomada de la API de Ollama y no de `pgrep`.
+
+    Lo que hay que probar es que el modelo **no se recargó** entre puntuar la base y
+    puntuar el candidato: el juez cambia de nota al recargarse. `pgrep -f` no sirve para
+    eso, y dio dos falsos positivos: casa con la línea de órdenes de cualquier shell que
+    mencione el runner —incluido el que hace la comprobación— y depende del nombre del
+    proceso, que Ollama cambió entre versiones (`ollama runner` antes, `llama-server`
+    ahora). Una comprobación que se detecta a sí misma no comprueba nada.
+
+    `/api/ps` dice qué modelos están cargados en este instante. Se toma nombre, digest y
+    tamaño en VRAM: si son los mismos antes y después, es la misma carga.
+    """
+    try:
+        residentes = api('ps').get('models', [])
+    except OSError:
+        return []
+    return sorted(f"{m.get('name')}@{m.get('digest', '')[:12]}:{m.get('size_vram', 0)}"
+                  for m in residentes)
 
 
 def run(baseline,candidate,task,split,out):

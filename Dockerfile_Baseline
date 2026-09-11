@@ -49,7 +49,14 @@ COPY --chown=user:user src/ /opt/app/src/
 
 RUN python3 -m pip install --no-cache-dir --no-deps .
 
-COPY --chown=user:user delete_final_versions_task/ /opt/app/delete_final_versions_task/
+# Lo que se entrega es V1 y sólo V1. La versión anterior no viaja en la imagen: para
+# volver atrás se reenvía la imagen anterior, que sigue existiendo como tag aparte.
+#
+# El entrypoint es `inference_v1.py`, un envoltorio de 60 líneas que importa el
+# `inference.py` real —el contrato del contenedor, intacto— y sustituye únicamente la
+# función que elige el paquete. Ningún fichero del contrato se duplica ni se edita.
+COPY --chown=user:user delete_final_versions_task_V1/ /opt/app/delete_final_versions_task_V1/
+COPY --chown=user:user delete_final_versions_task_V1/verification/inference_v1.py /opt/app/inference_v1.py
 COPY --chown=user:user data/task1/ /opt/app/data/task1/
 RUN ln -sfn /opt/ml/model /opt/app/model
 
@@ -59,4 +66,4 @@ COPY --chown=user:user configs/ /opt/app/configs/
 
 USER user
 
-ENTRYPOINT ["python3", "inference.py"]
+ENTRYPOINT ["python3", "inference_v1.py"]

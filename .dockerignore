@@ -117,6 +117,15 @@ delete_final_versions_task/**/analysis/
 delete_final_versions_task/**/runs/
 delete_final_versions_task/**/*.ipynb
 delete_final_versions_task/task_1/experts_1/model/expert_three_with_e2.joblib
+
+# V1 entra ENTERO: código, pesos, documentación y la evidencia de las mediciones.
+# El contenedor sólo necesita el código, pero llevar dentro el PLAN, la BITACORA y los
+# resultados de los experimentos hace la entrega auditable por sí sola, y cuesta ~46 MB
+# sobre 33 GB. Sólo se excluyen cachés de Python y el artefacto de una ablación que
+# ningún experto carga.
+delete_final_versions_task_V1/**/__pycache__/
+delete_final_versions_task_V1/**/*.ipynb
+delete_final_versions_task_V1/task_1/experts_1/model/expert_three_with_e2.joblib
 delete/
 delete_solution_one/
 delete_expert_modelate/

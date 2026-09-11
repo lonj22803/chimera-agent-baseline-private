@@ -23,7 +23,12 @@ class Panel:
         if mode not in {'oof', 'deployed'}:
             raise ValueError('mode must be oof or deployed')
         self.mode = mode
-        self.spokesperson = spokesperson or os.environ.get('CHIMERA_T3_SPOKESPERSON', 'capra')
+        # Adoptado el 11-sep-2026: el portavoz sale de la selección anidada, no de
+        # CAPRA-S predeclarado. c-index 0,7372 -> 0,8235 sobre los 75. El protocolo
+        # estaba pre-registrado (plan 6.3.2) y lo pasó: selección dentro de cada
+        # pliegue externo, IC pareado de DEV que excluye cero, VAL que reproduce.
+        # `capra` conserva la política anterior para poder comparar y volver atrás.
+        self.spokesperson = spokesperson or os.environ.get('CHIMERA_T3_SPOKESPERSON', 'selected')
         if self.spokesperson not in ('capra', 'selected'):
             raise ValueError('Unknown T3 spokesperson')
         self.reports = {}
