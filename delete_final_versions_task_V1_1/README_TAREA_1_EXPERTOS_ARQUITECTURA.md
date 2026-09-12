@@ -46,6 +46,27 @@ La razon para elegir Extra-Trees fue empirica: en el bakeoff ganaba o empataba a
 
 En V1.1 no se cambiaron las decisiones ni los modelos respecto a V1: se arreglo el reloj. Los expertos se precalientan en paralelo, los bosques puntuan con `n_jobs=1` para evitar overhead en una sola fila, y algunos calculos caros se hacen perezosos.
 
+### Que son A, B y D
+
+Los nombres **A**, **B** y **D** vienen del constructor de matrices de `chimera_experts/dataset.py`. Cada letra es una fuente de variables. El Experto 1 usa solo **A**; el Experto 3 usa **A+B+D**, por eso se llama experto de fusion multi-fuente.
+
+| bloque | origen | que contiene | por que importa |
+|---|---|---|---|
+| **A** | `structured-prompt.json` | panel estructurado que el reto entrega ya tabulado: edad, PSA, volumen, PSAD, PI-RADS, biopsia previa (`bx`), DRE, comorbilidades, `cspca`, etc. | Es el suelo robusto: esta disponible en todos los casos y permite inferencia aunque no se abra ningun documento. |
+| **B** | `prostate-biopsy-decision-clinical-data.json` | analitica/laboratorio, especialmente variables derivadas del PSA libre y otros valores de laboratorio. | Aporta senales pequenas pero utiles; por ejemplo `%PSA libre < 15%` aparece entre las variables importantes del Experto 3. |
+| **D** | `prostate-biopsy-decision-clinical-data.json` | informe radiologico de RM procesado con extraccion de conceptos y deteccion de negacion tipo NegEx: restriccion en difusion, severidad DWI/T2, lesion >= 15 mm, extension extracapsular, adenopatias, etc. | Es el bloque que mas se nota en la ablacion: quitar radiologia cuesta alrededor de -0.030 AUC. Lee matices que no estan en el panel estructurado. |
+
+Hay otros bloques, pero no se adoptaron para el Experto 3 final:
+
+| bloque | contenido | decision |
+|---|---|---|
+| **C** | serie longitudinal de PSA | no mejora al clasificador; se usa aparte en el Experto 2 como proyeccion del PSA |
+| **E** | notas previas/familia | en la ablacion restaba ligeramente; se deja para el registrador y para reglas documentales, no como bloque del clasificador |
+| **F** | embedding neuronal de RM de 1024 dimensiones | las sondas lineales quedaron por debajo del escalar `cspca`; no se usa |
+| **G** | salida del Experto 2 como variables | no mejora sobre ABD; se descarta como entrada del clasificador |
+
+La razon de **ABD** es, por tanto, practica: combina el panel completo (**A**), una senal analitica pequena (**B**) y la informacion radiologica textual que mas aporta (**D**), sin meter fuentes que anaden ruido con solo 91 etiquetas. En la ablacion, **ABD** obtuvo AUC 0.794, mejor que ABCD, ABCDE, AD, ABDE o A solo.
+
 ## 3. Que hace cada experto en la junta
 
 La junta esta en `task_1/agent/graph.py`. Tiene intervenciones numeradas y persistidas en JSON/Markdown. El orden importa porque algunos expertos solo pueden hablar despues de que el registrador abra documentos.
@@ -175,7 +196,430 @@ El Experto 3 tiene multiplicador 1.5 porque su AUC es mejor que el Experto 1. La
 
 El umbral 0.45 no es casual. En estos casos, especialmente con cancer ya conocido, diferir una biopsia exige una razon positiva. La rejilla medida mostro que 0.45 daba mejor ranking que 0.50 o 0.40 en la configuracion de entrega.
 
-## 7. Que se entrega al formulario
+## 7. Ejemplo detallado de una inferencia
+
+Este ejemplo es representativo de la ruta dificil, no una promesa clinica. Sirve para ver como se mueve la arquitectura cuando llega un caso que no se resuelve solo con el panel.
+
+### Entrada del caso
+
+Supongamos un paciente con este `structured-prompt.json` simplificado:
+
+```json
+{
+  "age": 72,
+  "bx": "Positive",
+  "psa": 9.8,
+  "psad": 0.16,
+  "vol": 61,
+  "pirads": 4,
+  "dre": "normal",
+  "cspca": 0.42,
+  "comorbidity": "controlled hypertension"
+}
+```
+
+Y con estos documentos disponibles pero todavia cerrados:
+
+```text
+radiology_report
+psa_trend
+previous_notes
+laboratory_results
+family_history
+```
+
+Lo importante de entrada es `bx = Positive`: el paciente ya tiene una biopsia previa positiva. Eso lo mete en el cubo dificil. En un paciente nunca biopsiado, PI-RADS 4 casi bastaria para biopsiar. Aqui no: puede ser vigilancia activa, confirmatoria, progresion ya conocida o indicacion de tratamiento sin repetir biopsia.
+
+### Paso 1: `INTAKE`
+
+La junta primero escribe dos intervenciones de intake:
+
+1. El JSON crudo, campo por campo.
+2. El mismo caso renderizado como formulario clinico.
+
+No decide nada. Solo fija el expediente visible. Tambien deja claro que en tarea 1 no hay `pathology_report` separado: si hay grado previo, vive en `previous_notes`.
+
+### Paso 2: `EXPERT-STRUCTURED`, el Experto 1
+
+El Experto 1 lee solo el bloque **A**, es decir, el panel estructurado. No ha visto RM en texto libre, notas previas ni analitica.
+
+Para este ejemplo podria devolver:
+
+```json
+{
+  "decision": "yes",
+  "p": 0.54,
+  "tier": "discuss",
+  "confidence": "uncertain",
+  "sigma": 0.18,
+  "variable_weights": {
+    "bx": "decisive",
+    "pirads": "important",
+    "psa": "noted",
+    "psad": "noted",
+    "age": "noted",
+    "dre": "noted"
+  }
+}
+```
+
+Lectura humana: el panel se inclina levemente a biopsia porque hay PI-RADS 4 y PSAD algo elevada, pero el propio experto sabe que en `bx = Positive` su senal es debil. Por eso el tramo es `discuss`: habla, pero no puede cerrar el caso.
+
+### Paso 3: `EXPERT-COHORT`, el criterio por cubo
+
+El experto de cohorte mira primero el cubo:
+
+```text
+bx = Positive
+```
+
+Luego prueba sus reglas fuertes para biopsia previa positiva:
+
+```text
+PSA >= 20       ? no, PSA = 9.8
+edad >= 78      ? no, edad = 72
+PI-RADS <= 2    ? no, PI-RADS = 4
+```
+
+Como ninguna dispara, se abstiene:
+
+```json
+{
+  "bucket": "prior positive biopsy",
+  "verdict": null,
+  "fired": null,
+  "confidence": "uncertain",
+  "rule": "the visible panel does not determine this decision"
+}
+```
+
+Esto es crucial. El sistema no interpreta "no hay regla" como "no biopsiar". Lo interpreta como "el panel no alcanza; hay que leer las notas previas para saber grado, vigilancia y contexto".
+
+### Paso 4: `EXPERT-EXPERIENCE`, biblioteca de precedentes
+
+La biblioteca busca los `k=3` casos mas parecidos dentro del mismo cubo `Positive`, usando variables estructuradas estandarizadas: PI-RADS, log(PSA), log(PSAD), volumen, edad, DRE y `cspca`.
+
+Podria recuperar:
+
+| vecino | distancia | decision real | confianza | resumen |
+|---|---:|---|---|---|
+| caso A | 0.42 | yes | borderline | vigilancia con sospecha persistente |
+| caso B | 0.58 | no | clear | grado alto previo, paso a tratamiento |
+| caso C | 0.77 | yes | uncertain | lesion persistente sin grado inicial claro |
+
+La moda ponderada podria quedar cerca de empate:
+
+```json
+{
+  "answer": "yes",
+  "p_yes": 0.56,
+  "confidence": "uncertain",
+  "self_match": false
+}
+```
+
+Pero en `bx = Positive` esta biblioteca acierta 0.47 leave-one-out. Por eso en la decision final **no vota**. Aun asi su turno sirve: muestra precedentes, que documentos abrio el urologo en situaciones parecidas y que variables solian aparecer en la traza.
+
+### Paso 5: `EXPERT-TRACE`, el Experto 4 fija el plan
+
+El Experto 4 no decide biopsia. Predice que abriria y que pesaria el urologo lector.
+
+Para este caso podria decir:
+
+```json
+{
+  "source": "trace model + bucket mode",
+  "reveal_sequence": [
+    "radiology_report",
+    "previous_notes",
+    "laboratory_results"
+  ],
+  "confidence": "borderline",
+  "variable_weights": {
+    "bx": "decisive",
+    "pirads": "important",
+    "psa": "important",
+    "psad": "noted",
+    "dre": "noted",
+    "age": "noted",
+    "fh": "not_used"
+  }
+}
+```
+
+Esta salida tiene dos efectos:
+
+1. Fija el `reveal_sequence` candidato del formulario.
+2. Fija el plan operativo del registrador: abrir exactamente radiologia, notas previas y laboratorio.
+
+No se abre `family_history` porque en esta tarea penaliza mas de lo que aporta y el urologo casi nunca la abria. Tampoco se abre `psa_trend` si el modelo de traza no lo pidio.
+
+### Paso 6: `EXPERT-EAU` y `MODERATOR`
+
+El experto EAU consulta guia y recuerda el criterio general:
+
+```text
+En cancer ya diagnosticado, una nueva biopsia solo tiene sentido si cambia manejo:
+confirmatoria en vigilancia, sospecha de reclasificacion o informacion histologica
+insuficiente. Si ya hay grado alto documentado, el siguiente paso suele ser tratamiento
+o estadificacion, no repetir tejido.
+```
+
+El moderador convierte la incertidumbre en preguntas concretas:
+
+```text
+radiology_report: confirmar PI-RADS, tamano de lesion, restriccion DWI y extension extracapsular.
+previous_notes: buscar grado ISUP/Gleason de la biopsia previa, fechas y si esta en vigilancia activa.
+laboratory_results: confirmar PSA, PSA libre o datos que apoyen riesgo actual.
+```
+
+### Paso 7: `REGISTRAR` abre los documentos del plan
+
+El registrador llama herramientas reales y solo para las secciones previstas. Supongamos que recupera:
+
+```text
+radiology_report:
+  Lesion periferica izquierda PI-RADS 4, 12 mm, restriccion en difusion moderada,
+  sin extension extracapsular ni adenopatias.
+
+previous_notes:
+  Biopsia previa hace 14 meses: Gleason 3+3, Grade Group 1.
+  Paciente en vigilancia activa. Se recomienda biopsia confirmatoria si persiste lesion en RM.
+
+laboratory_results:
+  PSA 9.8 ng/mL, porcentaje PSA libre 12%, creatinina normal.
+```
+
+El registrador puede resumir, pero la decision no confia ciegamente en su resumen para el grado. `decide.documented_grade()` escanea el texto crudo y extrae:
+
+```json
+{
+  "gg": 1,
+  "quote": "Gleason 3+3",
+  "on_surveillance": true,
+  "biopsy_mentions": 1
+}
+```
+
+La traduccion es mecanica: Gleason 3+3 equivale a Grade Group 1. Ademas detecta vigilancia activa.
+
+### Paso 8: `EXPERT-PSA`
+
+En este ejemplo no se abrio `psa_trend`, asi que el Experto 2 se abstiene:
+
+```json
+{
+  "available": false,
+  "reason": "psa_trend not opened"
+}
+```
+
+Esto es deliberado. No proyecta el PSA a partir del valor suelto del panel, porque su contrato es leer la serie abierta. Si no esta sobre la mesa, no inventa trayectoria.
+
+### Paso 9: `EXPERT-FUSION`, el Experto 3 con A+B+D
+
+El Experto 3 ahora si puede leer sus bloques:
+
+- **A**: panel estructurado.
+- **B**: laboratorio abierto.
+- **D**: radiologia abierta procesada con NegEx.
+
+Sus variables internas incluirian cosas como:
+
+```text
+A:
+  bx_positive = 1
+  pirads = 4
+  log_psa = log(9.8)
+  psad = 0.16
+  dre_suspicious = 0
+
+B:
+  fpsa_lt15 = 1
+
+D:
+  rad_dwi_restriction = 1
+  rad_dwi_severity = 2
+  rad_lesion_ge15mm = 0
+  rad_epe = 0
+  rad_nodes = 0
+```
+
+Podria devolver:
+
+```json
+{
+  "decision": "yes",
+  "p": 0.62,
+  "tier": "supports",
+  "confidence": "borderline",
+  "available": true,
+  "variant": "fusion_full",
+  "variable_weights": {
+    "bx": "decisive",
+    "pirads": "important",
+    "psa": "important",
+    "psad": "noted",
+    "dre": "noted"
+  }
+}
+```
+
+Lectura humana: la RM y el PSA libre bajo empujan hacia biopsia/confirmacion, pero no es un caso `firm` porque `bx = Positive` sigue cambiando la pregunta.
+
+### Paso 10: `PANEL-PROTOCOL` aplica la cascada
+
+La cascada revisa los peldaños:
+
+```text
+1. precedente identico?
+   no, self-match apagado / test no puede tenerlo
+
+2. criterio de cohorte?
+   no, en bx Positive no disparan PSA >= 20, edad >= 78 ni PI-RADS <= 2
+
+3. grado documentado?
+   si: GG 1 ("Gleason 3+3") y vigilancia activa
+```
+
+Como hay grado documentado GG 1 en vigilancia, dispara la regla documental:
+
+```text
+GG 1 en vigilancia activa -> biopsia confirmatoria
+```
+
+La decision queda:
+
+```json
+{
+  "decision": "yes",
+  "who": "documented grade",
+  "rule": "documented prior grade GG 1 (Gleason 3+3)",
+  "confidence": "clear",
+  "track": "A documented GG 1 in a man under surveillance is what a confirmatory biopsy is for..."
+}
+```
+
+Observa algo importante: aunque el Experto 1 y el Experto 3 tambien sugerian `yes`, aqui **no hace falta llegar al voto ponderado**. El caso lo decide un hecho documental con regla escrita.
+
+Si no hubiese grado documentado, entonces si entraria el voto ponderado:
+
+```text
+Experto 1: p = 0.54, tier discuss  -> peso 1.0
+Experto 3: p = 0.62, tier supports -> peso 2.0 * 1.5 = 3.0
+Biblioteca: p = 0.56              -> peso 0.0
+
+p_final = (0.54*1.0 + 0.62*3.0 + 0.56*0.0) / (1.0 + 3.0 + 0.0)
+        = (0.54 + 1.86) / 4.0
+        = 0.60
+
+0.60 >= 0.45 -> biopsia yes
+```
+
+En esta ruta alternativa tambien habria salido `yes`, pero por otro motivo: masa ponderada de expertos, no regla documental.
+
+### Paso 11: pesos de variables y grounding
+
+El formulario final necesita `variable_weights`. No se copian sin mas las importancias del Experto 3. Se parte del Experto 4 porque predice la traza del urologo:
+
+```json
+{
+  "bx": "decisive",
+  "pirads": "important",
+  "psa": "important",
+  "psad": "noted",
+  "dre": "noted",
+  "age": "noted",
+  "fh": "not_used"
+}
+```
+
+Luego `enforce_grounding` comprueba que las variables importantes esten aterrizadas:
+
+| variable | nivel | fuente necesaria | se abrio? | queda |
+|---|---|---|---|---|
+| `bx` | decisive | panel / no aterrizable por diseno | si | decisive |
+| `pirads` | important | `radiology_report` | si | important |
+| `psa` | important | panel/lab | si | important |
+| `psad` | noted | radiologia/panel | si | noted |
+| `fh` | not_used | `family_history` | no | not_used |
+
+Si el formulario intentara marcar `fh = important` sin abrir `family_history`, la guardia lo bajaria.
+
+### Paso 12: `VERIFIER`
+
+El verificador comprueba si falta algun documento del plan. Aqui se abrieron los tres:
+
+```text
+radiology_report: abierto
+previous_notes: abierto
+laboratory_results: abierto
+```
+
+Tambien contrasta que la regla tenga sentido con la guia: en vigilancia activa con GG 1 y lesion persistente, la confirmatoria es defendible. Por tanto cierra:
+
+```text
+VERDICT: ready
+```
+
+### Paso 13: `CHAIR` redacta la nota clinica
+
+El presidente no recibe "el Experto 3 dijo..." ni "el protocolo disparo...". Recibe un parte clinico limpio. Una nota final aceptable podria ser:
+
+```text
+72-year-old man on active surveillance after prior Gleason 3+3 prostate cancer.
+Current MRI shows a persistent PI-RADS 4 lesion without extracapsular extension
+or nodal disease. PSA is 9.8 ng/mL with PSA density 0.16 and low free PSA.
+Because the prior documented grade is Grade Group 1 and the lesion persists on
+surveillance imaging, confirmatory biopsy is appropriate. Biopsy.
+```
+
+Luego las guardias revisan:
+
+| comprobacion | resultado |
+|---|---|
+| no menciona "experts", "protocol", "panel decision" | pasa |
+| no inventa numeros | pasa: edad, PSA, PSAD y PI-RADS vienen del panel/documentos |
+| no inventa grado | pasa: `Gleason 3+3` esta en `previous_notes` |
+| JSON valida contra `Task1Output` | pasa |
+
+### Salida Grand Challenge
+
+La salida final tendria dos ficheros. El de decision:
+
+```json
+"yes"
+```
+
+Y el de razonamiento, esquematicamente:
+
+```json
+{
+  "confidence": "clear",
+  "variable_weights": {
+    "bx": "decisive",
+    "fh": "not_used",
+    "age": "noted",
+    "dre": "noted",
+    "psa": "important",
+    "vol": "noted",
+    "psad": "noted",
+    "cspca": "not_used",
+    "pirads": "important",
+    "comorbidity": "not_used"
+  },
+  "reveal_sequence": [
+    "radiology_report",
+    "previous_notes",
+    "laboratory_results"
+  ],
+  "free_text": "72-year-old man on active surveillance after prior Gleason 3+3 prostate cancer..."
+}
+```
+
+La idea completa se ve ahi: el LLM ayudo a recuperar y redactar, pero la decision no dependio de una intuicion generativa. Dependio de cubo clinico, grado documentado, plan de documentos y reglas medidas.
+
+## 8. Que se entrega al formulario
 
 El formulario de Grand Challenge no solo pide `biopsy_decision`: tambien pide `confidence`, `variable_weights`, `reveal_sequence` y `free_text`.
 
@@ -191,7 +635,7 @@ Se entrega la importancia conductual del Experto 4 porque el evaluador compara c
 
 La confianza final tampoco sale simplemente de `p`. Sale del acuerdo y del peldaño que decidio. Una probabilidad 0.52 no significa lo mismo si viene de una regla que acierta 24/24 que si viene de expertos en desacuerdo.
 
-## 8. Resultado y lectura honesta
+## 9. Resultado y lectura honesta
 
 Resultado principal de la tarea 1 con juez de razonamiento apagado:
 
@@ -213,7 +657,7 @@ La lectura honesta es:
 - Los expertos entrenados aportan probabilidad, incertidumbre y trazas; el protocolo decide con reglas medibles.
 - La cifra 0.8390 es optimista para test porque hay seleccion y entrenamiento sobre 91 etiquetas; la cifra honesta publicada alrededor de 0.7607 es la referencia de generalizacion.
 
-## 9. Por que esta es la decision final
+## 10. Por que esta es la decision final
 
 La decision final de arquitectura fue esta:
 
