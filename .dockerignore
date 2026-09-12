@@ -126,6 +126,11 @@ delete_final_versions_task/task_1/experts_1/model/expert_three_with_e2.joblib
 delete_final_versions_task_V1/**/__pycache__/
 delete_final_versions_task_V1/**/*.ipynb
 delete_final_versions_task_V1/task_1/experts_1/model/expert_three_with_e2.joblib
+delete_final_versions_task_V1_1/**/__pycache__/
+delete_final_versions_task_V1_1/**/*.ipynb
+delete_final_versions_task_V1_1/task_1/experts_1/model/expert_three_with_e2.joblib
+# La evidencia de las corridas del perfilador pesa y no la necesita el contenedor.
+delete_final_versions_task_V1_1/verification/gc_profile_*/
 delete/
 delete_solution_one/
 delete_expert_modelate/
@@ -137,3 +142,16 @@ dev/
 .deepeval/
 .hydra/
 .venv-eval/
+
+# De la V2 la imagen sólo necesita el perfil de memoria y su entrada. Planes,
+# bitácoras, auditorías, pruebas y bancos de medida se quedan fuera: no los usa
+# en ejecución y, si viajasen, cada edición de documentación invalidaría la
+# imagen ya comprobada por la compuerta.
+delete_final_versions_task_V2/**/__pycache__/
+delete_final_versions_task_V2/**/*.ipynb
+delete_final_versions_task_V2/**/*.md
+delete_final_versions_task_V2/analisis/
+delete_final_versions_task_V2/evaluation/
+delete_final_versions_task_V2/verification/test_*.py
+delete_final_versions_task_V2/verification/e11_*.py
+delete_final_versions_task_V2/verification/gc_profile_*/

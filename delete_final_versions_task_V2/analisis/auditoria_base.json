@@ -1,0 +1,159 @@
+{
+  "scope": "Auditoría descriptiva de artefactos existentes; ninguna mejora V2 medida",
+  "repo_commit": "4907a97ddd56f2aa5f9477ac25d724eba12fdcab",
+  "evaluator_commit": "92365b94b0eca90daec9021ffdb18c581dcc4619",
+  "cohorts": {
+    "1": {
+      "inputs": 195,
+      "labelled": 91,
+      "classes": {
+        "no": 35,
+        "yes": 56
+      }
+    },
+    "2": {
+      "inputs": 153,
+      "labelled": 72,
+      "classes": {
+        "active_surveillance": 25,
+        "active_treatment": 31,
+        "continued_surveillance": 14,
+        "watchful_waiting": 2
+      },
+      "both_stable_and_progression_flags": 16,
+      "labelled_with_empty_reveal_sequence": 72
+    },
+    "3": {
+      "inputs": 75,
+      "labelled": 75,
+      "classes": {
+        "1": 19,
+        "0": 56
+      }
+    }
+  },
+  "sources": {
+    "/home/jjlondono/PycharmProjects/CHIMERA-agent-eval/evaluation/evaluate.py": "8684b9c4104d227bd08325fbef3c67ccd826e2836155db10f571f6eb16316a99",
+    "/home/jjlondono/PycharmProjects/CHIMERA-agent-eval/evaluation/ground_truth/section_variable_mapping.json": "6f434193d178f6b22f5dc23ae74180a2d5e8244c8bc345e924ac925afb64344f",
+    "delete_final_versions_task_V1/verification/scores_v1_no_judge.json": "4c85f0f435c35bc05aa61b78f00b128f4233bb0be7660b9e88091fef0509c152",
+    "delete_final_versions_task_V1/experiments/results/survival_total.json": "5efe5b004e2f7b7d70b1c5e2f5dfd57a7584172df1fca0aad6e5059a6a451024",
+    "delete_final_versions_task/resultados/task_2/summary.jsonl": "297e17a3322f4d5def3f6d6e607a85943af226168c3b7861625a143c52d05211",
+    "delete_final_versions_task_V1/common/chimera_experts/features_pathology.py": "861f32a2eb46b0789fe996ec73969122e140d616f5d2746e3c5a8a1e09109d12",
+    "delete_final_versions_task_V1/task_2/agent/protocol.py": "21f92c9963db8ef7515b973926ceebeda5a995ebff02f30c0a14531d3061bb74",
+    "delete_final_versions_task_V1/task_3/agent/protocol.py": "f43b3972c433743faaaea9371de05da9a37dfd66e23fab8dbec2f457a75eebbb",
+    "delete_final_versions_task_V1/experiments/results/paired_judge_task1.json": "ac271f02c0e8da4245a02223185168fd541d9a3e9ebea1e77015e3e2391dbb1b",
+    "delete_final_versions_task_V1/experiments/results/paired_judge_task2.json": "18fa7922e7d6516b7b6c745c292b6b18ce80e15b016bf125d0b55f0796eec3d6",
+    "delete_final_versions_task_V1/experiments/results/paired_judge_task3.json": "6f5f610710228c3b6a8556edf29348d588cc03225537938dd43c150fb3fdc2e1"
+  },
+  "identical_mri_vectors": {
+    "groups_with_multiple_records": 170,
+    "groups_spanning_tasks": 170,
+    "task_combinations": {
+      "1+2+3": 54,
+      "1+2": 95,
+      "1+3": 21
+    },
+    "interpretation": "Igualdad de vectores es pista para agrupar, no identidad clínica demostrada; sin IDs publicados."
+  },
+  "data_manifest": {
+    "inputs_sha256": "eca18b3dfd5417e8009dcf7bc256c9aea13500a6f3696745af42d164181181fa",
+    "labels_sha256": "a8b1e357b11dd2aa0bfc61d729ab0aaa08dffe5b58d2aaf2e254eb350a786a8e",
+    "input_files": 1265,
+    "label_files": 401
+  },
+  "baseline": {
+    "no_judge_artifact": {
+      "task1": 0.8390295552762397,
+      "task2": 0.7783863062229879,
+      "task3": 0.8831858407079646
+    },
+    "t3_nested_c_index": 0.8234513274336284,
+    "t3_nested_ci95_delta_vs_capra": [
+      -0.004138922865375535,
+      0.20206167181978793
+    ],
+    "t3_nested_time_score": 0.7120625469090819,
+    "mixed_no_judge_overall": 0.8116566100864168,
+    "warning": "El agregado sustituye sólo T3; T1/T2 conservan selección histórica y no son un ensayo externo.",
+    "paired_judge": [
+      {
+        "pass": 1,
+        "t1": 0.8378092223938188,
+        "t2": 0.8158667593154201,
+        "mixed_overall": 0.8261606581704213
+      },
+      {
+        "pass": 2,
+        "t1": 0.8376993322839288,
+        "t2": 0.8158667593154201,
+        "mixed_overall": 0.8261167021264653
+      }
+    ]
+  },
+  "t2_reveal_replay": {
+    "n": 72,
+    "mismatched_reveals": 72,
+    "source": "Corrida original resultados/task_2; V1 conserva la política de reveal vacío en protocol.trace",
+    "interpretation": "Corrección contable sobre decisiones y lecturas congeladas, no política nueva ni evaluación de generalización",
+    "no_judge": {
+      "declared": {
+        "ranking_score": 0.7783863062229879,
+        "mean_tool_score": 1.0,
+        "mean_section_grounding_score": 0.21714285714285714,
+        "decision_accuracy": 0.9027777777777778
+      },
+      "actual_reads": {
+        "ranking_score": 0.7725182506674323,
+        "mean_tool_score": 0.0,
+        "mean_section_grounding_score": 1.0,
+        "decision_accuracy": 0.9027777777777778
+      },
+      "overall_delta": -0.002347222222222234
+    },
+    "frozen_rationale": {
+      "declared": {
+        "ranking_score": 0.8150334259820868,
+        "mean_tool_score": 1.0,
+        "mean_section_grounding_score": 0.21714285714285714,
+        "decision_accuracy": 0.9027777777777778
+      },
+      "actual_reads": {
+        "ranking_score": 0.7649937434424042,
+        "mean_tool_score": 0.0,
+        "mean_section_grounding_score": 1.0,
+        "decision_accuracy": 0.9027777777777778
+      },
+      "overall_delta": -0.020015873015873042
+    }
+  },
+  "synthetic_extractor_probes": [
+    {
+      "input": "No histological progression. ISUP grade group 1.",
+      "observed": {
+        "path_traj_stable": 1.0,
+        "path_traj_progress": 1.0,
+        "path_isup_first": 1.0,
+        "path_isup_last": 1.0,
+        "path_isup_delta": 0.0
+      }
+    },
+    {
+      "input": "Timepoint 2: Gleason 3+3, ISUP grade group 1. Timepoint 1: Gleason 3+4, ISUP grade group 2.",
+      "observed": {
+        "path_traj_stable": 0.0,
+        "path_traj_progress": 0.0,
+        "path_isup_first": 1.0,
+        "path_isup_last": 2.0,
+        "path_isup_delta": 1.0
+      }
+    }
+  ],
+  "synthetic_extractor_probes_note": "Pruebas de mecanismo, sin etiquetas clínicas; no cuantifican mejora de decisión.",
+  "t3_percentile_export": {
+    "reference_n": 75,
+    "reference_unique": 75,
+    "formula": "F_train(raw)=(n_ref<raw + 0.5*n_ref==raw)/n_ref",
+    "unseen_scalar_bins_upper_bound": 76,
+    "interpretation": "La CDF empírica congelada es desplegable por paciente, pero es escalonada: distintos riesgos nuevos pueden empatar."
+  }
+}

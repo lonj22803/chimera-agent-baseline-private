@@ -1,0 +1,424 @@
+{
+  "limite_gc_segundos": 900,
+  "condiciones": "un contenedor por caso, --cpuset-cpus 0-3, case_id que panel_cache.json no tiene",
+  "parejas_mismo_case_id": [
+    {
+      "tarea": 1,
+      "case_id": "FIJO-0",
+      "segundos_v1": 274.4,
+      "segundos_v11": 154.1,
+      "ahorro_segundos": 120.3,
+      "ahorro_porciento": 43.8,
+      "respaldo_v1": false,
+      "respaldo_v11": false,
+      "salida": {
+        "mismos_ficheros": true,
+        "identicos_byte_a_byte": true,
+        "ficheros": [
+          "prostate-biopsy-decision-reasoning.json",
+          "prostate-biopsy-decision.json"
+        ]
+      }
+    },
+    {
+      "tarea": 1,
+      "case_id": "FIJO-0",
+      "segundos_v1": 274.4,
+      "segundos_v11": 211.3,
+      "ahorro_segundos": 63.1,
+      "ahorro_porciento": 23.0,
+      "respaldo_v1": false,
+      "respaldo_v11": false,
+      "salida": {
+        "mismos_ficheros": true,
+        "identicos_byte_a_byte": true,
+        "ficheros": [
+          "prostate-biopsy-decision-reasoning.json",
+          "prostate-biopsy-decision.json"
+        ]
+      }
+    },
+    {
+      "tarea": 2,
+      "case_id": "FIJO-1",
+      "segundos_v1": 128.2,
+      "segundos_v11": 122.2,
+      "ahorro_segundos": 6.0,
+      "ahorro_porciento": 4.7,
+      "respaldo_v1": false,
+      "respaldo_v11": false,
+      "salida": {
+        "mismos_ficheros": true,
+        "identicos_byte_a_byte": true,
+        "ficheros": [
+          "prostate-treatment-decision-reasoning.json",
+          "prostate-treatment-decision.json"
+        ]
+      }
+    },
+    {
+      "tarea": 3,
+      "case_id": "FIJO-2",
+      "segundos_v1": 76.6,
+      "segundos_v11": 77.3,
+      "ahorro_segundos": -0.7,
+      "ahorro_porciento": -0.9,
+      "respaldo_v1": false,
+      "respaldo_v11": false,
+      "salida": {
+        "mismos_ficheros": true,
+        "identicos_byte_a_byte": true,
+        "ficheros": [
+          "prostate-time-to-recurrence-or-last-follow-up-reasoning.json",
+          "prostate-time-to-recurrence-or-last-follow-up.json"
+        ]
+      }
+    }
+  ],
+  "expertos_base_vs_njobs1": {
+    "task1": {
+      "casos": 6,
+      "errores": 0,
+      "peor_delta": 3.637978807091713e-12,
+      "alguna_decision_cambia": false,
+      "casos_identicos": 4,
+      "aceleracion_media": 1.23
+    },
+    "task2": {
+      "casos": 6,
+      "errores": 0,
+      "peor_delta": 3.608224830031759e-16,
+      "alguna_decision_cambia": false,
+      "casos_identicos": 0,
+      "aceleracion_media": 1.77
+    }
+  },
+  "todas_las_corridas": [
+    {
+      "corrida": "gc_profile_20260911_185011_base_t2",
+      "version": "V1.1",
+      "tarea": 2,
+      "case_id": "UNSEEN-1-20260911_185011",
+      "cpuset": null,
+      "cacheado": false,
+      "segundos": 141.2,
+      "exit_code": 0,
+      "sobre_el_limite": false,
+      "respaldo": false,
+      "ficheros": 2,
+      "fases": {
+        "model_load": 65.692918774992,
+        "mcp": 7.819362050999189,
+        "graph": 59.312087208003504
+      },
+      "llamadas_llm": 12,
+      "presupuesto": null,
+      "soltado": null,
+      "dir": "/home/jjlondono/PycharmProjects/chimera-agent-baseline/delete_final_versions_task_V1_1/verification/gc_profile_20260911_185011_base_t2"
+    },
+    {
+      "corrida": "gc_profile_20260911_185534_base_4core",
+      "version": "V1.1",
+      "tarea": 2,
+      "case_id": "UNSEEN-1-20260911_185534",
+      "cpuset": "0-3",
+      "cacheado": false,
+      "segundos": 127.3,
+      "exit_code": 0,
+      "sobre_el_limite": false,
+      "respaldo": false,
+      "ficheros": 2,
+      "fases": {
+        "model_load": 60.185496179998154,
+        "mcp": 7.2944953690166585,
+        "graph": 52.396600225998554
+      },
+      "llamadas_llm": 12,
+      "presupuesto": null,
+      "soltado": null,
+      "dir": "/home/jjlondono/PycharmProjects/chimera-agent-baseline/delete_final_versions_task_V1_1/verification/gc_profile_20260911_185534_base_4core"
+    },
+    {
+      "corrida": "gc_profile_20260911_185534_base_4core",
+      "version": "V1.1",
+      "tarea": 1,
+      "case_id": "UNSEEN-0-20260911_185534",
+      "cpuset": "0-3",
+      "cacheado": false,
+      "segundos": 267.8,
+      "exit_code": 0,
+      "sobre_el_limite": false,
+      "respaldo": false,
+      "ficheros": 2,
+      "fases": {
+        "model_load": 63.76480201300001,
+        "mcp": 7.76945760200033,
+        "graph": 189.39187298397883
+      },
+      "llamadas_llm": 7,
+      "presupuesto": null,
+      "soltado": null,
+      "dir": "/home/jjlondono/PycharmProjects/chimera-agent-baseline/delete_final_versions_task_V1_1/verification/gc_profile_20260911_185534_base_4core"
+    },
+    {
+      "corrida": "gc_profile_20260911_191526_v11_solape",
+      "version": "V1.1",
+      "tarea": 1,
+      "case_id": "UNSEEN-0-20260911_191526",
+      "cpuset": "4-7",
+      "cacheado": false,
+      "segundos": 211.5,
+      "exit_code": 0,
+      "sobre_el_limite": false,
+      "respaldo": false,
+      "ficheros": 2,
+      "fases": {
+        "mcp": 7.05748028101516,
+        "model_load": 90.38546977000078,
+        "graph": 114.25649370500469,
+        "warm_prewarm": 169.28,
+        "warm_embed": 7.09,
+        "warm_model": 90.23
+      },
+      "llamadas_llm": 7,
+      "presupuesto": 780.0,
+      "soltado": null,
+      "dir": "/home/jjlondono/PycharmProjects/chimera-agent-baseline/delete_final_versions_task_V1_1/verification/gc_profile_20260911_191526_v11_solape"
+    },
+    {
+      "corrida": "gc_profile_20260911_191526_v11_solape",
+      "version": "V1.1",
+      "tarea": 2,
+      "case_id": "UNSEEN-1-20260911_191526",
+      "cpuset": "4-7",
+      "cacheado": false,
+      "segundos": 126.5,
+      "exit_code": 0,
+      "sobre_el_limite": false,
+      "respaldo": false,
+      "ficheros": 2,
+      "fases": {
+        "mcp": 7.306931083003292,
+        "model_load": 79.95651164202718,
+        "graph": 38.53596217700397,
+        "warm_prewarm": 18.17,
+        "warm_embed": 7.36,
+        "warm_model": 79.86
+      },
+      "llamadas_llm": 7,
+      "presupuesto": 780.0,
+      "soltado": null,
+      "dir": "/home/jjlondono/PycharmProjects/chimera-agent-baseline/delete_final_versions_task_V1_1/verification/gc_profile_20260911_191526_v11_solape"
+    },
+    {
+      "corrida": "gc_profile_20260911_191526_v11_solape",
+      "version": "V1.1",
+      "tarea": 3,
+      "case_id": "UNSEEN-2-20260911_191526",
+      "cpuset": "4-7",
+      "cacheado": false,
+      "segundos": 74.0,
+      "exit_code": 0,
+      "sobre_el_limite": false,
+      "respaldo": false,
+      "ficheros": 2,
+      "fases": {
+        "mcp": 3.0401861295104027e-07,
+        "model_load": 61.673109797004145,
+        "graph": 5.82700626301812,
+        "warm_model": 61.6
+      },
+      "llamadas_llm": 1,
+      "presupuesto": 780.0,
+      "soltado": null,
+      "dir": "/home/jjlondono/PycharmProjects/chimera-agent-baseline/delete_final_versions_task_V1_1/verification/gc_profile_20260911_191526_v11_solape"
+    },
+    {
+      "corrida": "gc_profile_20260911_192238_v11_lazy",
+      "version": "V1.1",
+      "tarea": 1,
+      "case_id": "FIJO-0",
+      "cpuset": "0-3",
+      "cacheado": false,
+      "segundos": 154.1,
+      "exit_code": 0,
+      "sobre_el_limite": false,
+      "respaldo": false,
+      "ficheros": 2,
+      "fases": {
+        "mcp": 7.055520750989672,
+        "model_load": 115.59222790400963,
+        "graph": 31.03418144900934,
+        "warm_prewarm": 116.5,
+        "warm_embed": 7.1,
+        "warm_model": 115.41
+      },
+      "llamadas_llm": 7,
+      "presupuesto": 780.0,
+      "soltado": null,
+      "dir": "/home/jjlondono/PycharmProjects/chimera-agent-baseline/delete_final_versions_task_V1_1/verification/gc_profile_20260911_192238_v11_lazy"
+    },
+    {
+      "corrida": "gc_profile_20260911_192512_v11_inproc",
+      "version": "V1.1",
+      "tarea": 1,
+      "case_id": "FIJO-0",
+      "cpuset": "0-3",
+      "cacheado": false,
+      "segundos": 211.3,
+      "exit_code": 0,
+      "sobre_el_limite": false,
+      "respaldo": false,
+      "ficheros": 2,
+      "fases": {
+        "mcp": 12.71991068701027,
+        "model_load": 165.68324497999856,
+        "graph": 40.416666267003166,
+        "warm_prewarm": 151.36,
+        "warm_embed": 12.75,
+        "warm_model": 165.64
+      },
+      "llamadas_llm": 7,
+      "presupuesto": 780.0,
+      "soltado": null,
+      "dir": "/home/jjlondono/PycharmProjects/chimera-agent-baseline/delete_final_versions_task_V1_1/verification/gc_profile_20260911_192512_v11_inproc"
+    },
+    {
+      "corrida": "gc_profile_20260911_192850_v1_arm",
+      "version": "V1",
+      "tarea": 1,
+      "case_id": "FIJO-0",
+      "cpuset": "0-3",
+      "cacheado": false,
+      "segundos": 274.4,
+      "exit_code": 0,
+      "sobre_el_limite": false,
+      "respaldo": false,
+      "ficheros": 2,
+      "fases": {
+        "model_load": 76.88870667098672,
+        "mcp": 8.276918909017695,
+        "graph": 181.36900583998067
+      },
+      "llamadas_llm": 7,
+      "presupuesto": null,
+      "soltado": null,
+      "dir": "/home/jjlondono/PycharmProjects/chimera-agent-baseline/delete_final_versions_task_V1_1/verification/gc_profile_20260911_192850_v1_arm"
+    },
+    {
+      "corrida": "gc_profile_20260911_193333_v11_t2",
+      "version": "V1.1",
+      "tarea": 2,
+      "case_id": "FIJO-1",
+      "cpuset": "0-3",
+      "cacheado": false,
+      "segundos": 122.2,
+      "exit_code": 0,
+      "sobre_el_limite": false,
+      "respaldo": false,
+      "ficheros": 2,
+      "fases": {
+        "mcp": 6.987437920004595,
+        "model_load": 80.72483669299982,
+        "graph": 33.53735820800648,
+        "warm_prewarm": 19.12,
+        "warm_embed": 7.05,
+        "warm_model": 80.66
+      },
+      "llamadas_llm": 7,
+      "presupuesto": 780.0,
+      "soltado": null,
+      "dir": "/home/jjlondono/PycharmProjects/chimera-agent-baseline/delete_final_versions_task_V1_1/verification/gc_profile_20260911_193333_v11_t2"
+    },
+    {
+      "corrida": "gc_profile_20260911_193535_v1_t2",
+      "version": "V1",
+      "tarea": 2,
+      "case_id": "FIJO-1",
+      "cpuset": "0-3",
+      "cacheado": false,
+      "segundos": 128.2,
+      "exit_code": 0,
+      "sobre_el_limite": false,
+      "respaldo": false,
+      "ficheros": 2,
+      "fases": {
+        "model_load": 60.99774437700398,
+        "mcp": 7.448911495972425,
+        "graph": 52.574248745979276
+      },
+      "llamadas_llm": 7,
+      "presupuesto": null,
+      "soltado": null,
+      "dir": "/home/jjlondono/PycharmProjects/chimera-agent-baseline/delete_final_versions_task_V1_1/verification/gc_profile_20260911_193535_v1_t2"
+    },
+    {
+      "corrida": "gc_profile_20260911_193744_v11_t3",
+      "version": "V1.1",
+      "tarea": 3,
+      "case_id": "FIJO-2",
+      "cpuset": "0-3",
+      "cacheado": false,
+      "segundos": 77.3,
+      "exit_code": 0,
+      "sobre_el_limite": false,
+      "respaldo": false,
+      "ficheros": 2,
+      "fases": {
+        "mcp": 2.580054569989443e-07,
+        "model_load": 62.21787266599131,
+        "graph": 8.600928764994023,
+        "warm_model": 62.14
+      },
+      "llamadas_llm": 2,
+      "presupuesto": 780.0,
+      "soltado": null,
+      "dir": "/home/jjlondono/PycharmProjects/chimera-agent-baseline/delete_final_versions_task_V1_1/verification/gc_profile_20260911_193744_v11_t3"
+    },
+    {
+      "corrida": "gc_profile_20260911_193901_v1_t3",
+      "version": "V1",
+      "tarea": 3,
+      "case_id": "FIJO-2",
+      "cpuset": "0-3",
+      "cacheado": false,
+      "segundos": 76.6,
+      "exit_code": 0,
+      "sobre_el_limite": false,
+      "respaldo": false,
+      "ficheros": 2,
+      "fases": {
+        "model_load": 61.450374197011115,
+        "mcp": 4.920002538710833e-07,
+        "graph": 8.61249971302459
+      },
+      "llamadas_llm": 2,
+      "presupuesto": null,
+      "soltado": null,
+      "dir": "/home/jjlondono/PycharmProjects/chimera-agent-baseline/delete_final_versions_task_V1_1/verification/gc_profile_20260911_193901_v1_t3"
+    },
+    {
+      "corrida": "gc_profile_20260911_194026_guardia",
+      "version": "V1.1",
+      "tarea": 1,
+      "case_id": "GUARDIA-0",
+      "cpuset": "0-3",
+      "cacheado": false,
+      "segundos": 63.9,
+      "exit_code": 0,
+      "sobre_el_limite": false,
+      "respaldo": true,
+      "ficheros": 2,
+      "fases": {
+        "mcp": 7.274236083991127,
+        "warm_prewarm:GUARDIA-0": null,
+        "warm_embed": 7.31,
+        "warm_model": null
+      },
+      "llamadas_llm": 0,
+      "presupuesto": 60.0,
+      "soltado": null,
+      "dir": "/home/jjlondono/PycharmProjects/chimera-agent-baseline/delete_final_versions_task_V1_1/verification/gc_profile_20260911_194026_guardia"
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "imagen": "chimera_agent_baseline_v2",
+  "montado": false,
+  "sim_total_gib": 16.0,
+  "vram_libre_ofrecida_gib": 15.51,
+  "cpuset": "0-3",
+  "pico_tarjeta_durante_la_corrida_mib": 30553,
+  "muestras_nvml": 536,
+  "codigo_salida_perfilador": 0,
+  "directorio": "/home/jjlondono/PycharmProjects/chimera-agent-baseline/delete_final_versions_task_V2/evaluation/reports/resources_16gb/gc_profile_20260912_001444_v2_prefill8192",
+  "perfilador": {
+    "cpus": "",
+    "cpuset": "0-3",
+    "memory": "32g",
+    "image": "chimera_agent_baseline_v2",
+    "montado": false,
+    "source": null,
+    "package": null,
+    "unseen_case": true,
+    "limit_seconds": 900,
+    "runs": [
+      {
+        "interface": 0,
+        "case_id": "UNSEEN-0",
+        "seconds": 134.0,
+        "exit_code": 0,
+        "over_gc_limit": false,
+        "files": [
+          "prostate-biopsy-decision-reasoning.json",
+          "prostate-biopsy-decision.json"
+        ],
+        "gc_resources": {
+          "kind": "gc_resources",
+          "case_id": "UNSEEN-0",
+          "task": 1,
+          "phases_seconds": {
+            "mcp": 7.178438188013388,
+            "model_load": 89.2315766440006,
+            "graph": 37.80157572199823,
+            "warm_prewarm:UNSEEN-0": 100.55,
+            "warm_embed": 7.22,
+            "warm_model": 89.07
+          },
+          "llm_calls": 7,
+          "prompt_tokens": 44556,
+          "completion_tokens": 1606,
+          "llm_seconds": 24.85,
+          "tool_calls": 5,
+          "tool_seconds": 0.08,
+          "tools_used": [
+            "get_lab_results",
+            "get_mri_report",
+            "get_previous_notes",
+            "get_psa_trend",
+            "search_guidelines"
+          ],
+          "by_role": {
+            "chair": {
+              "calls": 1,
+              "prompt_tokens": 2689,
+              "completion_tokens": 196,
+              "seconds": 2.56
+            },
+            "eau": {
+              "calls": 2,
+              "prompt_tokens": 13322,
+              "completion_tokens": 340,
+              "seconds": 5.02
+            },
+            "moderator": {
+              "calls": 1,
+              "prompt_tokens": 6141,
+              "completion_tokens": 221,
+              "seconds": 4.89
+            },
+            "registrar": {
+              "calls": 2,
+              "prompt_tokens": 14208,
+              "completion_tokens": 432,
+              "seconds": 6.87
+            },
+            "verifier": {
+              "calls": 1,
+              "prompt_tokens": 8196,
+              "completion_tokens": 417,
+              "seconds": 5.51
+            }
+          },
+          "peak_vram_mb": 30057.2,
+          "host_rss_mb": 3470.2,
+          "tokens_approx": false,
+          "host_peak_rss_mb": 3470.2421875,
+          "device_peak_vram_mb": 30057.1875,
+          "device_total_mb": 32110.9375,
+          "vram_sample_interval_seconds": 0.5
+        },
+        "gc_delivery": {
+          "kind": "gc_delivery",
+          "task": 1,
+          "case_id": "UNSEEN-0",
+          "fallback": false,
+          "cut": false,
+          "write_seconds": 0.00013305401080287993,
+          "total_seconds": 127.24958738699206,
+          "budget_seconds": 780.0,
+          "budget_spent": 127.2,
+          "budget_left": 652.8,
+          "budget_skipped": null
+        }
+      }
+    ]
+  }
+}

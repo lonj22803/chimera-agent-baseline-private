@@ -1,0 +1,76 @@
+{
+  "cpus": "4",
+  "memory": "32g",
+  "image": "chimera_agent_baseline_v1",
+  "source": "/home/jjlondono/PycharmProjects/chimera-agent-baseline/delete_final_versions_task_V1_1",
+  "package": "delete_final_versions_task_V1_1",
+  "unseen_case": true,
+  "limit_seconds": 900,
+  "runs": [
+    {
+      "interface": 1,
+      "case_id": "UNSEEN-1-20260911_185011",
+      "seconds": 141.2,
+      "exit_code": 0,
+      "over_gc_limit": false,
+      "files": [
+        "prostate-treatment-decision-reasoning.json",
+        "prostate-treatment-decision.json"
+      ],
+      "gc_resources": {
+        "kind": "gc_resources",
+        "case_id": "UNSEEN-1-20260911_185011",
+        "task": 2,
+        "phases_seconds": {
+          "model_load": 65.692918774992,
+          "mcp": 7.819362050999189,
+          "graph": 59.312087208003504
+        },
+        "llm_calls": 12,
+        "prompt_tokens": 38738,
+        "completion_tokens": 1413,
+        "llm_seconds": 25.34,
+        "tool_calls": 7,
+        "tool_seconds": 0.77,
+        "tools_used": [
+          "get_family_history",
+          "get_lab_results",
+          "get_mri_report",
+          "get_pathology_report",
+          "get_previous_notes",
+          "get_psa_trend",
+          "search_guidelines"
+        ],
+        "by_role": {
+          "eau": {
+            "calls": 2,
+            "prompt_tokens": 5890,
+            "completion_tokens": 701,
+            "seconds": 10.79
+          },
+          "other": {
+            "calls": 10,
+            "prompt_tokens": 32848,
+            "completion_tokens": 712,
+            "seconds": 14.56
+          }
+        },
+        "peak_vram_mb": 21501.9,
+        "host_rss_mb": 3622.5,
+        "tokens_approx": false,
+        "host_peak_rss_mb": 3622.47265625,
+        "device_peak_vram_mb": 21501.875,
+        "device_total_mb": 32110.9375,
+        "vram_sample_interval_seconds": 0.5
+      },
+      "gc_delivery": {
+        "kind": "gc_delivery",
+        "task": 2,
+        "case_id": "UNSEEN-1-20260911_185011",
+        "fallback": false,
+        "write_seconds": 0.00031010800739750266,
+        "total_seconds": 135.09647996901185
+      }
+    }
+  ]
+}

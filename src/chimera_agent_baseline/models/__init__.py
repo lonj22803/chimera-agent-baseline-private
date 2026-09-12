@@ -55,7 +55,7 @@ def _load_vllm(cfg: DictConfig) -> BaseChatModel:
     tp_size = int(cfg.generation.get("tensor_parallel_size", 1))
     log.info("vLLM tensor_parallel_size=%s", tp_size)
 
-    llm = LLM(
+    engine_kwargs = dict(
         model=model_path,
         dtype="auto",
         max_model_len=cfg.generation.get("max_model_len", 32768),
@@ -64,6 +64,21 @@ def _load_vllm(cfg: DictConfig) -> BaseChatModel:
         enforce_eager=True,
         disable_custom_all_reduce=True,
     )
+
+    # Perfil de memoria opcional (CHIMERA V2 §13.1). Ausente la clave, el
+    # motor arranca exactamente como en V1/V1.1: vLLM reparte por utilización
+    # y se queda con lo libre de la tarjeta. Presente, el KV se dimensiona por
+    # lo que un paciente necesita y el pico deja de seguir al tamaño de la GPU.
+    for clave in ("max_num_seqs", "max_num_batched_tokens", "kv_cache_memory_bytes"):
+        valor = cfg.generation.get(clave, None)
+        if valor is not None:
+            engine_kwargs[clave] = int(valor)
+    limite_imagen = cfg.generation.get("limit_mm_image", None)
+    if limite_imagen is not None:
+        engine_kwargs["limit_mm_per_prompt"] = {"image": int(limite_imagen)}
+    log.info("vLLM engine options: %s", {k: v for k, v in engine_kwargs.items() if k != "model"})
+
+    llm = LLM(**engine_kwargs)
 
     params = SamplingParams(
         temperature=cfg.generation.temperature,

@@ -48,4 +48,11 @@ echo "== Para subir a Grand Challenge =="
 echo "   1. $salida        -> Algorithm (Container Image)"
 echo "   2. model.tar.gz   -> Model, aparte; GC lo extrae en /opt/ml/model"
 echo "   Instancia: A10G, <=32 GB RAM, las tres interfaces."
-echo "   Ver delete_final_versions_task_V1/ENTREGA_CHECKLIST.md antes de enviar."
+# La lista que toca es la de la versión que se empaqueta, no la de la anterior:
+# mandar a revisar la checklist de V1 antes de enviar V1.1 es cómo se cuelan los
+# renglones medidos con el método equivocado.
+case "$TAG" in
+    *_v1_1) checklist=delete_final_versions_task_V1_1/ENTREGA_CHECKLIST.md ;;
+    *)      checklist=delete_final_versions_task_V1/ENTREGA_CHECKLIST.md ;;
+esac
+echo "   Ver $checklist antes de enviar."
