@@ -1,0 +1,805 @@
+{
+  "alcance": "Comparativa de result_v2 contra H0/B0 y los experimentos E01-E07",
+  "aviso": "Cobertura = contrato, no calidad. 423 casos ejecutados; sólo 91/72/75 tienen etiqueta y son los que se puntúan. Los expertos de T1/T2 se ajustaron sobre esas mismas cohortes: dentro de muestra.",
+  "aviso_memoria": "Esta corrida usa el tope de 19 GiB de la V1.1 (pico 21 502 MiB), NO el perfil de 16 GB. Es deliberado: el perfil se valida con la compuerta sin montar de ../delete_final_versions_task_V2/, y un lote caliente de 195 casos en un proceso no reproduce el arranque frío por paciente de Grand Challenge. No leer esta cobertura como validación del perfil.",
+  "v2_2": {
+    "task1": {
+      "n_cases": 91,
+      "n_evaluated": 91,
+      "n_decision_correct": 83,
+      "n_decision_incorrect": 8,
+      "mean_case_score": 0.7470246277938586,
+      "ranking_score": 0.8390295552762397,
+      "decision_accuracy": 0.9120879120879121,
+      "decision_f1_yes": 0.9310344827586207,
+      "decision_weighted_f1": null,
+      "confidence_weighted_kappa": null,
+      "variable_weight_weighted_kappa": null,
+      "mean_tool_score": 0.8684738955823293,
+      "mean_section_grounding_score": 0.8430866322432587,
+      "mean_rationale_score": null,
+      "decision_gate_pass_rate": 0.9120879120879121,
+      "mean_case_score_among_gate_passed": 0.819027001557122
+    },
+    "task2": {
+      "n_cases": 72,
+      "n_evaluated": 72,
+      "n_decision_correct": 65,
+      "n_decision_incorrect": 7,
+      "mean_case_score": 0.6669897762345679,
+      "ranking_score": 0.7783863062229879,
+      "decision_accuracy": 0.9027777777777778,
+      "decision_f1_yes": null,
+      "decision_weighted_f1": 0.8897828362114077,
+      "confidence_weighted_kappa": null,
+      "variable_weight_weighted_kappa": null,
+      "mean_tool_score": 1.0,
+      "mean_section_grounding_score": 0.21714285714285714,
+      "mean_rationale_score": null,
+      "decision_gate_pass_rate": 0.9027777777777778,
+      "mean_case_score_among_gate_passed": 0.7388194444444445
+    },
+    "task3": {
+      "n_cases": 75,
+      "n_evaluated": 75,
+      "mean_case_score": 0.7581545219789801,
+      "ranking_score": 0.8831858407079646,
+      "recurrence_event_accuracy": 0.7866666666666666,
+      "mean_event_score": 0.7866666666666666,
+      "mean_time_score": 0.7296423772912937,
+      "event1_time_mae_months": 26.67850671062117,
+      "concordance_index": 0.8831858407079646,
+      "time_dependent_auc": {
+        "12m": 0.9118481806243911,
+        "24m": 0.8951156542231453,
+        "36m": 0.8964987559031103,
+        "60m": 0.9545128560799552
+      },
+      "mean_time_dependent_auc": 0.9144938617076505,
+      "mean_rationale_score": null
+    },
+    "overall_ranking_score": 0.823603512741284
+  },
+  "H0": {
+    "task1": {
+      "n_cases": 91,
+      "n_evaluated": 91,
+      "n_decision_correct": 83,
+      "n_decision_incorrect": 8,
+      "mean_case_score": 0.7470246277938586,
+      "ranking_score": 0.8390295552762397,
+      "decision_accuracy": 0.9120879120879121,
+      "decision_f1_yes": 0.9310344827586207,
+      "decision_weighted_f1": null,
+      "confidence_weighted_kappa": null,
+      "variable_weight_weighted_kappa": null,
+      "mean_tool_score": 0.8684738955823293,
+      "mean_section_grounding_score": 0.8430866322432587,
+      "mean_rationale_score": null,
+      "decision_gate_pass_rate": 0.9120879120879121,
+      "mean_case_score_among_gate_passed": 0.819027001557122
+    },
+    "task2": {
+      "n_cases": 72,
+      "n_evaluated": 72,
+      "n_decision_correct": 65,
+      "n_decision_incorrect": 7,
+      "mean_case_score": 0.6669897762345679,
+      "ranking_score": 0.7783863062229879,
+      "decision_accuracy": 0.9027777777777778,
+      "decision_f1_yes": null,
+      "decision_weighted_f1": 0.8897828362114077,
+      "confidence_weighted_kappa": null,
+      "variable_weight_weighted_kappa": null,
+      "mean_tool_score": 1.0,
+      "mean_section_grounding_score": 0.21714285714285714,
+      "mean_rationale_score": null,
+      "decision_gate_pass_rate": 0.9027777777777778,
+      "mean_case_score_among_gate_passed": 0.7388194444444445
+    },
+    "task3": {
+      "n_cases": 75,
+      "n_evaluated": 75,
+      "mean_case_score": 0.7534258154377842,
+      "ranking_score": 0.8831858407079646,
+      "recurrence_event_accuracy": 0.7866666666666666,
+      "mean_event_score": 0.7866666666666666,
+      "mean_time_score": 0.7201849642089018,
+      "event1_time_mae_months": 25.146072781921973,
+      "concordance_index": 0.8831858407079646,
+      "time_dependent_auc": {
+        "12m": 0.9118270004659634,
+        "24m": 0.8944989818025373,
+        "36m": 0.8964783030631277,
+        "60m": 0.9545128560799552
+      },
+      "mean_time_dependent_auc": 0.9143292853528959,
+      "mean_rationale_score": null
+    },
+    "overall_ranking_score": 0.823603512741284
+  },
+  "B0": {
+    "task1": {
+      "n_cases": 91,
+      "n_evaluated": 91,
+      "n_decision_correct": 83,
+      "n_decision_incorrect": 8,
+      "mean_case_score": 0.7470246277938586,
+      "ranking_score": 0.8390295552762397,
+      "decision_accuracy": 0.9120879120879121,
+      "decision_f1_yes": 0.9310344827586207,
+      "decision_weighted_f1": null,
+      "confidence_weighted_kappa": null,
+      "variable_weight_weighted_kappa": null,
+      "mean_tool_score": 0.8684738955823293,
+      "mean_section_grounding_score": 0.8430866322432587,
+      "mean_rationale_score": null,
+      "decision_gate_pass_rate": 0.9120879120879121,
+      "mean_case_score_among_gate_passed": 0.819027001557122
+    },
+    "task2": {
+      "n_cases": 72,
+      "n_evaluated": 72,
+      "n_decision_correct": 65,
+      "n_decision_incorrect": 7,
+      "mean_case_score": 0.6552536651234568,
+      "ranking_score": 0.7725182506674323,
+      "decision_accuracy": 0.9027777777777778,
+      "decision_f1_yes": null,
+      "decision_weighted_f1": 0.8897828362114077,
+      "confidence_weighted_kappa": null,
+      "variable_weight_weighted_kappa": null,
+      "mean_tool_score": 0.0,
+      "mean_section_grounding_score": 1.0,
+      "mean_rationale_score": null,
+      "decision_gate_pass_rate": 0.9027777777777778,
+      "mean_case_score_among_gate_passed": 0.7258194444444445
+    },
+    "task3": {
+      "n_cases": 75,
+      "n_evaluated": 75,
+      "mean_case_score": 0.7534258154377842,
+      "ranking_score": 0.8831858407079646,
+      "recurrence_event_accuracy": 0.7866666666666666,
+      "mean_event_score": 0.7866666666666666,
+      "mean_time_score": 0.7201849642089018,
+      "event1_time_mae_months": 25.146072781921973,
+      "concordance_index": 0.8831858407079646,
+      "time_dependent_auc": {
+        "12m": 0.9118270004659634,
+        "24m": 0.8944989818025373,
+        "36m": 0.8964783030631277,
+        "60m": 0.9545128560799552
+      },
+      "mean_time_dependent_auc": 0.9143292853528959,
+      "mean_rationale_score": null
+    },
+    "overall_ranking_score": 0.8212562905190617
+  },
+  "deltas": {
+    "v2_2_menos_H0": 0.0,
+    "v2_2_menos_B0": 0.00235
+  },
+  "experimentos": {
+    "e01_extraccion": {
+      "alcance": "E01: mecanismo de extracción, no exactitud clínica revisada",
+      "por_tarea": {
+        "task1": {
+          "ausencias_no_convertidas_en_negativa": 2145,
+          "casos": 195,
+          "conflictos_declarados": 0,
+          "estado_unknown": 2145,
+          "hechos": 2145,
+          "hechos_sin_respaldo": 0,
+          "sin_informe": 195
+        },
+        "task2": {
+          "ausencias_no_convertidas_en_negativa": 1004,
+          "casos": 153,
+          "conflictos_declarados": 8,
+          "contradiccion_v1": 16,
+          "estado_observed": 1311,
+          "estado_unknown": 1004,
+          "hechos": 2315,
+          "hechos_sin_respaldo": 0,
+          "negativas_documentadas": 347
+        },
+        "task3": {
+          "ausencias_no_convertidas_en_negativa": 568,
+          "casos": 75,
+          "conflictos_declarados": 22,
+          "estado_observed": 357,
+          "estado_unknown": 568,
+          "hechos": 925,
+          "hechos_sin_respaldo": 0,
+          "negativas_documentadas": 121
+        }
+      },
+      "global": {
+        "ausencias_no_convertidas_en_negativa": 3717,
+        "casos": 423,
+        "conflictos_declarados": 30,
+        "contradiccion_v1": 16,
+        "estado_observed": 1668,
+        "estado_unknown": 3717,
+        "hechos": 5385,
+        "hechos_sin_respaldo": 0,
+        "negativas_documentadas": 468,
+        "sin_informe": 195,
+        "pct_hechos_con_fuente_valida": 100.0
+      },
+      "ejemplos": {
+        "contradiccion_v1": [
+          {
+            "tarea": 2,
+            "caso": "T2-004",
+            "v2_progresion": false,
+            "cita": "Biopsy timepoint 1 (oldest):\nHistological examination reveals adenocarcinoma of the prostate with a Gleason sc"
+          },
+          {
+            "tarea": 2,
+            "caso": "T2-008",
+            "v2_progresion": false,
+            "cita": "Biopsy 1 (2022): Histological examination of the prostate tissue reveals adenocarcinoma with a Gleason score o"
+          },
+          {
+            "tarea": 2,
+            "caso": "T2-018",
+            "v2_progresion": false,
+            "cita": "Biopsy timepoint 1: Transrectal ultrasound-guided systematic biopsy specimens were received. Histological exam"
+          }
+        ],
+        "desorden_cronologico": [],
+        "cambio_de_signo": []
+      }
+    },
+    "e02_panel_t2": {
+      "alcance": "E02: panel vs completo bajo la MISMA validación anidada por grupo",
+      "bloques": {
+        "panel": "AGJ",
+        "completo": "ABCDEGHIJ"
+      },
+      "columnas": {
+        "panel": 79,
+        "completo": 192
+      },
+      "resultados": {
+        "ancla_isup": {
+          "exactitud_media": 0.86111,
+          "exactitud_por_semilla": [
+            0.86111,
+            0.86111,
+            0.86111
+          ],
+          "f1_ponderado_medio": 0.84896,
+          "f1_ponderado_por_semilla": [
+            0.84896,
+            0.84896,
+            0.84896
+          ],
+          "f1_macro_medio": 0.66089,
+          "nota": "mapeo grado->clase aprendido dentro de cada pliegue de train"
+        },
+        "panel|logistica_regularizada": {
+          "exactitud_media": 0.78241,
+          "exactitud_por_semilla": [
+            0.75,
+            0.81944,
+            0.77778
+          ],
+          "f1_ponderado_medio": 0.77811,
+          "f1_ponderado_por_semilla": [
+            0.74459,
+            0.81944,
+            0.77031
+          ],
+          "f1_macro_medio": 0.60735,
+          "informe_ultima_semilla": {
+            "active_surveillance": {
+              "precision": 0.7391304347826086,
+              "recall": 0.68,
+              "f1-score": 0.7083333333333334,
+              "support": 25.0
+            },
+            "active_treatment": {
+              "precision": 0.8571428571428571,
+              "recall": 0.8571428571428571,
+              "f1-score": 0.8571428571428571,
+              "support": 14.0
+            },
+            "continued_surveillance": {
+              "precision": 0.7941176470588235,
+              "recall": 0.8709677419354839,
+              "f1-score": 0.8307692307692308,
+              "support": 31.0
+            },
+            "watchful_waiting": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 2.0
+            },
+            "accuracy": 0.7777777777777778,
+            "macro avg": {
+              "precision": 0.5975977347460723,
+              "recall": 0.6020276497695852,
+              "f1-score": 0.5990613553113553,
+              "support": 72.0
+            },
+            "weighted avg": {
+              "precision": 0.7652209434498436,
+              "recall": 0.7777777777777778,
+              "f1-score": 0.7703080484330485,
+              "support": 72.0
+            }
+          }
+        },
+        "panel|bosque_pequeno": {
+          "exactitud_media": 0.8287,
+          "exactitud_por_semilla": [
+            0.81944,
+            0.84722,
+            0.81944
+          ],
+          "f1_ponderado_medio": 0.82418,
+          "f1_ponderado_por_semilla": [
+            0.81888,
+            0.83494,
+            0.81872
+          ],
+          "f1_macro_medio": 0.6443,
+          "informe_ultima_semilla": {
+            "active_surveillance": {
+              "precision": 0.8260869565217391,
+              "recall": 0.76,
+              "f1-score": 0.7916666666666666,
+              "support": 25.0
+            },
+            "active_treatment": {
+              "precision": 0.9285714285714286,
+              "recall": 0.9285714285714286,
+              "f1-score": 0.9285714285714286,
+              "support": 14.0
+            },
+            "continued_surveillance": {
+              "precision": 0.8181818181818182,
+              "recall": 0.8709677419354839,
+              "f1-score": 0.84375,
+              "support": 31.0
+            },
+            "watchful_waiting": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 2.0
+            },
+            "accuracy": 0.8194444444444444,
+            "macro avg": {
+              "precision": 0.6432100508187465,
+              "recall": 0.6398847926267281,
+              "f1-score": 0.6409970238095238,
+              "support": 72.0
+            },
+            "weighted avg": {
+              "precision": 0.8196640316205533,
+              "recall": 0.8194444444444444,
+              "f1-score": 0.8187210648148148,
+              "support": 72.0
+            }
+          }
+        },
+        "completo|logistica_regularizada": {
+          "exactitud_media": 0.78704,
+          "exactitud_por_semilla": [
+            0.77778,
+            0.79167,
+            0.79167
+          ],
+          "f1_ponderado_medio": 0.7786,
+          "f1_ponderado_por_semilla": [
+            0.76736,
+            0.78152,
+            0.78693
+          ],
+          "f1_macro_medio": 0.61277,
+          "informe_ultima_semilla": {
+            "active_surveillance": {
+              "precision": 0.7307692307692307,
+              "recall": 0.76,
+              "f1-score": 0.7450980392156863,
+              "support": 25.0
+            },
+            "active_treatment": {
+              "precision": 0.9230769230769231,
+              "recall": 0.8571428571428571,
+              "f1-score": 0.8888888888888888,
+              "support": 14.0
+            },
+            "continued_surveillance": {
+              "precision": 0.8125,
+              "recall": 0.8387096774193549,
+              "f1-score": 0.8253968253968254,
+              "support": 31.0
+            },
+            "watchful_waiting": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 2.0
+            },
+            "accuracy": 0.7916666666666666,
+            "macro avg": {
+              "precision": 0.6165865384615384,
+              "recall": 0.613963133640553,
+              "f1-score": 0.6148459383753502,
+              "support": 72.0
+            },
+            "weighted avg": {
+              "precision": 0.7830528846153846,
+              "recall": 0.7916666666666666,
+              "f1-score": 0.7869332918352526,
+              "support": 72.0
+            }
+          }
+        },
+        "completo|bosque_pequeno": {
+          "exactitud_media": 0.84722,
+          "exactitud_por_semilla": [
+            0.84722,
+            0.86111,
+            0.83333
+          ],
+          "f1_ponderado_medio": 0.84109,
+          "f1_ponderado_por_semilla": [
+            0.84127,
+            0.84896,
+            0.83305
+          ],
+          "f1_macro_medio": 0.65594,
+          "informe_ultima_semilla": {
+            "active_surveillance": {
+              "precision": 0.8333333333333334,
+              "recall": 0.8,
+              "f1-score": 0.8163265306122449,
+              "support": 25.0
+            },
+            "active_treatment": {
+              "precision": 0.9285714285714286,
+              "recall": 0.9285714285714286,
+              "f1-score": 0.9285714285714286,
+              "support": 14.0
+            },
+            "continued_surveillance": {
+              "precision": 0.84375,
+              "recall": 0.8709677419354839,
+              "f1-score": 0.8571428571428571,
+              "support": 31.0
+            },
+            "watchful_waiting": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 2.0
+            },
+            "accuracy": 0.8333333333333334,
+            "macro avg": {
+              "precision": 0.6514136904761905,
+              "recall": 0.6498847926267282,
+              "f1-score": 0.6505102040816326,
+              "support": 72.0
+            },
+            "weighted avg": {
+              "precision": 0.8331886574074074,
+              "recall": 0.8333333333333334,
+              "f1-score": 0.8330498866213152,
+              "support": 72.0
+            }
+          }
+        }
+      }
+    },
+    "e03_consultas": {
+      "alcance": "E03 fuera de línea: valor de consultar, medido como cambios de decisión",
+      "casos": 72,
+      "consultas_de_v1_por_caso": 6,
+      "decisiones_que_cambian_al_abrir_los_6": 3,
+      "pct_casos_sin_cambio": 95.83,
+      "casos_arreglados": 2,
+      "casos_rotos": 0,
+      "balance_neto": 2,
+      "aciertos_panel": 59,
+      "aciertos_completo": 61,
+      "utilidad_marginal_por_seccion": {
+        "laboratory_results": {
+          "bloque": "B",
+          "delta_f1_ponderado": -0.01462,
+          "decisiones_cambiadas": 1
+        },
+        "psa_trend": {
+          "bloque": "C",
+          "delta_f1_ponderado": -0.00016,
+          "decisiones_cambiadas": 1
+        },
+        "radiology_report": {
+          "bloque": "D",
+          "delta_f1_ponderado": -0.00016,
+          "decisiones_cambiadas": 1
+        },
+        "previous_notes": {
+          "bloque": "E",
+          "delta_f1_ponderado": 0.0,
+          "decisiones_cambiadas": 0
+        },
+        "pathology_report": {
+          "bloque": "H",
+          "delta_f1_ponderado": 0.01417,
+          "decisiones_cambiadas": 2
+        },
+        "family_history": {
+          "bloque": "I",
+          "delta_f1_ponderado": -0.01462,
+          "decisiones_cambiadas": 1
+        }
+      }
+    },
+    "e04_conceptos": {
+      "alcance": "E04: ancla vs conceptos verificados, validación anidada por grupo",
+      "task1": {
+        "tarea": 1,
+        "casos": 91,
+        "columnas_conceptos": 24,
+        "columnas_panel": 39,
+        "casos_con_informe_de_patologia": 0,
+        "resultados": {
+          "ancla": {
+            "exactitud": 0.91209,
+            "f1_yes": 0.93103,
+            "ranking_parcial": 0.93103,
+            "nota": "cascada de reglas de V1, fija; su exposición histórica al corpus queda declarada"
+          },
+          "conceptos_solos|logistica_fuerte": {
+            "exactitud": 0.38462,
+            "f1_yes": 0.0,
+            "ranking_parcial": 0.0,
+            "por_semilla": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "conceptos_solos|arbol_minusculo": {
+            "exactitud": 0.38462,
+            "f1_yes": 0.0,
+            "ranking_parcial": 0.0,
+            "por_semilla": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "panel_mas_conceptos|logistica_fuerte": {
+            "exactitud": 0.61538,
+            "f1_yes": 0.68287,
+            "ranking_parcial": 0.68287,
+            "por_semilla": [
+              0.66667,
+              0.69725,
+              0.68468
+            ]
+          },
+          "panel_mas_conceptos|arbol_minusculo": {
+            "exactitud": 0.63736,
+            "f1_yes": 0.68936,
+            "ranking_parcial": 0.68936,
+            "por_semilla": [
+              0.66055,
+              0.76106,
+              0.64646
+            ]
+          },
+          "residual_ancla_mas_conceptos|logistica_fuerte": {
+            "exactitud": 0.91209,
+            "f1_yes": 0.93103,
+            "ranking_parcial": 0.93103,
+            "por_semilla": [
+              0.93103,
+              0.93103,
+              0.93103
+            ]
+          },
+          "residual_ancla_mas_conceptos|arbol_minusculo": {
+            "exactitud": 0.91209,
+            "f1_yes": 0.93103,
+            "ranking_parcial": 0.93103,
+            "por_semilla": [
+              0.93103,
+              0.93103,
+              0.93103
+            ]
+          }
+        }
+      },
+      "task2": {
+        "tarea": 2,
+        "casos": 72,
+        "columnas_conceptos": 33,
+        "columnas_panel": 64,
+        "casos_con_informe_de_patologia": 72,
+        "resultados": {
+          "ancla": {
+            "exactitud": 0.86111,
+            "f1_ponderado": 0.84896,
+            "f1_macro": 0.66089,
+            "ranking_parcial": 0.84896
+          },
+          "conceptos_solos|logistica_fuerte": {
+            "exactitud": 0.60648,
+            "f1_ponderado": 0.62775,
+            "f1_macro": 0.50813,
+            "ranking_parcial": 0.62775,
+            "por_semilla": [
+              0.62838,
+              0.65327,
+              0.60159
+            ]
+          },
+          "conceptos_solos|arbol_minusculo": {
+            "exactitud": 0.66667,
+            "f1_ponderado": 0.71232,
+            "f1_macro": 0.58904,
+            "ranking_parcial": 0.71232,
+            "por_semilla": [
+              0.73887,
+              0.69107,
+              0.70704
+            ]
+          },
+          "panel_mas_conceptos|logistica_fuerte": {
+            "exactitud": 0.79167,
+            "f1_ponderado": 0.79041,
+            "f1_macro": 0.61685,
+            "ranking_parcial": 0.79041,
+            "por_semilla": [
+              0.79563,
+              0.78438,
+              0.79122
+            ]
+          },
+          "panel_mas_conceptos|arbol_minusculo": {
+            "exactitud": 0.76389,
+            "f1_ponderado": 0.80063,
+            "f1_macro": 0.65443,
+            "ranking_parcial": 0.80063,
+            "por_semilla": [
+              0.80531,
+              0.76442,
+              0.83216
+            ]
+          },
+          "residual_ancla_mas_conceptos|logistica_fuerte": {
+            "exactitud": 0.77778,
+            "f1_ponderado": 0.79837,
+            "f1_macro": 0.64338,
+            "ranking_parcial": 0.79837,
+            "por_semilla": [
+              0.80941,
+              0.79209,
+              0.79359
+            ]
+          },
+          "residual_ancla_mas_conceptos|arbol_minusculo": {
+            "exactitud": 0.67593,
+            "f1_ponderado": 0.73412,
+            "f1_macro": 0.61052,
+            "ranking_parcial": 0.73412,
+            "por_semilla": [
+              0.7502,
+              0.70218,
+              0.74997
+            ]
+          }
+        }
+      }
+    },
+    "e05_mapa_t3": {
+      "alcance": "E05: mismo riesgo, dos mapas de exportación, validación anidada por grupo",
+      "aviso": "Los riesgos (`train_raw`) vienen del portavoz ajustado con los 75 casos, así que las cifras absolutas de c-index están infladas por dentro de muestra. Lo que este experimento aísla y sí es comparable es la DIFERENCIA entre mapas, porque ambos reciben exactamente los mismos riesgos y sólo sus parámetros se ajustan por pliegue.",
+      "mapas": {
+        "cdf_escalonada_v1": {
+          "c_index_medio": 0.87876,
+          "c_index_por_semilla": [
+            0.88053,
+            0.88009,
+            0.87566
+          ],
+          "time_score_medio": 0.71961,
+          "time_score_por_semilla": [
+            0.7199,
+            0.71955,
+            0.71937
+          ],
+          "meses_distintos_medio": 43.67,
+          "empates_medio": 31.33
+        },
+        "continuo_sigmoide_v2": {
+          "c_index_medio": 0.87817,
+          "c_index_por_semilla": [
+            0.88496,
+            0.88584,
+            0.86372
+          ],
+          "time_score_medio": 0.7368,
+          "time_score_por_semilla": [
+            0.74298,
+            0.74131,
+            0.7261
+          ],
+          "meses_distintos_medio": 75.0,
+          "empates_medio": 0.0
+        }
+      },
+      "referencia_desplegada": {
+        "c_index_meses_exportados": 0.82345,
+        "meses_distintos": 74,
+        "nota": "dentro de muestra; la CDF se ajustó con los mismos 75 casos"
+      },
+      "delta_continuo_menos_cdf": {
+        "c_index": -0.00059,
+        "time_score": 0.01719
+      }
+    },
+    "e06_e07_supervivencia": {
+      "alcance": "E06/E07 con validación anidada por grupo, 5x3 pliegues, 3 semillas",
+      "eventos": 19,
+      "casos": 75,
+      "horizonte_rmst_meses": 62.6,
+      "e06_riesgo": {
+        "ancla_capra_sola": {
+          "c_index_medio": 0.73717,
+          "c_index_por_semilla": [
+            0.73717,
+            0.73717,
+            0.73717
+          ],
+          "grados_de_libertad": 1
+        },
+        "ancla_mas_conceptos_clinicos": {
+          "c_index_medio": 0.7944,
+          "c_index_por_semilla": [
+            0.79912,
+            0.76637,
+            0.8177
+          ],
+          "grados_de_libertad": 4
+        },
+        "ancla_conceptos_y_residuo_modalidades": {
+          "c_index_medio": 0.82832,
+          "c_index_por_semilla": [
+            0.80265,
+            0.84956,
+            0.83274
+          ],
+          "grados_de_libertad": 4
+        }
+      },
+      "e07_meses_exportados": {
+        "cdf_escalonada": {
+          "c_index_medio": 0.82994,
+          "time_score_medio": 0.71407,
+          "valores_distintos_medio": 43.33
+        },
+        "mapa_continuo": {
+          "c_index_medio": 0.82655,
+          "time_score_medio": 0.7223,
+          "valores_distintos_medio": 75.0
+        },
+        "curva_supervivencia": {
+          "c_index_medio": 0.82684,
+          "time_score_medio": 0.73288,
+          "valores_distintos_medio": 75.0
+        }
+      },
+      "mejor_composicion_e06": "ancla_conceptos_y_residuo_modalidades"
+    }
+  }
+}

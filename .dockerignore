@@ -113,27 +113,18 @@ __pycache__/
 .env.*
 **/.env
 **/.env.*
-delete_final_versions_task/**/analysis/
-delete_final_versions_task/**/runs/
-delete_final_versions_task/**/*.ipynb
-delete_final_versions_task/task_1/experts_1/model/expert_three_with_e2.joblib
 
 # V1 entra ENTERO: código, pesos, documentación y la evidencia de las mediciones.
 # El contenedor sólo necesita el código, pero llevar dentro el PLAN, la BITACORA y los
 # resultados de los experimentos hace la entrega auditable por sí sola, y cuesta ~46 MB
 # sobre 33 GB. Sólo se excluyen cachés de Python y el artefacto de una ablación que
 # ningún experto carga.
-delete_final_versions_task_V1/**/__pycache__/
-delete_final_versions_task_V1/**/*.ipynb
-delete_final_versions_task_V1/task_1/experts_1/model/expert_three_with_e2.joblib
-delete_final_versions_task_V1_1/**/__pycache__/
-delete_final_versions_task_V1_1/**/*.ipynb
-delete_final_versions_task_V1_1/task_1/experts_1/model/expert_three_with_e2.joblib
+version_final_reto/**/__pycache__/
+version_final_reto/**/*.ipynb
+version_final_reto/task_1/experts_1/model/expert_three_with_e2.joblib
 # La evidencia de las corridas del perfilador pesa y no la necesita el contenedor.
-delete_final_versions_task_V1_1/verification/gc_profile_*/
+version_final_reto/verification/gc_profile_*/
 delete/
-delete_solution_one/
-delete_expert_modelate/
 delete_test/
 dev/
 .agents/
@@ -147,11 +138,26 @@ dev/
 # bitácoras, auditorías, pruebas y bancos de medida se quedan fuera: no los usa
 # en ejecución y, si viajasen, cada edición de documentación invalidaría la
 # imagen ya comprobada por la compuerta.
-delete_final_versions_task_V2/**/__pycache__/
-delete_final_versions_task_V2/**/*.ipynb
-delete_final_versions_task_V2/**/*.md
-delete_final_versions_task_V2/analisis/
-delete_final_versions_task_V2/evaluation/
-delete_final_versions_task_V2/verification/test_*.py
-delete_final_versions_task_V2/verification/e11_*.py
-delete_final_versions_task_V2/verification/gc_profile_*/
+version_final_reto/runtime_16gb/**/__pycache__/
+version_final_reto/runtime_16gb/**/*.ipynb
+version_final_reto/runtime_16gb/**/*.md
+version_final_reto/runtime_16gb/analisis/
+version_final_reto/runtime_16gb/evaluation/
+version_final_reto/runtime_16gb/verification/test_*.py
+version_final_reto/runtime_16gb/verification/e11_*.py
+version_final_reto/runtime_16gb/verification/gc_profile_*/
+
+# La investigación viaja sólo por el exportador de T3; sus informes,
+# manifiestos y referencias históricas no se usan en inferencia.
+version_final_reto/investigacion/evaluation/reports/
+version_final_reto/investigacion/evaluation/manifests/
+version_final_reto/investigacion/referencias_historicas/
+version_final_reto/experiments/
+version_final_reto/baseline_scores/
+version_final_reto/tasks_complete/
+version_final_reto/**/*.md
+
+# Corridas pesadas y resultados: nunca en la imagen.
+result_v2/
+delete/
+delete_test/

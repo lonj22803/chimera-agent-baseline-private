@@ -1,0 +1,633 @@
+{
+  "case_id": "T2-130",
+  "task": 2,
+  "n_interventions": 12,
+  "interventions": [
+    {
+      "n": 1,
+      "speaker": "INTAKE",
+      "who": "the record clerk; reads the file out loud and interprets nothing",
+      "body": "{\n  \"case_id\": \"T2-130\",\n  \"pid\": \"T2-130\",\n  \"task\": 2,\n  \"psa\": 4.5,\n  \"age\": 72,\n  \"months\": 3,\n  \"pirads\": \"4\",\n  \"psad\": 0.08,\n  \"psav\": 0.25,\n  \"psap\": 2.4,\n  \"vol\": 56.09,\n  \"dre\": \"Abnormal\",\n  \"bx\": \"Positive\",\n  \"cspca\": 0.7867544,\n  \"medhx\": \"Chronic kidney disease\",\n  \"meds\": \"None\",\n  \"notes\": \"PSA 4.5 ng/mL. PI-RADS 4. PSAD 0.08. Prostate volume 56 mL. DRE abnormal. csPCa 0.79.\",\n  \"pmhx\": [\n    \"Chronic kidney disease\"\n  ],\n  \"allergies\": [],\n  \"vitals\": {\n    \"weight\": \"66 kg\",\n    \"height\": \"187 cm\",\n    \"bmi\": \"18.9\",\n    \"bp\": \"136/81 mmHg\",\n    \"hr\": \"85 bpm\",\n    \"smoking\": \"Ex-smoker (16 pack-yr, quit 2006)\",\n    \"last_dental\": \"1 yr ago\",\n    \"flu_vax\": \"Sep 2024\"\n  },\n  \"enc_dept\": \"Urology - outpatient\",\n  \"enc_date\": \"25 Feb 2025\",\n  \"enc_ref\": \"Dr. C. Peters (GP)\",\n  \"enc_type\": \"Re-evaluation - prior PCa diagnosis\",\n  \"note_sections\": [\n    {\n      \"s\": \"Chief complaint\",\n      \"t\": \"Re-evaluation for prior prostate cancer diagnosis to discuss definitive management versus surveillance.\"\n    },\n    {\n      \"s\": \"History\",\n      \"t\": \"The patient is a 72-year-old warehouse manager, widowed and living alone, with his adult daughter acting as the primary contact. He has a known history of chronic kidney disease and is currently not taking any active medications. He reports moderate lower urinary tract symptoms, quantified by an IPSS score of 10. He has a history of smoking 16 pack-years but quit in 2006. He remains physically active, swimming once a week, and consumes no alcohol. He recently attended a routine podiatry appointment for foot care. Mobility is limited, requiring the use of a walking frame, which necessitates a ground-floor consult room for his visits.\"\n    },\n    {\n      \"s\": \"Physical examination\",\n      \"t\": \"On digital rectal examination, an abnormality is palpated in the prostate, consistent with a clinical T stage of cT1c. General examination reveals a thin, elderly gentleman with a BMI of 18.9. Vital signs are stable with a blood pressure of 136/81 mmHg and a heart rate of 85 bpm.\"\n    }\n  ],\n  \"occupation\": \"warehouse manager\",\n  \"marital\": \"Widowed\",\n  \"living\": \"Lives alone; adult daughter is primary contact\",\n  \"next_of_kin\": \"Adult daughter (primary contact)\",\n  \"recent_other\": [\n    \"Podiatry — routine foot care\"\n  ],\n  \"alcohol\": \"0 units / week (alcohol-free)\",\n  \"exercise\": \"Swimming 1x/week\",\n  \"ipss\": \"IPSS score: 10/35 (moderate LUTS)\",\n  \"admin\": \"Mobility limitation (frame); ground-floor consult room preferred.\",\n  \"mri_hospital\": \"Radboudumc\",\n  \"bx_isup\": 2,\n  \"bx_gl_prim\": 3,\n  \"bx_gl_sec\": 4,\n  \"ct\": \"cT1c\",\n  \"active_treatment_flag\": 0\n}",
+      "data": {},
+      "pass_": 1
+    },
+    {
+      "n": 2,
+      "speaker": "EXPERT-GRADE",
+      "who": "EXPERT-GRADE",
+      "body": "expert_one: active_treatment; reliability rung supports. Grade block G, 28 variables; calibration anchor, measured ECE 0.0425.\nForm baseline (not attribution): {\"pirads\": \"important\", \"ct\": \"noted\", \"fh\": \"noted\", \"comorbidity\": \"noted\", \"psa\": \"important\", \"age\": \"important\", \"psad\": \"noted\", \"cspca\": \"noted\", \"bx_isup\": \"important\", \"bx_gl_prim\": \"noted\", \"bx_gl_sec\": \"noted\"}",
+      "data": {
+        "classes": [
+          "active_surveillance",
+          "continued_surveillance",
+          "active_treatment",
+          "watchful_waiting"
+        ],
+        "probabilities": [
+          0.17758201876618235,
+          0.0013219278954615986,
+          0.5772300553224754,
+          0.2438659980158807
+        ],
+        "decision": "active_treatment",
+        "runner_up": "watchful_waiting",
+        "margin": 0.3333640573065947,
+        "margin_sigma": 0.270204431101646,
+        "entropy_total": 0.7047608932276891,
+        "aleatoric": 0.627861292919802,
+        "epistemic_model": 0.2773077718129932,
+        "epistemic_missing": 0.0,
+        "epistemic_total": 0.2773077718129932,
+        "completeness": 0.18181818181818182,
+        "ladder": "supports",
+        "n_members": 25,
+        "n_imputations": 1,
+        "available": true,
+        "confidence": "clear",
+        "variable_weights": {
+          "pirads": "important",
+          "ct": "noted",
+          "fh": "noted",
+          "comorbidity": "noted",
+          "psa": "important",
+          "age": "important",
+          "psad": "noted",
+          "cspca": "noted",
+          "bx_isup": "important",
+          "bx_gl_prim": "noted",
+          "bx_gl_sec": "noted"
+        }
+      },
+      "pass_": 1
+    },
+    {
+      "n": 3,
+      "speaker": "EXPERT-PATHOLOGY",
+      "who": "EXPERT-PATHOLOGY",
+      "body": "Second reading and upgrade assessment pending pathology retrieval. Confirmatory replica, not a vote.",
+      "data": {
+        "available": false,
+        "pending": "pathology_report",
+        "replica_of": "expert_one"
+      },
+      "pass_": 1
+    },
+    {
+      "n": 4,
+      "speaker": "EXPERT-CASCADE",
+      "who": "EXPERT-CASCADE",
+      "body": "expert_five: active_treatment; reliability rung supports.\nCancer? Treat? Benefit? {}\nMeasured node AUC (LOO): cancer 0.9569; treat 0.8739; fit 0.5645; The benefit node is at chance (AUC 0.5645, accuracy equals the majority floor): it carries no information beyond the base rate.\nForm baseline (not attribution): {\"pirads\": \"important\", \"ct\": \"noted\", \"fh\": \"noted\", \"comorbidity\": \"noted\", \"psa\": \"important\", \"age\": \"important\", \"psad\": \"noted\", \"cspca\": \"noted\", \"bx_isup\": \"important\", \"bx_gl_prim\": \"noted\", \"bx_gl_sec\": \"noted\"}",
+      "data": {
+        "classes": [
+          "active_surveillance",
+          "continued_surveillance",
+          "active_treatment",
+          "watchful_waiting"
+        ],
+        "probabilities": [
+          0.2742114232597733,
+          0.08800887652050515,
+          0.5292415354763672,
+          0.10853816474335434
+        ],
+        "decision": "active_treatment",
+        "runner_up": "active_surveillance",
+        "margin": 0.2550301122165939,
+        "margin_sigma": 0.21245819672505545,
+        "entropy_total": 0.8270011971777331,
+        "aleatoric": 0.7670604057677031,
+        "epistemic_model": 0.2448280854191979,
+        "epistemic_missing": 0.0,
+        "epistemic_total": 0.2448280854191979,
+        "completeness": 0.18181818181818182,
+        "ladder": "supports",
+        "n_members": 25,
+        "n_imputations": 1,
+        "available": true,
+        "confidence": "clear",
+        "variable_weights": {
+          "pirads": "important",
+          "ct": "noted",
+          "fh": "noted",
+          "comorbidity": "noted",
+          "psa": "important",
+          "age": "important",
+          "psad": "noted",
+          "cspca": "noted",
+          "bx_isup": "important",
+          "bx_gl_prim": "noted",
+          "bx_gl_sec": "noted"
+        }
+      },
+      "pass_": 1
+    },
+    {
+      "n": 5,
+      "speaker": "EXPERT-TRACE",
+      "who": "Expert 4, trace model; which documents the reading urologist opens and what he weighs in this situation",
+      "body": "reasoning_task2 form baseline: moda, confidence clear, delivered reveal_sequence []. Internal reading plan is fixed by model source requirements, not the rejected learned reveal policy.\n{\"confidence\": \"clear\", \"variable_weights\": {\"pirads\": \"important\", \"ct\": \"noted\", \"fh\": \"noted\", \"comorbidity\": \"noted\", \"psa\": \"important\", \"age\": \"important\", \"psad\": \"noted\", \"cspca\": \"noted\", \"bx_isup\": \"important\", \"bx_gl_prim\": \"noted\", \"bx_gl_sec\": \"noted\"}, \"reveal_sequence\": [], \"internal_plan\": [\"radiology_report\", \"pathology_report\", \"previous_notes\", \"family_history\", \"psa_trend\", \"laboratory_results\"], \"policy\": \"moda\"}",
+      "data": {
+        "confidence": "clear",
+        "variable_weights": {
+          "pirads": "important",
+          "ct": "noted",
+          "fh": "noted",
+          "comorbidity": "noted",
+          "psa": "important",
+          "age": "important",
+          "psad": "noted",
+          "cspca": "noted",
+          "bx_isup": "important",
+          "bx_gl_prim": "noted",
+          "bx_gl_sec": "noted"
+        },
+        "reveal_sequence": [],
+        "internal_plan": [
+          "radiology_report",
+          "pathology_report",
+          "previous_notes",
+          "family_history",
+          "psa_trend",
+          "laboratory_results"
+        ],
+        "policy": "moda"
+      },
+      "pass_": 1
+    },
+    {
+      "n": 6,
+      "speaker": "EXPERT-EAU",
+      "who": "EAU guideline specialist; speaks only from the guideline text he retrieved",
+      "body": "<|channel>thought\nThe user wants me to act as EXPERT-EAU and perform the following steps:\n1.  Call `search_guidelines` with a clinical question about management after biopsy. (Done, result retrieved).\n2.  Write at most 200 words under GUIDELINE using the retrieved text.\n3.  Write what the experts do not settle on (critique variable levels, not probabilities).\n4.  Write what the documents must settle on (one question per planned document).\n\n**Analysis of Retrieved Guidelines:**\nThe retrieved guidelines cover:\n*   MRI-directed US-guided biopsy vs. targeted biopsy based on PI-RADS.\n*   Follow-up protocols (PSA monitoring, DRE, repeat biopsy frequency).\n*   Pathology reporting standards.\n\n**Case Context:**\n*   Age: 72\n*   PSA: 4.5 ng/mL\n*   PI-RADS: 4\n*   DRE: Abnormal (cT1c)\n*   bx: Positive\n*   Comorbidity: Chronic kidney disease (CKD)\n\n**Plan:**\n1.  Synthesize guideline information relevant to the biopsy decision (which is the current task).\n2.  Critique the expert disagreement (which is not explicitly detailed in the provided text, but the cascade suggests uncertainty around 'treat' benefit).\n3.  Identify missing information that the documents should clarify.\n\n**Drafting EXPERT-EAU response.**<channel|>GUIDELINE\n\"MRI-directed US-guided prostate biopsy is now the standard of care, although MRI in-bore biopsy is offered in a few centres. MRI-directed US-guided prostate biopsy can be performed using either the transperineal or the transrectal approach.\"\n\nWHAT THE EXPERTS DO NOT SETTLE\nThe experts show uncertainty regarding the benefit of active treatment, as the benefit node AUC was at chance (0.5645). This indicates that the decision between surveillance and active treatment is not strongly informed by the current model, suggesting that clinical context, such as the patient's comorbidities (CKD) and clinical findings (cT1c), must heavily influence the final management strategy beyond the model's output.\n\nWHAT THE DOCUMENTS MUST SETTLE ON\n1.  What is the optimal strategy for biopsy and subsequent management given the PI-RADS 4 finding and the patient's history of chronic kidney disease?\n2.  What is the recommended follow-up protocol (frequency of PSA monitoring, DRE, and repeat biopsy) for this patient based on current guidelines?",
+      "data": {
+        "retrievals": {
+          "search_guidelines": {
+            "query": "management after prostate cancer biopsy",
+            "results": [
+              {
+                "text": "e patients with suspected organ-confined disease.\nStrong\nPerform limited biopsy only, without MRI, in males with clear evidence of locally advanced\ndisease on digital rectal examination or those not for curative treatment.\nWeak\nCombine targeted biopsy with perilesional sampling when MRI is positive (i.e. PI-RADS ≥ 4).\nWeak\nOmit biopsy and offer PSA monitoring when MRI is negative (i.e. PI-RADS ≤ 2), and clinical\nsuspicion of PCa is low (PSA density < 0.20 ng/mL/cc and no family history).\nWeak\nWhen MRI is indeterminate (PI-RADS = 3), and clinical suspicion of PCa is very low (PSA\ndensity < 0.10 ng/mL/cc and no family history), omit biopsy and offer PSA monitoring.\nOtherwise, consider targeted biopsy with perilesional sampling.\nWeak\nPROSTATE CANCER - LIMITED UPDATE MARCH 2026\n5.6\nBiopsy approach\nMRI-directed US-guided prostate biopsy is now the standard of care, although MRI in-bore biopsy is offered\nin a few centres. MRI-directed US-guided prostate biopsy can be performed using either the transperineal\nor the transrectal approach.",
+                "page": 45,
+                "section": "5.5.8 Recommendations for MRI imaging in biopsy indication and strategy",
+                "score": 0.1714
+              },
+              {
+                "text": "nett, H.Y., et al. The global burden of major infectious complications following prostate biopsy.\nEpidemiol Infect, 2016. 144: 1784.\nhttps://www.ncbi.nlm.nih.gov/pubmed/26645476\n453.\nBerry, B., et al. Comparison of complications after transrectal and transperineal prostate biopsy: a\nnational population-based study. BJU Int, 2020. 126: 97.\nhttps://www.ncbi.nlm.nih.gov/pubmed/32124525\n454.\nCastellani, D., et al. Infection Rate after Transperineal Prostate Biopsy with and without Prophylactic\nAntibiotics: Results from a Systematic Review and Meta-Analysis of Comparative Studies. J Urol,\n2022. 207: 25.\nhttps://www.ncbi.nlm.nih.gov/pubmed/34555932\n455.\nBasourakos, S.P., et al. Role of Prophylactic Antibiotics in Transperineal Prostate Biopsy: A\nSystematic Review and Meta-analysis. Eur Urol Open Sci, 2022. 37: 53.\nhttps://www.ncbi.nlm.nih.gov/pubmed/35243391\n456.\nChernysheva, D.Y., Popov S.V., Orlov I.N., Tsoy A.V., Neradovskiy V.A. . The first experience of\ntransperineal prostate biopsy without antibiotic prophylaxis. Cancer Urology 2021.",
+                "page": 194,
+                "section": "8.3.2 Improving quality of life in men who have been diagnosed with PCa",
+                "score": 0.1424
+              },
+              {
+                "text": "g\nTake targeted and perilesional biopsy cores (of any PI-RADS ≥ 3 lesion) if a confirmatory or\nrepeat biopsy is performed.\nStrong\nPerform per-protocol confirmatory prostate biopsies if MRI is not available.\nWeak\nBase the strategy of AS on a strict follow-up protocol including prostate-specific\nantigen (PSA) (at least once every six months), digital rectal examination (DRE), and\nrepeated biopsy with or without MRI (every 2-3 years) until life expectancy falls below ten\nyears.\nStrong\nExclude patients with a low-risk PCa, a stable MRI (PRECISE 3) and a stable low PSA density\n(< 0.15) from repeat biopsy when MRI is repeated before repeat biopsy.\nWeak\nPerform MRI and repeat biopsy if PSA is rising (PSA doubling time < 3 years).\nStrong\nBase change in treatment on biopsy progression, not on progression on MRI, PSA, and/or\nDRE.\nWeak\n6.2.2\nRadical prostatectomy\n6.2.2.a\nIntroduction\nThe goal of RP by any approach is the eradication of cancer while preserving pelvic organ function whenever\npossible [675].",
+                "page": 69,
+                "section": "1.3 years, but patients had more side effects from the treatment without showing any long-term benefits from",
+                "score": 0.1303
+              },
+              {
+                "text": "Guidelines on processing and reporting of prostate biopsies: the 2013 update\nof the pathology committee of the European Randomized Study of Screening for Prostate Cancer\n(ERSPC). Virchows Arch, 2013. 463: 367.\nhttps://www.ncbi.nlm.nih.gov/pubmed/23918245\n305.\nEpstein, J.I., et al. Best practices recommendations in the application of immunohistochemistry in\nthe prostate: report from the International Society of Urologic Pathology consensus conference. Am\nJ Surg Pathol, 2014. 38: e6.\nhttps://www.ncbi.nlm.nih.gov/pubmed/25029122\n306.\nChen, R.C., et al. Active Surveillance for the Management of Localized Prostate Cancer (Cancer Care\nOntario Guideline): American Society of Clinical Oncology Clinical Practice Guideline Endorsement. J\nClin Oncol, 2016. 34: 2182.\nhttps://www.ncbi.nlm.nih.gov/pubmed/26884580\n307.\nDeng, F.M., et al. Size-adjusted Quantitative Gleason Score as a Predictor of Biochemical Recurrence\nafter Radical Prostatectomy. Eur Urol, 2016. 70: 248.\nhttps://www.ncbi.nlm.nih.gov/pubmed/26525839\n308.\nDean, L.W., et al.",
+                "page": 185,
+                "section": "8.3.2 Improving quality of life in men who have been diagnosed with PCa",
+                "score": 0.1189
+              },
+              {
+                "text": "udes psychological aspects, signs of disease progression, and\ntreatment-related complications. Evaluation of treatment-related complications in the post-treatment period is\nhighlighted in Section 8.2. The examinations used for cancer-related follow-up after curative surgery or RT are\ndiscussed below.\nPROSTATE CANCER - LIMITED UPDATE MARCH 2026\n7.3.3.a\nProstate-specific antigen monitoring\nMeasurement of PSA is the cornerstone of follow-up after local treatment. While PSA thresholds depend on the\nlocal treatment used, PSA recurrence almost always precedes clinical recurrence [1436, 1437]. The key question\nis to establish when a PSA rise is clinically significant since not all PSA increases have the same clinical value\n(see Section 6.4.2) [994]. No prospective studies are available on the optimal timing for PSA testing and the\nimpact on oncological outcomes.\n7.3.3.a.1\nProstate-specific antigen monitoring after radical prostatectomy\nFollowing RP, the PSA level is expected to be undetectable.",
+                "page": 151,
+                "section": "7.3.3 How to follow up?",
+                "score": 0.1097
+              }
+            ]
+          }
+        }
+      },
+      "pass_": 1
+    },
+    {
+      "n": 7,
+      "speaker": "MODERATOR",
+      "who": "chairs the discussion; sets the open questions and assigns the documents",
+      "body": "{\"radiology_report\": \"What are the specific findings from the MRI that led to the PI-RADS 4 assessment?\", \"pathology_report\": \"What is the final pathological diagnosis and Gleason score from the biopsy?\", \"previous_notes\": \"Are there any documented trends in the PSA level or DRE findings prior to this re-evaluation?\", \"family_history\": \"Is there a family history of prostate cancer that should influence the management plan?\", \"psa_trend\": \"What is the trend in the PSA level over the last 12 months?\", \"laboratory_results\": \"Are there any other relevant laboratory results, such as renal function tests, that should be reviewed?\"}",
+      "data": {
+        "questions": [
+          "Given the PI-RADS 4 finding and the patient's history of chronic kidney disease, what is the optimal strategy for biopsy and subsequent management?",
+          "What is the recommended follow-up protocol (frequency of PSA monitoring, DRE, and repeat biopsy) for this patient based on current guidelines?"
+        ]
+      },
+      "pass_": 1
+    },
+    {
+      "n": 8,
+      "speaker": "REGISTRAR",
+      "who": "the registrar who pulls up documents; reports what they say, nothing else",
+      "body": "WHAT I FOUND\n**radiology_report**: The MRI prostate showed a focal hypointense lesion in the right apical transition zone, measuring approximately 14 mm, with marked restricted diffusion and low ADC values, consistent with a PI-RADS 4 lesion. It showed early, intense enhancement, with no evidence of extracapsular extension or seminal vesicle invasion.\n**pathology_report**: Two biopsy timepoints confirmed adenocarcinoma with a Gleason score of 3+4 (ISUP grade group 2) in the transition zone, apex right. The histological findings were stable across both timepoints.\n**previous_notes**: Notes from March 2024 show the patient's PSA rising from 3.7 ng/mL to 4.2 ng/mL. The patient was referred to urology for re-evaluation due to the prior diagnosis.\n**family_history**: Yes, there is a family history of prostate cancer.\n**psa_trend**: The PSA trend shows values of 3.7 ng/mL (Sep 2023), 4.2 ng/mL (Mar 2024), 2.4 ng/mL (Aug 2024), and 4.5 ng/mL (Feb 2025).\n**laboratory_results**: The most recent PSA is 4.5 ng/mL (Jan 2025). Renal function tests show a Creatinine of 132 umol/L and an eGFR <60 mL/min/1.73m2, indicating chronic kidney disease. Free PSA is 0.65 ng/mL (14%).\n\nWHAT IS NOT RECORDED\nThe final pathological diagnosis and Gleason score from the current biopsy decision (Task 2) were not retrieved, although previous biopsies showed 3+4. The specific findings from the current biopsy are missing.",
+      "data": {
+        "opened": [
+          "radiology_report",
+          "pathology_report",
+          "previous_notes",
+          "family_history",
+          "psa_trend",
+          "laboratory_results"
+        ],
+        "tool_results": {
+          "get_mri_report": {
+            "case_id": "T2-130",
+            "radiology_report": "Radboudumc\nDepartment of Radiology\nDate: 12 January 2025\nExam: Multiparametric MRI prostate\nClinical indication: PSA 4.5 ng/mL, prior biopsy Gleason 3+4. Evaluate for focal lesion.\n\nFINDINGS:\nProstate volume: 56.09 mL. PSA density 0.08 ng/mL/mL.\nT2-weighted images show a focal hypointense lesion in the right apical transition zone, measuring approximately 14 mm in greatest dimension.\nDiffusion-weighted imaging demonstrates marked restricted diffusion in this region, with corresponding low ADC values.\nDynamic contrast-enhanced sequences reveal early, intense enhancement of the same lesion.\nNo evidence of extracapsular extension or seminal vesicle invasion. Clinical T stage cT1c.\n\nIMPRESSION:\nPI-RADS 4 lesion in the right apical transition zone.\ncT1c.\ncsPCa predicted probability 0.7867544"
+          },
+          "get_pathology_report": {
+            "case_id": "T2-130",
+            "pathology_report": "Biopsy timepoint 1 (15 September 2023):\nHistological examination of the prostate biopsy specimens reveals adenocarcinoma. The Gleason score is 3+4, corresponding to ISUP grade group 2. The predominant growth pattern is acinar. No cribriform or intraductal patterns are identified. The tumour is located in the transition zone, apex right.\n\nBiopsy timepoint 2 (18 November 2024):\nHistological examination of the prostate biopsy specimens reveals adenocarcinoma. The Gleason score is 3+4, corresponding to ISUP grade group 2. The predominant growth pattern is acinar. No cribriform or intraductal patterns are identified. The tumour is located in the transition zone, apex right.\n\nSummary: The histological findings across the two biopsy timepoints are stable, with persistent ISUP grade group 2 disease.\n\nAI-predicted ISUP grade group (digital pathology): grade group 2."
+          },
+          "get_previous_notes": {
+            "case_id": "T2-130",
+            "previous_notes": [
+              {
+                "date": "02 Mar 2024",
+                "author": "Dr. C. Peters (GP)",
+                "text": "Patient attended for routine follow-up. PSA measured at 4.2 ng/mL, showing a slight rise from the previous value of 3.7 ng/mL recorded in September 2023. Discussed the stable PSA trend and current medication list. Referred to urology for re-evaluation given the prior biopsy diagnosis of prostate cancer and the need to discuss long-term management options."
+              }
+            ]
+          },
+          "get_family_history": {
+            "case_id": "T2-130",
+            "family_history": "Yes"
+          },
+          "get_psa_trend": {
+            "case_id": "T2-130",
+            "psa_trend": [
+              {
+                "date": "Sep 2023",
+                "val": 3.7
+              },
+              {
+                "date": "Mar 2024",
+                "val": 4.2
+              },
+              {
+                "date": "Aug 2024",
+                "val": 2.4
+              },
+              {
+                "date": "Feb 2025",
+                "val": 4.5
+              }
+            ]
+          },
+          "get_lab_results": {
+            "case_id": "T2-130",
+            "laboratory_results": [
+              {
+                "name": "PSA",
+                "val": "4.5 ng/mL",
+                "date": "29 Jan 2025",
+                "flag": "H"
+              },
+              {
+                "name": "Free PSA",
+                "val": "0.65 ng/mL",
+                "date": "29 Jan 2025",
+                "flag": ""
+              },
+              {
+                "name": "%Free PSA",
+                "val": "14%",
+                "date": "29 Jan 2025",
+                "flag": "L"
+              },
+              {
+                "name": "Haemoglobin",
+                "val": "14.9 g/dL",
+                "date": "29 Jan 2025",
+                "flag": ""
+              },
+              {
+                "name": "WBC",
+                "val": "4.6 x10^9/L",
+                "date": "29 Jan 2025",
+                "flag": ""
+              },
+              {
+                "name": "Platelets",
+                "val": "237 x10^9/L",
+                "date": "29 Jan 2025",
+                "flag": ""
+              },
+              {
+                "name": "Creatinine",
+                "val": "132 umol/L",
+                "date": "29 Jan 2025",
+                "flag": "H"
+              },
+              {
+                "name": "eGFR",
+                "val": "<60 mL/min/1.73m2",
+                "date": "29 Jan 2025",
+                "flag": "L"
+              },
+              {
+                "name": "Testosterone",
+                "val": "14.4 nmol/L",
+                "date": "29 Jan 2025",
+                "flag": ""
+              },
+              {
+                "name": "Alkaline phosphatase",
+                "val": "39 U/L",
+                "date": "29 Jan 2025",
+                "flag": ""
+              },
+              {
+                "name": "LDH",
+                "val": "174 U/L",
+                "date": "29 Jan 2025",
+                "flag": ""
+              }
+            ]
+          }
+        }
+      },
+      "pass_": 1
+    },
+    {
+      "n": 9,
+      "speaker": "EXPERT-FUSION",
+      "who": "Expert 3, Extra-Trees on panel + laboratory + MRI prose; speaks only on documents that were opened",
+      "body": "expert_four: active_treatment; reliability rung supports. Confirmatory replica of Expert 1: identical 72 historical decisions, not an independent vote.\nForm baseline (not attribution): {\"pirads\": \"important\", \"ct\": \"noted\", \"fh\": \"noted\", \"comorbidity\": \"noted\", \"psa\": \"important\", \"age\": \"important\", \"psad\": \"noted\", \"cspca\": \"noted\", \"bx_isup\": \"important\", \"bx_gl_prim\": \"noted\", \"bx_gl_sec\": \"noted\"}\nPathology follow-up: expert_two: active_treatment; reliability rung supports. Confirmatory replica of Expert 1: identical 72 historical decisions, not an independent vote.\nForm baseline (not attribution): {\"pirads\": \"important\", \"ct\": \"noted\", \"fh\": \"noted\", \"comorbidity\": \"noted\", \"psa\": \"important\", \"age\": \"important\", \"psad\": \"noted\", \"cspca\": \"noted\", \"bx_isup\": \"important\", \"bx_gl_prim\": \"noted\", \"bx_gl_sec\": \"noted\"}\nCascade with retrieved sources: expert_five: active_treatment; reliability rung supports.\nCancer? Treat? Benefit? {}\nMeasured node AUC (LOO): cancer 0.9569; treat 0.8739; fit 0.5645; The benefit node is at chance (AUC 0.5645, accuracy equals the majority floor): it carries no information beyond the base rate.\nForm baseline (not attribution): {\"pirads\": \"important\", \"ct\": \"noted\", \"fh\": \"noted\", \"comorbidity\": \"noted\", \"psa\": \"important\", \"age\": \"important\", \"psad\": \"noted\", \"cspca\": \"noted\", \"bx_isup\": \"important\", \"bx_gl_prim\": \"noted\", \"bx_gl_sec\": \"noted\"}",
+      "data": {
+        "expert_one": {
+          "classes": [
+            "active_surveillance",
+            "continued_surveillance",
+            "active_treatment",
+            "watchful_waiting"
+          ],
+          "probabilities": [
+            0.17758201876618235,
+            0.0013219278954615986,
+            0.5772300553224754,
+            0.2438659980158807
+          ],
+          "decision": "active_treatment",
+          "runner_up": "watchful_waiting",
+          "margin": 0.3333640573065947,
+          "margin_sigma": 0.270204431101646,
+          "entropy_total": 0.7047608932276891,
+          "aleatoric": 0.627861292919802,
+          "epistemic_model": 0.2773077718129932,
+          "epistemic_missing": 0.0,
+          "epistemic_total": 0.2773077718129932,
+          "completeness": 0.18181818181818182,
+          "ladder": "supports",
+          "n_members": 25,
+          "n_imputations": 1,
+          "available": true,
+          "confidence": "clear",
+          "variable_weights": {
+            "pirads": "important",
+            "ct": "noted",
+            "fh": "noted",
+            "comorbidity": "noted",
+            "psa": "important",
+            "age": "important",
+            "psad": "noted",
+            "cspca": "noted",
+            "bx_isup": "important",
+            "bx_gl_prim": "noted",
+            "bx_gl_sec": "noted"
+          }
+        },
+        "expert_five": {
+          "classes": [
+            "active_surveillance",
+            "continued_surveillance",
+            "active_treatment",
+            "watchful_waiting"
+          ],
+          "probabilities": [
+            0.2657162479764683,
+            0.014480373269661194,
+            0.5897927651072332,
+            0.13001061364663719
+          ],
+          "decision": "active_treatment",
+          "runner_up": "active_surveillance",
+          "margin": 0.3240765171307649,
+          "margin_sigma": 0.24992304830918624,
+          "entropy_total": 0.7142245480023197,
+          "aleatoric": 0.6646529817115598,
+          "epistemic_model": 0.22264672980028222,
+          "epistemic_missing": 0.0,
+          "epistemic_total": 0.22264672980028222,
+          "completeness": 1.0,
+          "ladder": "supports",
+          "n_members": 25,
+          "n_imputations": 1,
+          "available": true,
+          "confidence": "clear",
+          "variable_weights": {
+            "pirads": "important",
+            "ct": "noted",
+            "fh": "noted",
+            "comorbidity": "noted",
+            "psa": "important",
+            "age": "important",
+            "psad": "noted",
+            "cspca": "noted",
+            "bx_isup": "important",
+            "bx_gl_prim": "noted",
+            "bx_gl_sec": "noted"
+          }
+        },
+        "expert_two": {
+          "classes": [
+            "active_surveillance",
+            "continued_surveillance",
+            "active_treatment",
+            "watchful_waiting"
+          ],
+          "probabilities": [
+            0.26723556998557,
+            0.012138888888888894,
+            0.6049728749028749,
+            0.11565266622266622
+          ],
+          "decision": "active_treatment",
+          "runner_up": "active_surveillance",
+          "margin": 0.33773730491730486,
+          "margin_sigma": 0.2344029370559668,
+          "entropy_total": 0.6922941044920675,
+          "aleatoric": 0.6495969622148577,
+          "epistemic_model": 0.20663286833708178,
+          "epistemic_missing": 0.0,
+          "epistemic_total": 0.20663286833708178,
+          "completeness": 1.0,
+          "ladder": "supports",
+          "n_members": 25,
+          "n_imputations": 1,
+          "available": true,
+          "confidence": "clear",
+          "variable_weights": {
+            "pirads": "important",
+            "ct": "noted",
+            "fh": "noted",
+            "comorbidity": "noted",
+            "psa": "important",
+            "age": "important",
+            "psad": "noted",
+            "cspca": "noted",
+            "bx_isup": "important",
+            "bx_gl_prim": "noted",
+            "bx_gl_sec": "noted"
+          }
+        },
+        "expert_four": {
+          "classes": [
+            "active_surveillance",
+            "continued_surveillance",
+            "active_treatment",
+            "watchful_waiting"
+          ],
+          "probabilities": [
+            0.2694309157509158,
+            0.01736,
+            0.5807427472527472,
+            0.13246633699633703
+          ],
+          "decision": "active_treatment",
+          "runner_up": "active_surveillance",
+          "margin": 0.3113118315018314,
+          "margin_sigma": 0.1919541055609326,
+          "entropy_total": 0.7264602513612382,
+          "aleatoric": 0.690771427841171,
+          "epistemic_model": 0.1889148578594791,
+          "epistemic_missing": 0.0,
+          "epistemic_total": 0.1889148578594791,
+          "completeness": 1.0,
+          "ladder": "supports",
+          "n_members": 25,
+          "n_imputations": 1,
+          "available": true,
+          "confidence": "clear",
+          "variable_weights": {
+            "pirads": "important",
+            "ct": "noted",
+            "fh": "noted",
+            "comorbidity": "noted",
+            "psa": "important",
+            "age": "important",
+            "psad": "noted",
+            "cspca": "noted",
+            "bx_isup": "important",
+            "bx_gl_prim": "noted",
+            "bx_gl_sec": "noted"
+          }
+        }
+      },
+      "pass_": 1
+    },
+    {
+      "n": 10,
+      "speaker": "PANEL-PROTOCOL",
+      "who": "the panel's written protocol; consolidates the experts by rule and says which rule fired",
+      "body": "{\"confidence\": \"clear\", \"variable_weights\": {\"pirads\": \"important\", \"ct\": \"noted\", \"fh\": \"noted\", \"comorbidity\": \"noted\", \"psa\": \"important\", \"age\": \"important\", \"psad\": \"noted\", \"cspca\": \"noted\", \"bx_isup\": \"important\", \"bx_gl_prim\": \"noted\", \"bx_gl_sec\": \"noted\"}, \"reveal_sequence\": [], \"internal_plan\": [\"radiology_report\", \"pathology_report\", \"previous_notes\", \"family_history\", \"psa_trend\", \"laboratory_results\"], \"policy\": \"moda\", \"decision\": \"active_treatment\", \"who\": \"expert_one\", \"rule\": \"reliability_spokesperson\", \"nodes\": {}, \"replicas\": {\"expert_two\": \"expert_one\", \"expert_four\": \"expert_one\"}, \"fitness_auc\": 0.5645, \"consistency_ceiling\": 0.931, \"consistency_warning\": \"Five cases share an exact profile with a contrary label; individual certainty is limited.\", \"confidence_diagnostic\": {\"value\": \"uncertain\", \"reason\": \"No hay experiencia comparable suficiente para una conclusi\\u00f3n firme.\", \"validated\": false, \"adopted\": false}, \"opened\": [\"radiology_report\", \"pathology_report\", \"previous_notes\", \"family_history\", \"psa_trend\", \"laboratory_results\"]}",
+      "data": {
+        "confidence": "clear",
+        "variable_weights": {
+          "pirads": "important",
+          "ct": "noted",
+          "fh": "noted",
+          "comorbidity": "noted",
+          "psa": "important",
+          "age": "important",
+          "psad": "noted",
+          "cspca": "noted",
+          "bx_isup": "important",
+          "bx_gl_prim": "noted",
+          "bx_gl_sec": "noted"
+        },
+        "reveal_sequence": [],
+        "internal_plan": [
+          "radiology_report",
+          "pathology_report",
+          "previous_notes",
+          "family_history",
+          "psa_trend",
+          "laboratory_results"
+        ],
+        "policy": "moda",
+        "decision": "active_treatment",
+        "who": "expert_one",
+        "rule": "reliability_spokesperson",
+        "nodes": {},
+        "replicas": {
+          "expert_two": "expert_one",
+          "expert_four": "expert_one"
+        },
+        "fitness_auc": 0.5645,
+        "consistency_ceiling": 0.931,
+        "consistency_warning": "Five cases share an exact profile with a contrary label; individual certainty is limited.",
+        "confidence_diagnostic": {
+          "value": "uncertain",
+          "reason": "No hay experiencia comparable suficiente para una conclusión firme.",
+          "validated": false,
+          "adopted": false
+        },
+        "opened": [
+          "radiology_report",
+          "pathology_report",
+          "previous_notes",
+          "family_history",
+          "psa_trend",
+          "laboratory_results"
+        ]
+      },
+      "pass_": 1
+    },
+    {
+      "n": 11,
+      "speaker": "VERIFIER",
+      "who": "second EAU reader; checks against the guideline whether this can be decided yet",
+      "body": "VERDICT: ready | MISSING: none\nActual missing: []",
+      "data": {
+        "ready": true,
+        "missing": [],
+        "reopened": false
+      },
+      "pass_": 1
+    },
+    {
+      "n": 12,
+      "speaker": "CHAIR",
+      "who": "the senior urologist who signs the decision",
+      "body": "The patient is a 72-year-old male with a PSA of 4.5 and a prior prostate cancer diagnosis with a Gleason score of 3+4 (ISUP grade group 2). MRI identified a PI-RADS 4 lesion in the right apical transition zone (cT1c). Given the stable Gleason grade and the patient's moderate LUTS, the management assessment is to review individual treatment benefit and preferences. The trade-off involves balancing potential cancer control with the risks and side effects of active treatment in a patient with pre-existing chronic kidney disease.",
+      "data": {
+        "case_id": "T2-130",
+        "task": 2,
+        "action": "active_treatment",
+        "confidence": "clear",
+        "variable_weights": {
+          "pirads": "important",
+          "ct": "noted",
+          "fh": "noted",
+          "comorbidity": "noted",
+          "psa": "important",
+          "age": "important",
+          "psad": "noted",
+          "cspca": "noted",
+          "bx_isup": "important",
+          "bx_gl_prim": "noted",
+          "bx_gl_sec": "noted"
+        },
+        "reveal_sequence": [],
+        "reasoning": "The patient is a 72-year-old male with a PSA of 4.5 and a prior prostate cancer diagnosis with a Gleason score of 3+4 (ISUP grade group 2). MRI identified a PI-RADS 4 lesion in the right apical transition zone (cT1c). Given the stable Gleason grade and the patient's moderate LUTS, the management assessment is to review individual treatment benefit and preferences. The trade-off involves balancing potential cancer control with the risks and side effects of active treatment in a patient with pre-existing chronic kidney disease.",
+        "audit": {
+          "schema_ok": true,
+          "attempts": 1,
+          "fallback_note": false,
+          "fallback_form": false,
+          "grounding_downgraded": [],
+          "note_violations": []
+        }
+      },
+      "pass_": 1
+    }
+  ]
+}

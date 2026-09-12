@@ -1,0 +1,56 @@
+{
+  "marca": "20260912_074044",
+  "imagen": "chimera_agent_baseline_v2",
+  "imagen_id": "sha256:f9a2e4819b5518f52425f96d057ac1ba108f72c1385dc2032c8a1940683a9326",
+  "alcance": "V2_2 = V2 (perfil de 16 GB) + exportador suave de T3. T1 y T2 son los de la V1.1 sin cambios. Cobertura es contrato, no calidad.",
+  "hashes_v2_2": {
+    "__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "common/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "common/evidence.py": "db57cd557ea70efc84727dea04a802b393bf9cf094f02e06e6b670596c42bd02",
+    "common/extractors.py": "794e448bebc5511ca760cf965cbf21348197545a2588b309b7d952df52d36e80",
+    "evaluation/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "evaluation/comparativa.py": "5e604503952e1f9b3483298bdff7cbd64aa7938f001d234fa882fe5c713db64f",
+    "evaluation/e01_extraccion.py": "85692e0dca2235f004524c6d49a3fd4eed83362dda4980c7435a29c3140b31db",
+    "evaluation/e02_panel_t2.py": "3efbc7cd6ca99fdc4d388a54d64523561d301e4e9eec41f8bb4f5a4c29c518d8",
+    "evaluation/e03_consultas.py": "ce35697845d555a9046061502ba8f105fa36ce57b89f30c8efb919e7bc905880",
+    "evaluation/e04_conceptos.py": "2965f201603d73e83f609b3246f20b8e27b672c233fb4d4e60cb4dd59a51e483",
+    "evaluation/e05_mapa_t3.py": "0303eb953810aeb3d026506700de6d820be4ec0e459a2d1cb05319a65145f929",
+    "evaluation/e06_e07_supervivencia.py": "dca32ab73a6368f513d4dbb66137538a708d8f9a053387b54139111a702e1f3c",
+    "evaluation/groups.py": "d5a13b34093db956302fac4794aa411130783265b14dce2f95560a236cbc895d",
+    "evaluation/referencias.py": "cf7c3f4c70962faa76dd604808f1954dcbde8f36baaed141292e1bf3a88e4421",
+    "evaluation/splits.py": "556d8a4c51b9ef201282afa693a0e5ff8e0928d9818076e3553439f3dc15c509",
+    "task_3/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "task_3/export.py": "4a8501e88687db89289199970b3cfa4ebe5db32765a57a7f8edaa6af33863377",
+    "task_3/policy.py": "e192e5d6f06438493ac190230e04fc7b8547d615d59c9b4e95436451e15cb41c",
+    "task_3/run_task3_v2_2.py": "2b64fae37e62801006ec1b4064f60880e16187c89562061a240fdcc7cc533bce",
+    "verification/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "verification/cierre_v2_2.py": "a54986adad94aa3623c7fa64b0fec00ebd8888ce5aa6b71cf1d8799d404e2f6f",
+    "verification/cobertura_v2_2.py": "6d915dc17810bf5de997fd91a7292e368883384e5420d944ac20ff3520fa1d9f",
+    "verification/inference_v2_2.py": "cf69cb53d7424fda90ace84bb3154f8ead03de2b152f1992f8c3701433347b3b"
+  },
+  "runs": [
+    {
+      "tarea": 3,
+      "exit_code": 0,
+      "segundos": 301.1,
+      "casos_con_salida": 75,
+      "pizarras": 75
+    }
+  ],
+  "recuento_corregido": {
+    "task1": {
+      "salidas": 195,
+      "pizarras": 195
+    },
+    "task2": {
+      "salidas": 153,
+      "pizarras": 153
+    },
+    "task3": {
+      "salidas": 75,
+      "pizarras": 75
+    }
+  },
+  "nota_recuento": "El contador original miraba en task_N/output, que sólo existe para T3; T1 y T2 reparten en labeled/ y unlabeled/.",
+  "nota_pizarras_t3": "75 actas. El recuento previo daba 150 porque sumaba boards/*.json y output/*/acta.json, que son copias de lo mismo."
+}
