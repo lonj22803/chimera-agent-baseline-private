@@ -50,17 +50,44 @@ recuperación es explícita:
 git checkout pre-limpieza -- result_v2
 ```
 
-## Lo que el renombrado podía romper, y no rompió
+## Lo que el renombrado rompió, y cómo se cazó
 
-Los expertos viajan como pickles que guardan la **ruta del paquete** donde se
-entrenaron. Renombrar el paquete es exactamente lo que tumbó la tarea 3 en la
-V1.1. Aquí no pasó porque las dos defensas que se añadieron entonces siguen en
-pie y se comprobaron después del renombrado:
+**Los pickles de los expertos no se rompieron.** Guardan la ruta del paquete donde
+se entrenaron, y renombrar el paquete es lo que tumbó la tarea 3 en la V1.1. Aquí
+aguantó porque siguen en pie las dos defensas de entonces: `find_class` compara
+por el final de la ruta, y `chimera_experts` se registra bajo su nombre histórico.
 
-- `ModelReader.find_class` compara **por el final de la ruta**, no por el nombre
-  exacto del paquete.
-- `common/chimera_experts/__init__.py` registra el nombre histórico en
-  `sys.modules`.
+**El entrypoint sí se rompió**, y ninguna prueba lo vio. El original importaba
 
-Las 221 pruebas pasan, E00 reproduce H0 (0,82360) desde las referencias
-congeladas, y la imagen se reconstruye y pasa su compuerta.
+    from delete_final_versions_task_V2.verification import inference_v2
+
+con el módulo separado por ` import `. La regla específica de sustitución no casó
+y la general lo convirtió en `version_final_reto.runtime_16gb.verification`, que
+no existe. **Las 221 pruebas pasaron**, porque ninguna importaba el entrypoint.
+
+Lo cazó la compuerta sin montar código: los tres casos salían con **exit 1 y cero
+ficheros en 3–5 segundos**. En Grand Challenge habría sido un envío con todos los
+casos a cero. Se buscaron entonces todos los imports del paquete que no resuelven
+y aparecieron cuatro; los cuatro están corregidos.
+
+Quedan dos pruebas para que no vuelva a pasar
+(`common/tests/test_entrypoint_final.py`): una importa el entrypoint en un
+subproceso y comprueba que aplica sus dos sustituciones, y otra recorre todo el
+paquete y falla si algún import apunta a un módulo inexistente o a un árbol
+retirado.
+
+## Verificación final
+
+| comprobación | resultado |
+|---|---|
+| Pruebas | **230 pasan** |
+| E00 desde las referencias congeladas | reproduce H0: **0,82360** |
+| Imports internos que no resuelven | **0** |
+| Compuerta, imagen tal cual, sin montar, 4 núcleos | **3/3 exit 0**, 2 ficheros cada una, `fallback: false` |
+| Tiempos | 138,8 · 119,4 · 68,5 s de 900 |
+| T1 y T2 frente a antes de limpiar (mismo `case_id`) | **idénticos byte a byte** |
+| T3 frente a antes de limpiar | mismo evento; meses 29,8388 → 30,8723, que es exactamente el exportador nuevo |
+
+La lección es la misma que la de la V1.1, y conviene tenerla escrita dos veces:
+**montar código sobre una imagen comprueba el código, no la entrega.** Sólo la
+imagen tal cual encontró el fallo.

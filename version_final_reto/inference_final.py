@@ -12,9 +12,9 @@ from pathlib import Path
 try:
     import inference  # noqa: F401
 except ModuleNotFoundError:
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from version_final_reto.runtime_16gb.verification import inference_v2 as base  # noqa: E402
+from version_final_reto.investigacion import inference_solo_perfil as base  # noqa: E402
 from version_final_reto.investigacion.task_3 import policy  # noqa: E402
 
 policy.aplicar()

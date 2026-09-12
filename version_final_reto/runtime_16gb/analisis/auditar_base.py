@@ -35,7 +35,7 @@ def main():
     os.environ["USE_RATIONALE_JUDGE"] = "0"
     sys.path.insert(0, str(args.eval_repo / "evaluation"))
     import evaluate as ev
-    from delete_final_versions_task_V1.common.chimera_experts.features_pathology import extract
+    from version_final_reto.common.chimera_experts.features_pathology import extract
 
     evaluator = args.eval_repo / "evaluation/evaluate.py"
     mapping = args.eval_repo / "evaluation/ground_truth/section_variable_mapping.json"

@@ -42,9 +42,11 @@ def test_files_dispatch_and_fallback(tmp_path, monkeypatch, task, failure):
         if failure:
             raise RuntimeError('forced backend failure')
         # Existing valid output fixture, independent of the fallback under test.
-        root = gc.REPO / f'version_final_reto/task_{task}/runs/labeled/output/task{task}'
-        if task == 1:
-            root = gc.REPO / 'version_final_reto/task_1/runs/labeled/output/task1'
+        # Salidas reales de la corrida histórica, congeladas dentro del paquete al
+        # limpiar el repositorio: antes se leían de `delete_final_versions_task/`,
+        # que ya no existe en main.
+        root = (gc.REPO / 'version_final_reto/investigacion/referencias_historicas'
+                / f'H0_task{task}' / f'task{task}')
         case_folder = root / cid
         decision = json.loads((case_folder / gc.DECISION_FILENAME[task]).read_text())
         reasoning = json.loads((case_folder / gc.DECISION_FILENAME[task].replace('.json', '-reasoning.json')).read_text())

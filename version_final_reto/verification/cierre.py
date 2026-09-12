@@ -41,7 +41,7 @@ def rehacer_t3() -> dict:
     if destino.is_dir() and not viejo.exists():
         destino.rename(viejo)
     sys.path.insert(0, str(RAIZ))
-    from version_final_reto.investigacion.verification import cobertura_v2_2 as cob
+    from version_final_reto.verification import cobertura_completa as cob
     cob.TAREAS = {3: cob.TAREAS[3]}
     cob.main()
     return {"primera_pasada_conservada_en": str(viejo.relative_to(RAIZ))}
@@ -84,7 +84,7 @@ def main() -> None:
     print("   ", info)
     permisos()
     sys.path.insert(0, str(RAIZ))
-    from version_final_reto.investigacion.verification.cobertura_v2_2 import normalizar_pizarras
+    from version_final_reto.verification.cobertura_completa import normalizar_pizarras
     print("3. pizarras:", normalizar_pizarras())
     print("4. recuento:", recontar())
     print("5. comparativa")
