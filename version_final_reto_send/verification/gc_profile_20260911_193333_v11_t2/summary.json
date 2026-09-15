@@ -1,0 +1,84 @@
+{
+  "cpus": "",
+  "cpuset": "0-3",
+  "memory": "32g",
+  "image": "chimera_agent_baseline_v1",
+  "source": "/home/jjlondono/PycharmProjects/chimera-agent-baseline/version_final_reto",
+  "package": "version_final_reto",
+  "unseen_case": true,
+  "limit_seconds": 900,
+  "runs": [
+    {
+      "interface": 1,
+      "case_id": "FIJO-1",
+      "seconds": 122.2,
+      "exit_code": 0,
+      "over_gc_limit": false,
+      "files": [
+        "prostate-treatment-decision-reasoning.json",
+        "prostate-treatment-decision.json"
+      ],
+      "gc_resources": {
+        "kind": "gc_resources",
+        "case_id": "FIJO-1",
+        "task": 2,
+        "phases_seconds": {
+          "mcp": 6.987437920004595,
+          "model_load": 80.72483669299982,
+          "graph": 33.53735820800648,
+          "warm_prewarm": 19.12,
+          "warm_embed": 7.05,
+          "warm_model": 80.66
+        },
+        "llm_calls": 7,
+        "prompt_tokens": 21405,
+        "completion_tokens": 1770,
+        "llm_seconds": 27.08,
+        "tool_calls": 7,
+        "tool_seconds": 0.06,
+        "tools_used": [
+          "get_family_history",
+          "get_lab_results",
+          "get_mri_report",
+          "get_pathology_report",
+          "get_previous_notes",
+          "get_psa_trend",
+          "search_guidelines"
+        ],
+        "by_role": {
+          "eau": {
+            "calls": 2,
+            "prompt_tokens": 5822,
+            "completion_tokens": 701,
+            "seconds": 10.75
+          },
+          "other": {
+            "calls": 5,
+            "prompt_tokens": 15583,
+            "completion_tokens": 1069,
+            "seconds": 16.33
+          }
+        },
+        "peak_vram_mb": 21501.9,
+        "host_rss_mb": 3369.3,
+        "tokens_approx": false,
+        "host_peak_rss_mb": 3369.29296875,
+        "device_peak_vram_mb": 21501.875,
+        "device_total_mb": 32110.9375,
+        "vram_sample_interval_seconds": 0.5
+      },
+      "gc_delivery": {
+        "kind": "gc_delivery",
+        "task": 2,
+        "case_id": "FIJO-1",
+        "fallback": false,
+        "write_seconds": 0.00015091101522557437,
+        "total_seconds": 114.61157414398622,
+        "budget_seconds": 780.0,
+        "budget_spent": 114.6,
+        "budget_left": 665.4,
+        "budget_skipped": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "pregunta": "¿Mejoraría la decisión un experto de otra familia (kNN probabilístico, RF, …)?",
+  "protocolo": "Sólo DEV. VAL no se lee: ninguna familia superó a lo que ya hay.",
+  "task2": {
+    "n_dev": 50,
+    "columnas": 166,
+    "modelos": {
+      "prior_only": {
+        "acc_cv": 0.44,
+        "sd": 0.0
+      },
+      "grade_rule": {
+        "acc_cv": 0.88,
+        "sd": 0.0
+      },
+      "logreg_l2": {
+        "acc_cv": 0.8467,
+        "sd": 0.0499
+      },
+      "logreg_l1": {
+        "acc_cv": 0.8667,
+        "sd": 0.0249
+      },
+      "logreg_balanced": {
+        "acc_cv": 0.8467,
+        "sd": 0.0618
+      },
+      "lda": {
+        "acc_cv": 0.8733,
+        "sd": 0.0377
+      },
+      "decision_tree": {
+        "acc_cv": 0.82,
+        "sd": 0.0
+      },
+      "random_forest": {
+        "acc_cv": 0.8533,
+        "sd": 0.0189
+      },
+      "random_forest_balanced": {
+        "acc_cv": 0.8667,
+        "sd": 0.0094
+      },
+      "extra_trees": {
+        "acc_cv": 0.88,
+        "sd": 0.0
+      },
+      "extra_trees_balanced": {
+        "acc_cv": 0.88,
+        "sd": 0.0
+      },
+      "grad_boosting": {
+        "acc_cv": 0.86,
+        "sd": 0.0163
+      },
+      "hist_gradient_boosting": {
+        "acc_cv": 0.5467,
+        "sd": 0.0249
+      },
+      "knn": {
+        "acc_cv": 0.66,
+        "sd": 0.0432
+      },
+      "svm_rbf": {
+        "acc_cv": 0.6867,
+        "sd": 0.0249
+      },
+      "gaussian_nb": {
+        "acc_cv": 0.5933,
+        "sd": 0.0249
+      },
+      "deep_ensemble_mlp": {
+        "acc_cv": 0.7533,
+        "sd": 0.0094
+      }
+    }
+  },
+  "task3": {
+    "n_dev": 52,
+    "eventos": 13,
+    "columnas": 2197,
+    "modelos": {
+      "extra_trees": {
+        "c_index": 0.7631
+      },
+      "random_forest": {
+        "c_index": 0.7515
+      },
+      "knn_probabilistico": {
+        "c_index": 0.5476
+      }
+    },
+    "referencias": {
+      "CAPRA-S": 0.6427,
+      "ASGDE_adoptado": 0.7903
+    }
+  },
+  "mejor_task2": "grade_rule",
+  "mejor_task3": "extra_trees",
+  "adoptado": false,
+  "motivo": "NO. En T2 nada bate a la regla ISUP (0,8800): Extra Trees la empata, Random Forest queda por debajo (0,8533–0,8667) y el kNN se hunde a 0.66. En T3 el Cox de fusión ya adoptado (c-index 0,7903) supera a las tres familias nuevas: extra_trees 0.7631, random_forest 0.7515 y kNN 0.5476, este último cerca del azar. Los árboles sí baten a CAPRA-S en T3 (0,6427), lo que respalda a posteriori la adopción del portavoz de fusión, pero no lo mejoran. Ninguna familia nueva merece asiento."
+}

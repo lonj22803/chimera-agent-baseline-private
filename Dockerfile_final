@@ -57,8 +57,15 @@ RUN python3 -m pip install --no-cache-dir --no-deps .
 # El entrypoint es `inference_final.py`: importa el `inference.py` real,
 # intacto, y sustituye dos cosas —el reparto de VRAM y el último paso de T3—.
 # Ningún fichero del contrato se duplica ni se edita.
-COPY --chown=user:user version_final_reto/ /opt/app/version_final_reto/
-COPY --chown=user:user version_final_reto/inference_final.py /opt/app/inference_final.py
+#
+# Qué versión se construye lo decide CODE_DIR, y dentro de la imagen se llama
+# siempre `version_final_reto`: el código importa ese paquete y los pickles de
+# los expertos guardan su ruta.
+#   version_final_reto_before -> chimera_agent_baseline_v2 (la enviada a Test)
+#   version_final_reto_send   -> chimera_agent_baseline_v3 (supervisor + sombra)
+ARG CODE_DIR=version_final_reto_send
+COPY --chown=user:user ${CODE_DIR}/ /opt/app/version_final_reto/
+COPY --chown=user:user ${CODE_DIR}/inference_final.py /opt/app/inference_final.py
 COPY --chown=user:user data/task1/ /opt/app/data/task1/
 RUN ln -sfn /opt/ml/model /opt/app/model
 

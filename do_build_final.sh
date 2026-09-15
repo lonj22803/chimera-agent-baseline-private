@@ -7,12 +7,18 @@ set -euo pipefail
 
 DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 TAG="${DOCKER_IMAGE_TAG:-chimera_agent_baseline_final}"
+# Qué carpeta entra como `version_final_reto` (ver ESTRUCTURA.md):
+#   CODE_DIR=version_final_reto_before DOCKER_IMAGE_TAG=chimera_agent_baseline_v2 ./do_build_final.sh
+#   CODE_DIR=version_final_reto_send   DOCKER_IMAGE_TAG=chimera_agent_baseline_v3 ./do_build_final.sh
+CODE_DIR="${CODE_DIR:-version_final_reto_send}"
 cd "$DIR"
+[[ -d "$CODE_DIR" && ! -L "$CODE_DIR" ]] || { echo "CODE_DIR=$CODE_DIR no es una carpeta real"; exit 1; }
 
-echo "== Construyendo $TAG desde Dockerfile_final =="
+echo "== Construyendo $TAG desde Dockerfile_final con $CODE_DIR =="
 docker build \
   --platform=linux/amd64 \
   --file Dockerfile_final \
+  --build-arg "CODE_DIR=$CODE_DIR" \
   --tag "$TAG" \
   ${DOCKER_QUIET_BUILD:+--quiet} \
   "$DIR" 2>&1

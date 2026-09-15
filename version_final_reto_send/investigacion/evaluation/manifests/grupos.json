@@ -1,0 +1,1979 @@
+{
+  "criterio": "igualdad exacta de un vector de modalidad, union-find sobre las tres tareas",
+  "modalidades_consideradas": [
+    "MRI image",
+    "Biopsy slide",
+    "Prostatectomy slide"
+  ],
+  "casos_totales": 423,
+  "casos_por_tarea": {
+    "t1": 195,
+    "t2": 153,
+    "t3": 75
+  },
+  "grupos": 199,
+  "grupos_multitarea": 170,
+  "huellas_compartidas": 280,
+  "distribucion_tamaños": {
+    "1": 29,
+    "2": 116,
+    "3": 54
+  },
+  "asignacion": {
+    "t1:PT-pseudo_0020cfca66c8": "g02630849e45f",
+    "t2:T2-001": "g02630849e45f",
+    "t3:T3-054": "g02630849e45f",
+    "t1:PT-pseudo_0169468160c6": "g779daea4d03a",
+    "t2:T2-002": "g779daea4d03a",
+    "t1:PT-pseudo_01b643727538": "g200b0bbb74c7",
+    "t2:T2-003": "g200b0bbb74c7",
+    "t3:T3-066": "g200b0bbb74c7",
+    "t1:PT-pseudo_033f1a8e1503": "g88acbbfe1725",
+    "t3:T3-044": "g88acbbfe1725",
+    "t1:PT-pseudo_0615b2bd8504": "ge969ed62b31b",
+    "t2:T2-004": "ge969ed62b31b",
+    "t3:T3-017": "ge969ed62b31b",
+    "t1:PT-pseudo_062a1125899d": "g59d232338cbb",
+    "t2:T2-005": "g59d232338cbb",
+    "t1:PT-pseudo_06b319f42fcb": "gd92cd6ea8e40",
+    "t2:T2-006": "gd92cd6ea8e40",
+    "t3:T3-011": "gd92cd6ea8e40",
+    "t1:PT-pseudo_075dd468b384": "g64456d8ecf26",
+    "t2:T2-007": "g64456d8ecf26",
+    "t1:PT-pseudo_079636ac5644": "gb107b4a9f241",
+    "t2:T2-008": "gb107b4a9f241",
+    "t1:PT-pseudo_0930885168c9": "g9e9a91c0bd94",
+    "t2:T2-009": "g9e9a91c0bd94",
+    "t1:PT-pseudo_099651db404e": "g5057737be440",
+    "t2:T2-010": "g5057737be440",
+    "t1:PT-pseudo_0bd72f429a8b": "ga8a296067905",
+    "t2:T2-011": "ga8a296067905",
+    "t1:PT-pseudo_0cdfb9410718": "g32e2e7bc9af3",
+    "t2:T2-012": "g32e2e7bc9af3",
+    "t3:T3-074": "g32e2e7bc9af3",
+    "t1:PT-pseudo_0de7e606ca70": "g23e01efb5a88",
+    "t1:PT-pseudo_11345b8a7ab3": "gb0dcce6dfced",
+    "t2:T2-013": "gb0dcce6dfced",
+    "t1:PT-pseudo_11574b12444b": "g932a7deff86d",
+    "t2:T2-014": "g932a7deff86d",
+    "t1:PT-pseudo_1185f6a68df0": "g680c23db24c9",
+    "t1:PT-pseudo_11fe9c6ca833": "g5180d0c9c045",
+    "t2:T2-015": "g5180d0c9c045",
+    "t3:T3-071": "g5180d0c9c045",
+    "t1:PT-pseudo_132e0000c0e0": "ga73dc73f091b",
+    "t2:T2-016": "ga73dc73f091b",
+    "t1:PT-pseudo_138092c2a6be": "g923c8cba6edd",
+    "t2:T2-017": "g923c8cba6edd",
+    "t1:PT-pseudo_152344add0f1": "g43eae3e9755f",
+    "t3:T3-051": "g43eae3e9755f",
+    "t1:PT-pseudo_175e6ad47991": "gc894d6836237",
+    "t2:T2-018": "gc894d6836237",
+    "t1:PT-pseudo_17f110c9e142": "g482b49676d3f",
+    "t2:T2-019": "g482b49676d3f",
+    "t3:T3-048": "g482b49676d3f",
+    "t1:PT-pseudo_180352970ace": "ge0437adac614",
+    "t3:T3-060": "ge0437adac614",
+    "t1:PT-pseudo_1a4e0cf3b927": "g9bce8eec52ae",
+    "t2:T2-020": "g9bce8eec52ae",
+    "t3:T3-064": "g9bce8eec52ae",
+    "t1:PT-pseudo_1dc32184cab6": "gab8eae0501a7",
+    "t2:T2-021": "gab8eae0501a7",
+    "t1:PT-pseudo_20a7e91c494c": "g24983fd7b622",
+    "t2:T2-022": "g24983fd7b622",
+    "t1:PT-pseudo_20ba3f0f6ca0": "g04fdef267c16",
+    "t1:PT-pseudo_21e7fa67a79e": "g9da66d8351eb",
+    "t2:T2-023": "g9da66d8351eb",
+    "t3:T3-006": "g9da66d8351eb",
+    "t1:PT-pseudo_249def42388a": "gf5828253e49e",
+    "t3:T3-036": "gf5828253e49e",
+    "t1:PT-pseudo_25007bb807d7": "gf5c752121dfc",
+    "t1:PT-pseudo_259484ae733f": "gc0f17760fc83",
+    "t2:T2-024": "gc0f17760fc83",
+    "t3:T3-019": "gc0f17760fc83",
+    "t1:PT-pseudo_2b3ef1d3a505": "gf59e3be36e5e",
+    "t2:T2-025": "gf59e3be36e5e",
+    "t1:PT-pseudo_2cd88bcdf81c": "g2018df7fae2f",
+    "t2:T2-026": "g2018df7fae2f",
+    "t3:T3-010": "g2018df7fae2f",
+    "t1:PT-pseudo_2e0346bce3b3": "g30f5ad1ecd88",
+    "t2:T2-027": "g30f5ad1ecd88",
+    "t1:PT-pseudo_2e4988b84112": "g30dd54f44192",
+    "t2:T2-028": "g30dd54f44192",
+    "t1:PT-pseudo_2eef4115a253": "gc8f23e5dd7d0",
+    "t3:T3-075": "gc8f23e5dd7d0",
+    "t1:PT-pseudo_2ef22b5dd08e": "g2ff6ffd1b470",
+    "t1:PT-pseudo_2fbb84505a45": "ge128e3280205",
+    "t2:T2-029": "ge128e3280205",
+    "t1:PT-pseudo_33c8cd4571fd": "g3566331fd229",
+    "t1:PT-pseudo_34647958aba3": "gb0e8ca68f3d0",
+    "t2:T2-030": "gb0e8ca68f3d0",
+    "t1:PT-pseudo_3477ea7065bd": "g628ad5cf776a",
+    "t1:PT-pseudo_3646e0a2ae13": "g2d8c6fd6b5a4",
+    "t1:PT-pseudo_36c92fb424ac": "gc39bee0bebad",
+    "t2:T2-031": "gc39bee0bebad",
+    "t1:PT-pseudo_376de00c8131": "g9083cc92d76a",
+    "t2:T2-032": "g9083cc92d76a",
+    "t1:PT-pseudo_37d8ae9b27f1": "gfec327078013",
+    "t2:T2-033": "gfec327078013",
+    "t3:T3-028": "gfec327078013",
+    "t1:PT-pseudo_394e0b8dbeeb": "g1b755719b88c",
+    "t2:T2-034": "g1b755719b88c",
+    "t1:PT-pseudo_3b6ea1920967": "g87358bd259ca",
+    "t2:T2-035": "g87358bd259ca",
+    "t3:T3-026": "g87358bd259ca",
+    "t1:PT-pseudo_3cc88c81f35a": "g9bfcd83e6137",
+    "t2:T2-036": "g9bfcd83e6137",
+    "t3:T3-014": "g9bfcd83e6137",
+    "t1:PT-pseudo_3ceacc9b660b": "gb930da962fce",
+    "t2:T2-037": "gb930da962fce",
+    "t1:PT-pseudo_3f75ae876abe": "g31f3734b22e4",
+    "t3:T3-033": "g31f3734b22e4",
+    "t1:PT-pseudo_41ca49bed13d": "g71672902ae2a",
+    "t1:PT-pseudo_47c373e230b6": "ge6ba89a67ce3",
+    "t2:T2-038": "ge6ba89a67ce3",
+    "t1:PT-pseudo_47d8b39fd07f": "g27bd18d5859e",
+    "t2:T2-039": "g27bd18d5859e",
+    "t1:PT-pseudo_48fb60dfd22f": "g6f4d9df3123e",
+    "t1:PT-pseudo_4a2fa7bc3595": "g791e7172bc4e",
+    "t2:T2-040": "g791e7172bc4e",
+    "t1:PT-pseudo_4a4fedfc1f51": "g1b30007eb98a",
+    "t3:T3-038": "g1b30007eb98a",
+    "t1:PT-pseudo_4b950525e6a8": "g6635731d2f77",
+    "t2:T2-041": "g6635731d2f77",
+    "t1:PT-pseudo_4bfd4ec864d8": "g0ef78d7c8065",
+    "t1:PT-pseudo_4c6b2b2bbf94": "g8340ccf0b8d7",
+    "t2:T2-043": "g8340ccf0b8d7",
+    "t1:PT-pseudo_4d54f04e26ae": "g3e0b0da28dd7",
+    "t1:PT-pseudo_4e545d350c5b": "g0617ad469fb5",
+    "t1:PT-pseudo_4edb17f79e46": "gfc74f6046e08",
+    "t2:T2-045": "gfc74f6046e08",
+    "t1:PT-pseudo_4f33b0253633": "g0d17df556123",
+    "t2:T2-046": "g0d17df556123",
+    "t1:PT-pseudo_52213169f58b": "g787aa6f72739",
+    "t1:PT-pseudo_562159dc2cc6": "ga80cf92998da",
+    "t2:T2-147": "ga80cf92998da",
+    "t1:PT-pseudo_575cb2819e96": "g6fa059661800",
+    "t2:T2-047": "g6fa059661800",
+    "t1:PT-pseudo_590e7b237744": "g21473c540d84",
+    "t2:T2-048": "g21473c540d84",
+    "t1:PT-pseudo_598f1d8f4e08": "ge9d95291d933",
+    "t2:T2-049": "ge9d95291d933",
+    "t3:T3-065": "ge9d95291d933",
+    "t1:PT-pseudo_5af00f9153c2": "gd2912a92408f",
+    "t2:T2-050": "gd2912a92408f",
+    "t1:PT-pseudo_5dc2eb70fbd7": "g3bea3a59ccc7",
+    "t2:T2-051": "g3bea3a59ccc7",
+    "t1:PT-pseudo_5f263f325019": "g2a79a25688e7",
+    "t2:T2-052": "g2a79a25688e7",
+    "t3:T3-027": "g2a79a25688e7",
+    "t1:PT-pseudo_62c93b0c3dba": "gd1caebf9e092",
+    "t1:PT-pseudo_6457372f9532": "g1a3b3b72dda1",
+    "t2:T2-053": "g1a3b3b72dda1",
+    "t1:PT-pseudo_665cf811e172": "gb766571499ca",
+    "t2:T2-054": "gb766571499ca",
+    "t3:T3-031": "gb766571499ca",
+    "t1:PT-pseudo_668c2a174afc": "gf0bd20d3f8b4",
+    "t3:T3-008": "gf0bd20d3f8b4",
+    "t1:PT-pseudo_67728e41a2fa": "g550d084c9ddf",
+    "t2:T2-055": "g550d084c9ddf",
+    "t1:PT-pseudo_6a100adb6ac3": "g76f0d359ca2b",
+    "t2:T2-056": "g76f0d359ca2b",
+    "t3:T3-030": "g76f0d359ca2b",
+    "t1:PT-pseudo_6b6ee002f75d": "gcb86bd0e0051",
+    "t2:T2-057": "gcb86bd0e0051",
+    "t1:PT-pseudo_6c8ef835ea42": "g4bb88ad24566",
+    "t1:PT-pseudo_6d2ecb82cc52": "g5f8d3c44f9f1",
+    "t2:T2-058": "g5f8d3c44f9f1",
+    "t3:T3-063": "g5f8d3c44f9f1",
+    "t1:PT-pseudo_6d6abf7f6fb5": "g4f2e83914405",
+    "t3:T3-018": "g4f2e83914405",
+    "t1:PT-pseudo_6d83f9e49421": "ge4006430fd3b",
+    "t2:T2-059": "ge4006430fd3b",
+    "t1:PT-pseudo_6dc747db3e7d": "gc9dda211b1e2",
+    "t3:T3-057": "gc9dda211b1e2",
+    "t1:PT-pseudo_6df4f23de04a": "g36fccc1e3de0",
+    "t2:T2-060": "g36fccc1e3de0",
+    "t1:PT-pseudo_723f490ff7ce": "g54f1b5c18fe8",
+    "t1:PT-pseudo_7423d1c19560": "gdd6bd3feac84",
+    "t3:T3-016": "gdd6bd3feac84",
+    "t1:PT-pseudo_76bfeeb8b8b8": "gc8c861935e44",
+    "t2:T2-061": "gc8c861935e44",
+    "t3:T3-042": "gc8c861935e44",
+    "t1:PT-pseudo_7bcbfa157137": "g923ea7a737ef",
+    "t2:T2-062": "g923ea7a737ef",
+    "t1:PT-pseudo_7be89ab28e92": "gc60ca2bc44d5",
+    "t2:T2-063": "gc60ca2bc44d5",
+    "t3:T3-004": "gc60ca2bc44d5",
+    "t1:PT-pseudo_7dbdcd6f9064": "g5b023a3c06ba",
+    "t1:PT-pseudo_7dd989c35f87": "g5f1a5e1d82f6",
+    "t2:T2-064": "g5f1a5e1d82f6",
+    "t1:PT-pseudo_7efca1668c87": "g4724e9f5b0d5",
+    "t2:T2-065": "g4724e9f5b0d5",
+    "t3:T3-070": "g4724e9f5b0d5",
+    "t1:PT-pseudo_7f85fe245d6c": "gd85156b83caa",
+    "t2:T2-066": "gd85156b83caa",
+    "t3:T3-015": "gd85156b83caa",
+    "t1:PT-pseudo_80d551b63772": "gbb668dc81516",
+    "t2:T2-149": "gbb668dc81516",
+    "t1:PT-pseudo_8137531888a0": "g41841792e364",
+    "t2:T2-067": "g41841792e364",
+    "t1:PT-pseudo_8192345b35fa": "g747f996f6d3a",
+    "t2:T2-068": "g747f996f6d3a",
+    "t3:T3-058": "g747f996f6d3a",
+    "t1:PT-pseudo_819642c63ff9": "g8c9b893f9206",
+    "t2:T2-069": "g8c9b893f9206",
+    "t3:T3-035": "g8c9b893f9206",
+    "t1:PT-pseudo_825bc8328913": "ge5297295595f",
+    "t2:T2-070": "ge5297295595f",
+    "t1:PT-pseudo_837f1dcfb56d": "g70801a41fbfa",
+    "t2:T2-150": "g70801a41fbfa",
+    "t1:PT-pseudo_83f690a06c81": "gc388f480cc60",
+    "t2:T2-071": "gc388f480cc60",
+    "t3:T3-034": "gc388f480cc60",
+    "t1:PT-pseudo_84ce0e4a9eed": "g926a517a679d",
+    "t2:T2-072": "g926a517a679d",
+    "t3:T3-024": "g926a517a679d",
+    "t1:PT-pseudo_8636aa471ef7": "g6bc57dd8c967",
+    "t1:PT-pseudo_8654c4ff4d10": "gb79fc5c430cb",
+    "t2:T2-074": "gb79fc5c430cb",
+    "t3:T3-072": "gb79fc5c430cb",
+    "t1:PT-pseudo_87cbc2052e90": "g5c35b5eaedb0",
+    "t3:T3-037": "g5c35b5eaedb0",
+    "t1:PT-pseudo_8967e0df17fc": "g5507b634f8d5",
+    "t2:T2-075": "g5507b634f8d5",
+    "t3:T3-029": "g5507b634f8d5",
+    "t1:PT-pseudo_9187d18278f9": "g2e7777d50b0d",
+    "t3:T3-002": "g2e7777d50b0d",
+    "t1:PT-pseudo_926c37508fe2": "ge8111b54fb41",
+    "t2:T2-076": "ge8111b54fb41",
+    "t3:T3-061": "ge8111b54fb41",
+    "t1:PT-pseudo_927456f47c99": "gdf229c5205da",
+    "t3:T3-068": "gdf229c5205da",
+    "t1:PT-pseudo_938ba8a478e6": "gcdac55848f97",
+    "t2:T2-077": "gcdac55848f97",
+    "t1:PT-pseudo_93c180f13bd8": "g7e896dc3761e",
+    "t2:T2-078": "g7e896dc3761e",
+    "t1:PT-pseudo_945da5c635c4": "g246b3adb7398",
+    "t2:T2-079": "g246b3adb7398",
+    "t1:PT-pseudo_956f2054a1ea": "g863f60a4f675",
+    "t2:T2-080": "g863f60a4f675",
+    "t3:T3-020": "g863f60a4f675",
+    "t1:PT-pseudo_958f2377f288": "g4335eff04b83",
+    "t2:T2-081": "g4335eff04b83",
+    "t1:PT-pseudo_95d3fd02d5e0": "g1398a9c47730",
+    "t2:T2-082": "g1398a9c47730",
+    "t1:PT-pseudo_97a7a14b3c3d": "g5a1d5a3f7b6e",
+    "t1:PT-pseudo_9835e080606c": "g69295885d17f",
+    "t2:T2-083": "g69295885d17f",
+    "t1:PT-pseudo_98f71f146763": "g7fcec676d034",
+    "t2:T2-084": "g7fcec676d034",
+    "t1:PT-pseudo_9988c23725e6": "g3471f5c0609a",
+    "t3:T3-040": "g3471f5c0609a",
+    "t1:PT-pseudo_99e3dc40a451": "g179ce361c9aa",
+    "t2:T2-085": "g179ce361c9aa",
+    "t1:PT-pseudo_9ac935d9650f": "g5d79d172e8b8",
+    "t2:T2-086": "g5d79d172e8b8",
+    "t1:PT-pseudo_9df1617405c1": "g3cb766d37fe5",
+    "t2:T2-087": "g3cb766d37fe5",
+    "t3:T3-043": "g3cb766d37fe5",
+    "t1:PT-pseudo_9ff22a71b795": "gd198e4805c8d",
+    "t3:T3-045": "gd198e4805c8d",
+    "t1:PT-pseudo_a2ed5cd06259": "ga8c727d2202f",
+    "t2:T2-088": "ga8c727d2202f",
+    "t3:T3-069": "ga8c727d2202f",
+    "t1:PT-pseudo_a32d7e3c3cdf": "g4f87bb1b83c2",
+    "t2:T2-089": "g4f87bb1b83c2",
+    "t3:T3-049": "g4f87bb1b83c2",
+    "t1:PT-pseudo_a37319c14573": "g34acdd6ffc33",
+    "t2:T2-090": "g34acdd6ffc33",
+    "t1:PT-pseudo_a424617e164e": "g40dd56425082",
+    "t2:T2-091": "g40dd56425082",
+    "t1:PT-pseudo_a4f6e7273fc3": "g0dfcf31fa066",
+    "t2:T2-092": "g0dfcf31fa066",
+    "t1:PT-pseudo_a5292377e539": "g20aa305424b1",
+    "t3:T3-073": "g20aa305424b1",
+    "t1:PT-pseudo_a62fdda714c0": "g3b28a4ea8b4c",
+    "t1:PT-pseudo_a64ead56f586": "g7791e488bd46",
+    "t2:T2-093": "g7791e488bd46",
+    "t1:PT-pseudo_a9a20522674d": "gd17f7380652c",
+    "t2:T2-094": "gd17f7380652c",
+    "t1:PT-pseudo_a9acda639666": "g8a064ea8e30e",
+    "t2:T2-095": "g8a064ea8e30e",
+    "t1:PT-pseudo_ac05cda1a88a": "gaa3f33d06624",
+    "t2:T2-096": "gaa3f33d06624",
+    "t1:PT-pseudo_ac1dc724676e": "gd72314add8fb",
+    "t2:T2-097": "gd72314add8fb",
+    "t1:PT-pseudo_acad53162dba": "g7d5b2606dd04",
+    "t3:T3-003": "g7d5b2606dd04",
+    "t1:PT-pseudo_acc7bae9e286": "g31b13be40fe1",
+    "t2:T2-098": "g31b13be40fe1",
+    "t3:T3-012": "g31b13be40fe1",
+    "t1:PT-pseudo_aed2e170b8e6": "gfdd387ffd8ba",
+    "t2:T2-099": "gfdd387ffd8ba",
+    "t3:T3-001": "gfdd387ffd8ba",
+    "t1:PT-pseudo_af12e08190bd": "gb702d1a5d3ad",
+    "t2:T2-100": "gb702d1a5d3ad",
+    "t1:PT-pseudo_afbc5ebc0d4e": "gcd2093cdd637",
+    "t2:T2-101": "gcd2093cdd637",
+    "t1:PT-pseudo_b00a553261d2": "gf3fdec6e289f",
+    "t2:T2-102": "gf3fdec6e289f",
+    "t1:PT-pseudo_b0321645a5de": "g5525736f644e",
+    "t2:T2-103": "g5525736f644e",
+    "t3:T3-056": "g5525736f644e",
+    "t1:PT-pseudo_b28f2ad6069e": "gc1052a68475f",
+    "t2:T2-104": "gc1052a68475f",
+    "t3:T3-022": "gc1052a68475f",
+    "t1:PT-pseudo_b414d3d849a7": "g34f5408a4f1d",
+    "t2:T2-105": "g34f5408a4f1d",
+    "t3:T3-023": "g34f5408a4f1d",
+    "t1:PT-pseudo_b477d3bd8246": "g889a90ffab8e",
+    "t2:T2-106": "g889a90ffab8e",
+    "t1:PT-pseudo_b59dce24e94a": "g1afeead920dc",
+    "t2:T2-107": "g1afeead920dc",
+    "t1:PT-pseudo_b63dfe0f311e": "g30cf240a3e16",
+    "t2:T2-108": "g30cf240a3e16",
+    "t1:PT-pseudo_b69f6fab2a86": "gdca83973cca2",
+    "t2:T2-109": "gdca83973cca2",
+    "t3:T3-067": "gdca83973cca2",
+    "t1:PT-pseudo_b6db06db35d7": "g0b6f992e670a",
+    "t2:T2-110": "g0b6f992e670a",
+    "t1:PT-pseudo_b8115e954c12": "g99660f6137f1",
+    "t2:T2-111": "g99660f6137f1",
+    "t1:PT-pseudo_b9aa0df93f2a": "g9aec8c24f4a0",
+    "t2:T2-112": "g9aec8c24f4a0",
+    "t1:PT-pseudo_b9f0b7018502": "g463248332134",
+    "t2:T2-113": "g463248332134",
+    "t1:PT-pseudo_c03b1168ff4d": "gc0089adac91c",
+    "t2:T2-114": "gc0089adac91c",
+    "t3:T3-052": "gc0089adac91c",
+    "t1:PT-pseudo_c12bcf838ec8": "g4bd457aad06b",
+    "t2:T2-115": "g4bd457aad06b",
+    "t1:PT-pseudo_c13fda040310": "g61f036ccc6e6",
+    "t2:T2-116": "g61f036ccc6e6",
+    "t1:PT-pseudo_c39e94a13920": "ga6f9bc191f35",
+    "t2:T2-117": "ga6f9bc191f35",
+    "t1:PT-pseudo_c55496c11421": "ga6bae3ab6dcd",
+    "t2:T2-118": "ga6bae3ab6dcd",
+    "t1:PT-pseudo_c7277954c60f": "g78cdcdcbfc7a",
+    "t2:T2-151": "g78cdcdcbfc7a",
+    "t1:PT-pseudo_c9d31197c533": "gd080afa4cbd5",
+    "t2:T2-119": "gd080afa4cbd5",
+    "t1:PT-pseudo_cac2563c222a": "gbd7aa992de56",
+    "t2:T2-120": "gbd7aa992de56",
+    "t1:PT-pseudo_cce5d47c05dd": "ga29cfb72bc91",
+    "t2:T2-121": "ga29cfb72bc91",
+    "t1:PT-pseudo_d217629c323a": "g9b65760cb2c8",
+    "t2:T2-122": "g9b65760cb2c8",
+    "t3:T3-050": "g9b65760cb2c8",
+    "t1:PT-pseudo_d38917f87b35": "g831e62e148da",
+    "t2:T2-123": "g831e62e148da",
+    "t1:PT-pseudo_d3d6b421d0aa": "geef12d638c36",
+    "t2:T2-124": "geef12d638c36",
+    "t3:T3-039": "geef12d638c36",
+    "t1:PT-pseudo_d3e975d025e6": "g57e08f9ecd78",
+    "t1:PT-pseudo_d49b896a09e6": "g77f16dc63b17",
+    "t2:T2-125": "g77f16dc63b17",
+    "t1:PT-pseudo_d5ceb6b4204f": "g976da0dfa07c",
+    "t2:T2-126": "g976da0dfa07c",
+    "t3:T3-013": "g976da0dfa07c",
+    "t1:PT-pseudo_d7d26761c714": "gb023b075dada",
+    "t2:T2-127": "gb023b075dada",
+    "t1:PT-pseudo_d95b3a02898e": "g5045a06de269",
+    "t2:T2-152": "g5045a06de269",
+    "t1:PT-pseudo_dcd61cf9b443": "g863c3bf4ca27",
+    "t2:T2-128": "g863c3bf4ca27",
+    "t3:T3-047": "g863c3bf4ca27",
+    "t1:PT-pseudo_dcd7bf13a6f4": "g266f88b52065",
+    "t1:PT-pseudo_dd011d696387": "g19e9f61199f3",
+    "t2:T2-129": "g19e9f61199f3",
+    "t3:T3-059": "g19e9f61199f3",
+    "t1:PT-pseudo_e001f4d06517": "g63b9bd04d915",
+    "t2:T2-130": "g63b9bd04d915",
+    "t3:T3-007": "g63b9bd04d915",
+    "t1:PT-pseudo_e1bb1e86b054": "gaa9c0c5e2d07",
+    "t2:T2-131": "gaa9c0c5e2d07",
+    "t3:T3-009": "gaa9c0c5e2d07",
+    "t1:PT-pseudo_e288564d7111": "gfa67b4c62b47",
+    "t2:T2-132": "gfa67b4c62b47",
+    "t3:T3-041": "gfa67b4c62b47",
+    "t1:PT-pseudo_e5104a16c8bb": "gff2ec16d28bc",
+    "t2:T2-133": "gff2ec16d28bc",
+    "t1:PT-pseudo_e91d5fe837cb": "g6b47aff2baf3",
+    "t2:T2-134": "g6b47aff2baf3",
+    "t1:PT-pseudo_e9fbcdc890f2": "g6652a580b98c",
+    "t2:T2-135": "g6652a580b98c",
+    "t1:PT-pseudo_ee512fea9006": "g419db6589a3c",
+    "t1:PT-pseudo_ef2309676161": "gaa253ae488ca",
+    "t3:T3-055": "gaa253ae488ca",
+    "t1:PT-pseudo_ef66ca71e996": "g73b82fb61820",
+    "t2:T2-136": "g73b82fb61820",
+    "t1:PT-pseudo_ef8ea220bdc6": "g6c17cd738a27",
+    "t2:T2-137": "g6c17cd738a27",
+    "t3:T3-021": "g6c17cd738a27",
+    "t1:PT-pseudo_f1083e2e01d8": "g42b4b5bb4f98",
+    "t2:T2-138": "g42b4b5bb4f98",
+    "t1:PT-pseudo_f2ec9a9b4d4a": "gaf6ba8161786",
+    "t2:T2-139": "gaf6ba8161786",
+    "t1:PT-pseudo_f3a2af65a42f": "g9e38c477f12a",
+    "t2:T2-153": "g9e38c477f12a",
+    "t1:PT-pseudo_f41131a1bc0b": "g1f20de04cb0d",
+    "t2:T2-140": "g1f20de04cb0d",
+    "t3:T3-005": "g1f20de04cb0d",
+    "t1:PT-pseudo_f4ea752ca1bb": "gec65bb31750d",
+    "t1:PT-pseudo_f80c073525b1": "gcdd8cc25fbe3",
+    "t3:T3-025": "gcdd8cc25fbe3",
+    "t1:PT-pseudo_f87b704d91af": "ge703d6e0e56f",
+    "t2:T2-141": "ge703d6e0e56f",
+    "t1:PT-pseudo_f99f0627e536": "g98692fce4fcb",
+    "t2:T2-142": "g98692fce4fcb",
+    "t3:T3-062": "g98692fce4fcb",
+    "t1:PT-pseudo_fa31cd663f5a": "g784b6b7194a1",
+    "t2:T2-143": "g784b6b7194a1",
+    "t1:PT-pseudo_fa4a71ae9a34": "g77c77234fb66",
+    "t2:T2-144": "g77c77234fb66",
+    "t3:T3-053": "g77c77234fb66",
+    "t1:PT-pseudo_fab43a43b7e6": "g85d91d3cf82d",
+    "t3:T3-046": "g85d91d3cf82d",
+    "t1:PT-pseudo_fc6cf5262222": "g0880ed15b30d",
+    "t2:T2-145": "g0880ed15b30d",
+    "t1:PT-pseudo_fdd4ff09679e": "gdd1379c05929",
+    "t2:T2-146": "gdd1379c05929",
+    "t3:T3-032": "gdd1379c05929",
+    "t2:T2-042": "ga7a0d053acae",
+    "t2:T2-044": "gd9dfe557d601",
+    "t2:T2-073": "g4b17e47e4c95",
+    "t2:T2-148": "geec79c782909"
+  },
+  "modalidades_por_caso": {
+    "t1:PT-pseudo_0020cfca66c8": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_0169468160c6": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_01b643727538": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_033f1a8e1503": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_0615b2bd8504": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_062a1125899d": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_06b319f42fcb": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_075dd468b384": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_079636ac5644": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_0930885168c9": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_099651db404e": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_0bd72f429a8b": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_0cdfb9410718": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_0de7e606ca70": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_11345b8a7ab3": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_11574b12444b": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_1185f6a68df0": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_11fe9c6ca833": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_132e0000c0e0": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_138092c2a6be": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_152344add0f1": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_175e6ad47991": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_17f110c9e142": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_180352970ace": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_1a4e0cf3b927": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_1dc32184cab6": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_20a7e91c494c": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_20ba3f0f6ca0": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_21e7fa67a79e": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_249def42388a": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_25007bb807d7": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_259484ae733f": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_2b3ef1d3a505": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_2cd88bcdf81c": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_2e0346bce3b3": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_2e4988b84112": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_2eef4115a253": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_2ef22b5dd08e": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_2fbb84505a45": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_33c8cd4571fd": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_34647958aba3": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_3477ea7065bd": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_3646e0a2ae13": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_36c92fb424ac": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_376de00c8131": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_37d8ae9b27f1": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_394e0b8dbeeb": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_3b6ea1920967": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_3cc88c81f35a": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_3ceacc9b660b": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_3f75ae876abe": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_41ca49bed13d": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_47c373e230b6": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_47d8b39fd07f": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_48fb60dfd22f": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_4a2fa7bc3595": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_4a4fedfc1f51": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_4b950525e6a8": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_4bfd4ec864d8": [],
+    "t1:PT-pseudo_4c6b2b2bbf94": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_4d54f04e26ae": [],
+    "t1:PT-pseudo_4e545d350c5b": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_4edb17f79e46": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_4f33b0253633": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_52213169f58b": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_562159dc2cc6": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_575cb2819e96": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_590e7b237744": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_598f1d8f4e08": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_5af00f9153c2": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_5dc2eb70fbd7": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_5f263f325019": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_62c93b0c3dba": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_6457372f9532": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_665cf811e172": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_668c2a174afc": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_67728e41a2fa": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_6a100adb6ac3": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_6b6ee002f75d": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_6c8ef835ea42": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_6d2ecb82cc52": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_6d6abf7f6fb5": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_6d83f9e49421": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_6dc747db3e7d": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_6df4f23de04a": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_723f490ff7ce": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_7423d1c19560": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_76bfeeb8b8b8": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_7bcbfa157137": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_7be89ab28e92": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_7dbdcd6f9064": [],
+    "t1:PT-pseudo_7dd989c35f87": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_7efca1668c87": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_7f85fe245d6c": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_80d551b63772": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_8137531888a0": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_8192345b35fa": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_819642c63ff9": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_825bc8328913": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_837f1dcfb56d": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_83f690a06c81": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_84ce0e4a9eed": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_8636aa471ef7": [],
+    "t1:PT-pseudo_8654c4ff4d10": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_87cbc2052e90": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_8967e0df17fc": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_9187d18278f9": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_926c37508fe2": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_927456f47c99": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_938ba8a478e6": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_93c180f13bd8": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_945da5c635c4": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_956f2054a1ea": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_958f2377f288": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_95d3fd02d5e0": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_97a7a14b3c3d": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_9835e080606c": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_98f71f146763": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_9988c23725e6": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_99e3dc40a451": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_9ac935d9650f": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_9df1617405c1": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_9ff22a71b795": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_a2ed5cd06259": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_a32d7e3c3cdf": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_a37319c14573": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_a424617e164e": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_a4f6e7273fc3": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_a5292377e539": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_a62fdda714c0": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_a64ead56f586": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_a9a20522674d": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_a9acda639666": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_ac05cda1a88a": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_ac1dc724676e": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_acad53162dba": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_acc7bae9e286": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_aed2e170b8e6": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_af12e08190bd": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_afbc5ebc0d4e": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_b00a553261d2": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_b0321645a5de": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_b28f2ad6069e": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_b414d3d849a7": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_b477d3bd8246": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_b59dce24e94a": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_b63dfe0f311e": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_b69f6fab2a86": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_b6db06db35d7": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_b8115e954c12": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_b9aa0df93f2a": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_b9f0b7018502": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_c03b1168ff4d": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_c12bcf838ec8": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_c13fda040310": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_c39e94a13920": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_c55496c11421": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_c7277954c60f": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_c9d31197c533": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_cac2563c222a": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_cce5d47c05dd": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_d217629c323a": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_d38917f87b35": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_d3d6b421d0aa": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_d3e975d025e6": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_d49b896a09e6": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_d5ceb6b4204f": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_d7d26761c714": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_d95b3a02898e": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_dcd61cf9b443": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_dcd7bf13a6f4": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_dd011d696387": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_e001f4d06517": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_e1bb1e86b054": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_e288564d7111": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_e5104a16c8bb": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_e91d5fe837cb": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_e9fbcdc890f2": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_ee512fea9006": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_ef2309676161": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_ef66ca71e996": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_ef8ea220bdc6": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_f1083e2e01d8": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_f2ec9a9b4d4a": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_f3a2af65a42f": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_f41131a1bc0b": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_f4ea752ca1bb": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_f80c073525b1": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_f87b704d91af": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_f99f0627e536": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_fa31cd663f5a": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_fa4a71ae9a34": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_fab43a43b7e6": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_fc6cf5262222": [
+      "MRI image"
+    ],
+    "t1:PT-pseudo_fdd4ff09679e": [
+      "MRI image"
+    ],
+    "t2:T2-001": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-002": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-003": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-004": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-005": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-006": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-007": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-008": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-009": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-010": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-011": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-012": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-013": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-014": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-015": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-016": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-017": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-018": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-019": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-020": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-021": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-022": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-023": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-024": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-025": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-026": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-027": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-028": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-029": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-030": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-031": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-032": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-033": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-034": [
+      "MRI image"
+    ],
+    "t2:T2-035": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-036": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-037": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-038": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-039": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-040": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-041": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-042": [
+      "Biopsy slide"
+    ],
+    "t2:T2-043": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-044": [
+      "Biopsy slide"
+    ],
+    "t2:T2-045": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-046": [
+      "MRI image"
+    ],
+    "t2:T2-047": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-048": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-049": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-050": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-051": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-052": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-053": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-054": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-055": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-056": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-057": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-058": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-059": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-060": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-061": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-062": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-063": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-064": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-065": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-066": [
+      "MRI image"
+    ],
+    "t2:T2-067": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-068": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-069": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-070": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-071": [
+      "MRI image"
+    ],
+    "t2:T2-072": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-073": [
+      "Biopsy slide"
+    ],
+    "t2:T2-074": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-075": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-076": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-077": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-078": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-079": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-080": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-081": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-082": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-083": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-084": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-085": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-086": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-087": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-088": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-089": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-090": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-091": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-092": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-093": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-094": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-095": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-096": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-097": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-098": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-099": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-100": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-101": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-102": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-103": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-104": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-105": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-106": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-107": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-108": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-109": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-110": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-111": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-112": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-113": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-114": [
+      "MRI image"
+    ],
+    "t2:T2-115": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-116": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-117": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-118": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-119": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-120": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-121": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-122": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-123": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-124": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-125": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-126": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-127": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-128": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-129": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-130": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-131": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-132": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-133": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-134": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-135": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-136": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-137": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-138": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-139": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-140": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-141": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-142": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-143": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-144": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-145": [
+      "MRI image"
+    ],
+    "t2:T2-146": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-147": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-148": [
+      "Biopsy slide"
+    ],
+    "t2:T2-149": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-150": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-151": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-152": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t2:T2-153": [
+      "MRI image",
+      "Biopsy slide"
+    ],
+    "t3:T3-001": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-002": [
+      "MRI image",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-003": [
+      "MRI image",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-004": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-005": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-006": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-007": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-008": [
+      "MRI image",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-009": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-010": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-011": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-012": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-013": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-014": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-015": [
+      "MRI image",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-016": [
+      "MRI image",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-017": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-018": [
+      "MRI image",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-019": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-020": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-021": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-022": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-023": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-024": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-025": [
+      "MRI image",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-026": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-027": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-028": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-029": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-030": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-031": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-032": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-033": [
+      "MRI image",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-034": [
+      "MRI image",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-035": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-036": [
+      "MRI image",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-037": [
+      "MRI image",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-038": [
+      "MRI image",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-039": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-040": [
+      "MRI image",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-041": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-042": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-043": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-044": [
+      "MRI image",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-045": [
+      "MRI image",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-046": [
+      "MRI image",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-047": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-048": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-049": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-050": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-051": [
+      "MRI image",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-052": [
+      "MRI image",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-053": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-054": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-055": [
+      "MRI image",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-056": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-057": [
+      "MRI image",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-058": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-059": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-060": [
+      "MRI image",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-061": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-062": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-063": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-064": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-065": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-066": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-067": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-068": [
+      "MRI image",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-069": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-070": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-071": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-072": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-073": [
+      "MRI image",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-074": [
+      "MRI image",
+      "Biopsy slide",
+      "Prostatectomy slide"
+    ],
+    "t3:T3-075": [
+      "MRI image",
+      "Prostatectomy slide"
+    ]
+  }
+}

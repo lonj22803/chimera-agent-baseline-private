@@ -1,0 +1,63 @@
+{
+  "cpus": "",
+  "cpuset": "0-3",
+  "memory": "32g",
+  "image": "chimera_agent_baseline_v3",
+  "montado": false,
+  "source": null,
+  "package": null,
+  "unseen_case": true,
+  "limit_seconds": 900,
+  "runs": [
+    {
+      "interface": 0,
+      "case_id": "UNSEEN-0",
+      "seconds": 106.2,
+      "exit_code": 0,
+      "over_gc_limit": false,
+      "files": [
+        "prostate-biopsy-decision-reasoning.json",
+        "prostate-biopsy-decision.json"
+      ],
+      "gc_resources": {
+        "kind": "gc_resources",
+        "case_id": "UNSEEN-0",
+        "task": 1,
+        "phases_seconds": {
+          "mcp": 8.605966658000398,
+          "warm_prewarm:UNSEEN-0": null,
+          "warm_embed": 8.65,
+          "warm_model": null
+        },
+        "llm_calls": 0,
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "llm_seconds": 0,
+        "tool_calls": 0,
+        "tool_seconds": 0,
+        "tools_used": [],
+        "by_role": {},
+        "peak_vram_mb": 546.6,
+        "host_rss_mb": 3073.2,
+        "tokens_approx": true,
+        "host_peak_rss_mb": 3073.2421875,
+        "device_peak_vram_mb": 546.5625,
+        "device_total_mb": 32110.9375,
+        "vram_sample_interval_seconds": 0.5
+      },
+      "gc_delivery": {
+        "kind": "gc_delivery",
+        "task": 1,
+        "case_id": "UNSEEN-0",
+        "fallback": true,
+        "cut": true,
+        "write_seconds": 0.001368138000543695,
+        "total_seconds": 102.3508640529999,
+        "budget_seconds": 102.0,
+        "budget_spent": 102.4,
+        "budget_left": -0.4,
+        "budget_skipped": null
+      }
+    }
+  ]
+}

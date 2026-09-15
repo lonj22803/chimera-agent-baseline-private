@@ -1,0 +1,57 @@
+{
+  "pregunta": "Las guardias de abstención del cubo Positive, ¿generalizan a None y Negative?",
+  "protocolo": "DEV con los splits fijos. VAL sólo si DEV mejora.",
+  "dev": {
+    "base": {
+      "n": 30,
+      "aciertos": 28,
+      "exactitud": 0.9333,
+      "fallos": [
+        "PT-pseudo_175e6ad47991",
+        "PT-pseudo_1dc32184cab6"
+      ]
+    },
+    "candidato": {
+      "n": 30,
+      "aciertos": 25,
+      "exactitud": 0.8333,
+      "fallos": [
+        "PT-pseudo_1dc32184cab6",
+        "PT-pseudo_249def42388a",
+        "PT-pseudo_48fb60dfd22f",
+        "PT-pseudo_4d54f04e26ae",
+        "PT-pseudo_4e545d350c5b"
+      ]
+    }
+  },
+  "afectados_por_edad": [
+    {
+      "cid": "PT-pseudo_175e6ad47991",
+      "bx": "Negative",
+      "age": 79.0,
+      "etiqueta": "no"
+    },
+    {
+      "cid": "PT-pseudo_249def42388a",
+      "bx": "None",
+      "age": 78.0,
+      "etiqueta": "yes"
+    },
+    {
+      "cid": "PT-pseudo_590e7b237744",
+      "bx": "Positive",
+      "age": 79.0,
+      "etiqueta": "no"
+    },
+    {
+      "cid": "PT-pseudo_c55496c11421",
+      "bx": "Positive",
+      "age": 82.0,
+      "etiqueta": "no"
+    }
+  ],
+  "nota_metodo": "Ambas reglas se miden sobre los mismos casos: los que la regla BASE decide. Comparar sobre denominadores distintos no diría nada.",
+  "adoptado": false,
+  "val_leido": false,
+  "motivo": "RECHAZADO. En DEV, sobre los mismos 30 casos, la exactitud cae de 0,9333 a 0,8333: el candidato arregla 175e6ad47991 y rompe cuatro. VAL no se lee. La razón es clínica y explica por qué las guardias eran específicas del cubo: el mismo PSA significa cosas distintas según haya cáncer confirmado o no. Con biopsia positiva previa, PSA>=20 pide estadificación en vez de más tejido; sin biopsia previa, PSA>=20 es justamente el motivo para biopsiar. Extender la guardia invierte la decisión donde más importa. Lo mismo con la edad: el único caso de >=78 sin biopsia previa está etiquetado yes."
+}

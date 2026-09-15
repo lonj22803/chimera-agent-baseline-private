@@ -1,0 +1,47 @@
+{
+  "alcance": "E05: mismo riesgo, dos mapas de exportación, validación anidada por grupo",
+  "aviso": "Los riesgos (`train_raw`) vienen del portavoz ajustado con los 75 casos, así que las cifras absolutas de c-index están infladas por dentro de muestra. Lo que este experimento aísla y sí es comparable es la DIFERENCIA entre mapas, porque ambos reciben exactamente los mismos riesgos y sólo sus parámetros se ajustan por pliegue.",
+  "mapas": {
+    "cdf_escalonada_v1": {
+      "c_index_medio": 0.87876,
+      "c_index_por_semilla": [
+        0.88053,
+        0.88009,
+        0.87566
+      ],
+      "time_score_medio": 0.71961,
+      "time_score_por_semilla": [
+        0.7199,
+        0.71955,
+        0.71937
+      ],
+      "meses_distintos_medio": 43.67,
+      "empates_medio": 31.33
+    },
+    "continuo_sigmoide_v2": {
+      "c_index_medio": 0.87817,
+      "c_index_por_semilla": [
+        0.88496,
+        0.88584,
+        0.86372
+      ],
+      "time_score_medio": 0.7368,
+      "time_score_por_semilla": [
+        0.74298,
+        0.74131,
+        0.7261
+      ],
+      "meses_distintos_medio": 75.0,
+      "empates_medio": 0.0
+    }
+  },
+  "referencia_desplegada": {
+    "c_index_meses_exportados": 0.82345,
+    "meses_distintos": 74,
+    "nota": "dentro de muestra; la CDF se ajustó con los mismos 75 casos"
+  },
+  "delta_continuo_menos_cdf": {
+    "c_index": -0.00059,
+    "time_score": 0.01719
+  }
+}

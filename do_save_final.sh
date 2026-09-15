@@ -29,6 +29,9 @@ fi
 
 fecha=$(docker inspect --format='{{ .Created }}' "$TAG" | sed -E 's/(.*)T(.*)\..*Z?/\1_\2/' | sed 's/[-,:]/-/g')
 salida="${TAG}_${fecha}.tar.gz"
+# Una imagen reconstruida tiene otra fecha. Para regenerar un tarball con su
+# nombre original:  TARBALL_NAME=chimera_agent_baseline_v3_2026-09-15_20-10-54.tar.gz
+salida="${TARBALL_NAME:-$salida}"
 
 echo "== Imagen =="
 echo "   tag    : $TAG"
