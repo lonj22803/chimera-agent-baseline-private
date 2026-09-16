@@ -1,0 +1,143 @@
+{
+  "cpus": "",
+  "cpuset": "0-3",
+  "memory": "32g",
+  "image": "chimera_agent_baseline_v4",
+  "montado": false,
+  "source": null,
+  "package": null,
+  "unseen_case": true,
+  "limit_seconds": 900,
+  "runs": [
+    {
+      "interface": 1,
+      "case_id": "UNSEEN-1",
+      "seconds": 125.3,
+      "exit_code": 0,
+      "over_gc_limit": false,
+      "files": [
+        "prostate-treatment-decision-reasoning.json",
+        "prostate-treatment-decision.json"
+      ],
+      "gc_resources": {
+        "kind": "gc_resources",
+        "case_id": "UNSEEN-1",
+        "task": 2,
+        "phases_seconds": {
+          "mcp": 9.094994498998858,
+          "model_load": 83.25696103899827,
+          "graph": 33.83003054000437,
+          "warm_prewarm:UNSEEN-1": 22.09,
+          "warm_embed": 9.08,
+          "warm_model": 83.19
+        },
+        "llm_calls": 7,
+        "prompt_tokens": 21598,
+        "completion_tokens": 1955,
+        "llm_seconds": 27.32,
+        "tool_calls": 7,
+        "tool_seconds": 0.07,
+        "tools_used": [
+          "get_family_history",
+          "get_lab_results",
+          "get_mri_report",
+          "get_pathology_report",
+          "get_previous_notes",
+          "get_psa_trend",
+          "search_guidelines"
+        ],
+        "by_role": {
+          "eau": {
+            "calls": 2,
+            "prompt_tokens": 5826,
+            "completion_tokens": 701,
+            "seconds": 9.17
+          },
+          "other": {
+            "calls": 5,
+            "prompt_tokens": 15772,
+            "completion_tokens": 1254,
+            "seconds": 18.14
+          }
+        },
+        "peak_vram_mb": 13689.9,
+        "host_rss_mb": 3398.2,
+        "tokens_approx": false,
+        "host_peak_rss_mb": 3398.171875,
+        "device_peak_vram_mb": 13689.875,
+        "device_total_mb": 32110.9375,
+        "vram_sample_interval_seconds": 0.5
+      },
+      "gc_delivery": {
+        "kind": "gc_delivery",
+        "task": 2,
+        "case_id": "UNSEEN-1",
+        "fallback": false,
+        "cut": false,
+        "write_seconds": 0.00018012700456893072,
+        "total_seconds": 117.42160960800538,
+        "budget_seconds": 571.5,
+        "budget_spent": 117.4,
+        "budget_left": 454.1,
+        "budget_skipped": null
+      }
+    },
+    {
+      "interface": 2,
+      "case_id": "UNSEEN-2",
+      "seconds": 70.1,
+      "exit_code": 0,
+      "over_gc_limit": false,
+      "files": [
+        "prostate-time-to-recurrence-or-last-follow-up-reasoning.json",
+        "prostate-time-to-recurrence-or-last-follow-up.json"
+      ],
+      "gc_resources": {
+        "kind": "gc_resources",
+        "case_id": "UNSEEN-2",
+        "task": 3,
+        "phases_seconds": {
+          "mcp": 1.9399885786697268e-07,
+          "model_load": 59.09232773900294,
+          "graph": 4.279854189000616,
+          "warm_model": 59.04
+        },
+        "llm_calls": 1,
+        "prompt_tokens": 2511,
+        "completion_tokens": 176,
+        "llm_seconds": 4.13,
+        "tool_calls": 0,
+        "tool_seconds": 0,
+        "tools_used": [],
+        "by_role": {
+          "chair": {
+            "calls": 1,
+            "prompt_tokens": 2511,
+            "completion_tokens": 176,
+            "seconds": 4.13
+          }
+        },
+        "peak_vram_mb": 13689.9,
+        "host_rss_mb": 2921.2,
+        "tokens_approx": false,
+        "host_peak_rss_mb": 2921.15234375,
+        "device_peak_vram_mb": 13689.875,
+        "device_total_mb": 32110.9375,
+        "vram_sample_interval_seconds": 0.5
+      },
+      "gc_delivery": {
+        "kind": "gc_delivery",
+        "task": 3,
+        "case_id": "UNSEEN-2",
+        "fallback": false,
+        "cut": false,
+        "write_seconds": 0.0001310640000156127,
+        "total_seconds": 63.57468381099898,
+        "budget_seconds": 572.1,
+        "budget_spent": 63.6,
+        "budget_left": 508.5,
+        "budget_skipped": null
+      }
+    }
+  ]
+}

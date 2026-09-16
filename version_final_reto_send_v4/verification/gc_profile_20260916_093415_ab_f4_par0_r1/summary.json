@@ -1,0 +1,102 @@
+{
+  "cpus": "",
+  "cpuset": "0-3",
+  "memory": "32g",
+  "image": "chimera_agent_baseline_v4",
+  "montado": false,
+  "source": null,
+  "package": null,
+  "unseen_case": true,
+  "limit_seconds": 900,
+  "runs": [
+    {
+      "interface": 0,
+      "case_id": "UNSEEN-0",
+      "seconds": 157.8,
+      "exit_code": 0,
+      "over_gc_limit": false,
+      "files": [
+        "prostate-biopsy-decision-reasoning.json",
+        "prostate-biopsy-decision.json"
+      ],
+      "gc_resources": {
+        "kind": "gc_resources",
+        "case_id": "UNSEEN-0",
+        "task": 1,
+        "phases_seconds": {
+          "mcp": 9.487176836999424,
+          "model_load": 124.6044841710027,
+          "graph": 25.975067833001958,
+          "warm_prewarm:UNSEEN-0": 105.38,
+          "warm_embed": 9.53,
+          "warm_model": 124.51
+        },
+        "llm_calls": 7,
+        "prompt_tokens": 44548,
+        "completion_tokens": 1606,
+        "llm_seconds": 24.46,
+        "tool_calls": 5,
+        "tool_seconds": 0.08,
+        "tools_used": [
+          "get_lab_results",
+          "get_mri_report",
+          "get_previous_notes",
+          "get_psa_trend",
+          "search_guidelines"
+        ],
+        "by_role": {
+          "chair": {
+            "calls": 1,
+            "prompt_tokens": 2689,
+            "completion_tokens": 196,
+            "seconds": 2.51
+          },
+          "eau": {
+            "calls": 2,
+            "prompt_tokens": 13321,
+            "completion_tokens": 340,
+            "seconds": 5.26
+          },
+          "moderator": {
+            "calls": 1,
+            "prompt_tokens": 6141,
+            "completion_tokens": 221,
+            "seconds": 4.52
+          },
+          "registrar": {
+            "calls": 2,
+            "prompt_tokens": 14201,
+            "completion_tokens": 432,
+            "seconds": 6.76
+          },
+          "verifier": {
+            "calls": 1,
+            "prompt_tokens": 8196,
+            "completion_tokens": 417,
+            "seconds": 5.41
+          }
+        },
+        "peak_vram_mb": 13867.9,
+        "host_rss_mb": 3291.6,
+        "tokens_approx": false,
+        "host_peak_rss_mb": 3291.58984375,
+        "device_peak_vram_mb": 13867.875,
+        "device_total_mb": 32110.9375,
+        "vram_sample_interval_seconds": 0.5
+      },
+      "gc_delivery": {
+        "kind": "gc_delivery",
+        "task": 1,
+        "case_id": "UNSEEN-0",
+        "fallback": false,
+        "cut": false,
+        "write_seconds": 0.00013478999608196318,
+        "total_seconds": 150.90004485999816,
+        "budget_seconds": 572.0,
+        "budget_spent": 150.9,
+        "budget_left": 421.1,
+        "budget_skipped": null
+      }
+    }
+  ]
+}

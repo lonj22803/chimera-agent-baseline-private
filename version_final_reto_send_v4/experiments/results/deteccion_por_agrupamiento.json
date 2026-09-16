@@ -1,0 +1,337 @@
+{
+  "pregunta": "¿Un agrupamiento encuentra dónde se equivoca el protocolo?",
+  "criterio": "Test de permutación, 5000 barajas. Un clúster sucio sin p-valor bajo es el azar repartiendo pocos fallos entre pocos grupos.",
+  "task1": {
+    "etiqueta": "T1 · fallos del protocolo en DEV",
+    "n": 64,
+    "fallos": 5,
+    "ensayos": [
+      {
+        "algoritmo": "jerarquico",
+        "k": 2,
+        "tasa_grupo_peor": 0.3333,
+        "tasa_global": 0.0781,
+        "p_permutacion": 0.2164,
+        "detalle": {
+          "grupo": 1,
+          "n": 3,
+          "fallos": 1,
+          "tasa": 0.3333
+        }
+      },
+      {
+        "algoritmo": "jerarquico",
+        "k": 3,
+        "tasa_grupo_peor": 0.3333,
+        "tasa_global": 0.0781,
+        "p_permutacion": 0.2519,
+        "detalle": {
+          "grupo": 1,
+          "n": 3,
+          "fallos": 1,
+          "tasa": 0.3333
+        }
+      },
+      {
+        "algoritmo": "jerarquico",
+        "k": 4,
+        "tasa_grupo_peor": 0.3333,
+        "tasa_global": 0.0781,
+        "p_permutacion": 0.2547,
+        "detalle": {
+          "grupo": 0,
+          "n": 3,
+          "fallos": 1,
+          "tasa": 0.3333
+        }
+      },
+      {
+        "algoritmo": "kmeans",
+        "k": 4,
+        "tasa_grupo_peor": 0.1111,
+        "tasa_global": 0.0781,
+        "p_permutacion": 0.6979,
+        "detalle": {
+          "grupo": 2,
+          "n": 45,
+          "fallos": 5,
+          "tasa": 0.1111
+        }
+      },
+      {
+        "algoritmo": "jerarquico",
+        "k": 5,
+        "tasa_grupo_peor": 0.125,
+        "tasa_global": 0.0781,
+        "p_permutacion": 0.7049,
+        "detalle": {
+          "grupo": 1,
+          "n": 32,
+          "fallos": 4,
+          "tasa": 0.125
+        }
+      },
+      {
+        "algoritmo": "gmm",
+        "k": 3,
+        "tasa_grupo_peor": 0.1042,
+        "tasa_global": 0.0781,
+        "p_permutacion": 0.7415,
+        "detalle": {
+          "grupo": 2,
+          "n": 48,
+          "fallos": 5,
+          "tasa": 0.1042
+        }
+      },
+      {
+        "algoritmo": "gmm",
+        "k": 4,
+        "tasa_grupo_peor": 0.1667,
+        "tasa_global": 0.0781,
+        "p_permutacion": 0.7556,
+        "detalle": {
+          "grupo": 3,
+          "n": 6,
+          "fallos": 1,
+          "tasa": 0.1667
+        }
+      },
+      {
+        "algoritmo": "gmm",
+        "k": 5,
+        "tasa_grupo_peor": 0.1667,
+        "tasa_global": 0.0781,
+        "p_permutacion": 0.8368,
+        "detalle": {
+          "grupo": 3,
+          "n": 6,
+          "fallos": 1,
+          "tasa": 0.1667
+        }
+      },
+      {
+        "algoritmo": "kmeans",
+        "k": 2,
+        "tasa_grupo_peor": 0.0806,
+        "tasa_global": 0.0781,
+        "p_permutacion": 0.8482,
+        "detalle": {
+          "grupo": 0,
+          "n": 62,
+          "fallos": 5,
+          "tasa": 0.0806
+        }
+      },
+      {
+        "algoritmo": "kmeans",
+        "k": 5,
+        "tasa_grupo_peor": 0.1176,
+        "tasa_global": 0.0781,
+        "p_permutacion": 0.8518,
+        "detalle": {
+          "grupo": 0,
+          "n": 34,
+          "fallos": 4,
+          "tasa": 0.1176
+        }
+      },
+      {
+        "algoritmo": "kmeans",
+        "k": 3,
+        "tasa_grupo_peor": 0.0909,
+        "tasa_global": 0.0781,
+        "p_permutacion": 0.9096,
+        "detalle": {
+          "grupo": 2,
+          "n": 55,
+          "fallos": 5,
+          "tasa": 0.0909
+        }
+      },
+      {
+        "algoritmo": "gmm",
+        "k": 2,
+        "tasa_grupo_peor": 0.0877,
+        "tasa_global": 0.0781,
+        "p_permutacion": 1.0,
+        "detalle": {
+          "grupo": 0,
+          "n": 57,
+          "fallos": 5,
+          "tasa": 0.0877
+        }
+      }
+    ],
+    "mejor_p": 0.2164,
+    "significativo": false
+  },
+  "task2": {
+    "etiqueta": "T2 · fallos del portavoz en DEV",
+    "n": 50,
+    "fallos": 4,
+    "ensayos": [
+      {
+        "algoritmo": "gmm",
+        "k": 5,
+        "tasa_grupo_peor": 0.25,
+        "tasa_global": 0.08,
+        "p_permutacion": 0.3129,
+        "detalle": {
+          "grupo": 3,
+          "n": 12,
+          "fallos": 3,
+          "tasa": 0.25
+        }
+      },
+      {
+        "algoritmo": "gmm",
+        "k": 4,
+        "tasa_grupo_peor": 0.2308,
+        "tasa_global": 0.08,
+        "p_permutacion": 0.3503,
+        "detalle": {
+          "grupo": 3,
+          "n": 13,
+          "fallos": 3,
+          "tasa": 0.2308
+        }
+      },
+      {
+        "algoritmo": "kmeans",
+        "k": 2,
+        "tasa_grupo_peor": 0.1111,
+        "tasa_global": 0.08,
+        "p_permutacion": 0.5693,
+        "detalle": {
+          "grupo": 0,
+          "n": 36,
+          "fallos": 4,
+          "tasa": 0.1111
+        }
+      },
+      {
+        "algoritmo": "kmeans",
+        "k": 5,
+        "tasa_grupo_peor": 0.1304,
+        "tasa_global": 0.08,
+        "p_permutacion": 0.8192,
+        "detalle": {
+          "grupo": 1,
+          "n": 23,
+          "fallos": 3,
+          "tasa": 0.1304
+        }
+      },
+      {
+        "algoritmo": "jerarquico",
+        "k": 5,
+        "tasa_grupo_peor": 0.1154,
+        "tasa_global": 0.08,
+        "p_permutacion": 0.8198,
+        "detalle": {
+          "grupo": 0,
+          "n": 26,
+          "fallos": 3,
+          "tasa": 0.1154
+        }
+      },
+      {
+        "algoritmo": "kmeans",
+        "k": 4,
+        "tasa_grupo_peor": 0.12,
+        "tasa_global": 0.08,
+        "p_permutacion": 0.8504,
+        "detalle": {
+          "grupo": 3,
+          "n": 25,
+          "fallos": 3,
+          "tasa": 0.12
+        }
+      },
+      {
+        "algoritmo": "jerarquico",
+        "k": 4,
+        "tasa_grupo_peor": 0.1154,
+        "tasa_global": 0.08,
+        "p_permutacion": 0.8548,
+        "detalle": {
+          "grupo": 1,
+          "n": 26,
+          "fallos": 3,
+          "tasa": 0.1154
+        }
+      },
+      {
+        "algoritmo": "jerarquico",
+        "k": 2,
+        "tasa_grupo_peor": 0.087,
+        "tasa_global": 0.08,
+        "p_permutacion": 1.0,
+        "detalle": {
+          "grupo": 0,
+          "n": 46,
+          "fallos": 4,
+          "tasa": 0.087
+        }
+      },
+      {
+        "algoritmo": "gmm",
+        "k": 2,
+        "tasa_grupo_peor": 0.0909,
+        "tasa_global": 0.08,
+        "p_permutacion": 1.0,
+        "detalle": {
+          "grupo": 0,
+          "n": 11,
+          "fallos": 1,
+          "tasa": 0.0909
+        }
+      },
+      {
+        "algoritmo": "kmeans",
+        "k": 3,
+        "tasa_grupo_peor": 0.0909,
+        "tasa_global": 0.08,
+        "p_permutacion": 1.0,
+        "detalle": {
+          "grupo": 0,
+          "n": 11,
+          "fallos": 1,
+          "tasa": 0.0909
+        }
+      },
+      {
+        "algoritmo": "jerarquico",
+        "k": 3,
+        "tasa_grupo_peor": 0.1,
+        "tasa_global": 0.08,
+        "p_permutacion": 1.0,
+        "detalle": {
+          "grupo": 2,
+          "n": 10,
+          "fallos": 1,
+          "tasa": 0.1
+        }
+      },
+      {
+        "algoritmo": "gmm",
+        "k": 3,
+        "tasa_grupo_peor": 0.0909,
+        "tasa_global": 0.08,
+        "p_permutacion": 1.0,
+        "detalle": {
+          "grupo": 0,
+          "n": 11,
+          "fallos": 1,
+          "tasa": 0.0909
+        }
+      }
+    ],
+    "mejor_p": 0.3129,
+    "significativo": false
+  },
+  "adoptado": false,
+  "ensayos_por_tarea": 12,
+  "motivo": "NO. Los fallos no están concentrados en ninguna región del espacio de rasgos. T1: 5 fallos en 64, el grupo más sucio da p=0.2164; T2: 4 en 50, p=0.3129. Ninguno acerca a 0,05, y eso es ANTES de corregir por las 12 configuraciones probadas en cada tarea —3 algoritmos x 4 valores de k—, que los alejaría todavía más. Coincide con el detector supervisado que ya se había probado en T2 (AUC 0,63, ruido) y lo extiende a T1 y al caso no supervisado: no hay un \"dónde falla\" que aprender. Los fallos son casos individualmente difíciles, no una región del problema."
+}

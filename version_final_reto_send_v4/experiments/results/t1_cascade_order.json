@@ -1,0 +1,56 @@
+{
+  "pregunta": "¿Debe el voto ponderado decidir antes que el grado documentado?",
+  "principio": "La cascada declara ir ordenada por acierto; hoy no lo está.",
+  "acierto_por_peldano": {
+    "1": {
+      "n": 52,
+      "exactitud": 0.9423
+    },
+    "2": {
+      "n": 12,
+      "exactitud": 0.8333
+    },
+    "3": {
+      "n": 27,
+      "exactitud": 0.8889
+    }
+  },
+  "umbral": 0.45,
+  "predicciones": "honest (out-of-fold); las desplegadas darían un techo, no una medición",
+  "dev": {
+    "base": {
+      "n": 64,
+      "aciertos": 59,
+      "exactitud": 0.9219,
+      "casos_reasignados": 0,
+      "fallos": [
+        "175e6ad47991",
+        "1dc32184cab6",
+        "37d8ae9b27f1",
+        "3b6ea1920967",
+        "d217629c323a"
+      ]
+    },
+    "intercambio": {
+      "n": 64,
+      "aciertos": 54,
+      "exactitud": 0.8438,
+      "casos_reasignados": 6,
+      "fallos": [
+        "01b643727538",
+        "079636ac5644",
+        "175e6ad47991",
+        "17f110c9e142",
+        "1a4e0cf3b927",
+        "1dc32184cab6",
+        "37d8ae9b27f1",
+        "3b6ea1920967",
+        "cce5d47c05dd",
+        "d217629c323a"
+      ]
+    }
+  },
+  "val_leido": false,
+  "adoptado": false,
+  "motivo": "RECHAZADO. En DEV la exactitud cae de 0,9219 a 0,8438: el intercambio rompe cinco casos que el grado documentado acertaba. La lección: el 0,8889 del voto está medido SOBRE LOS CASOS QUE HOY LE TOCAN, que son otra población. En los 12 casos donde hay grado documentado el voto lo hace peor. El principio de ordenar por acierto se refiere a la exactitud de cada peldaño EN LOS CASOS QUE RECLAMA, no a su tasa global; comparar tasas marginales entre poblaciones distintas es la trampa. La cascada ya estaba bien ordenada."
+}

@@ -1,0 +1,235 @@
+{
+  "cpus": "",
+  "cpuset": "0-3",
+  "memory": "32g",
+  "image": "chimera_agent_baseline_v4",
+  "montado": false,
+  "source": null,
+  "package": null,
+  "unseen_case": true,
+  "limit_seconds": 900,
+  "runs": [
+    {
+      "interface": 0,
+      "case_id": "UNSEEN-0",
+      "seconds": 160.3,
+      "exit_code": 0,
+      "over_gc_limit": false,
+      "files": [
+        "prostate-biopsy-decision-reasoning.json",
+        "prostate-biopsy-decision.json"
+      ],
+      "gc_resources": {
+        "kind": "gc_resources",
+        "case_id": "UNSEEN-0",
+        "task": 1,
+        "phases_seconds": {
+          "mcp": 9.75330609199591,
+          "model_load": 127.85522329599917,
+          "graph": 25.144442500997684,
+          "warm_prewarm:UNSEEN-0": 99.43,
+          "warm_embed": 9.84,
+          "warm_model": 127.73
+        },
+        "llm_calls": 7,
+        "prompt_tokens": 44557,
+        "completion_tokens": 1606,
+        "llm_seconds": 25.0,
+        "tool_calls": 5,
+        "tool_seconds": 0.07,
+        "tools_used": [
+          "get_lab_results",
+          "get_mri_report",
+          "get_previous_notes",
+          "get_psa_trend",
+          "search_guidelines"
+        ],
+        "by_role": {
+          "chair": {
+            "calls": 1,
+            "prompt_tokens": 2689,
+            "completion_tokens": 196,
+            "seconds": 2.59
+          },
+          "eau": {
+            "calls": 2,
+            "prompt_tokens": 13325,
+            "completion_tokens": 340,
+            "seconds": 5.15
+          },
+          "moderator": {
+            "calls": 1,
+            "prompt_tokens": 6141,
+            "completion_tokens": 221,
+            "seconds": 4.63
+          },
+          "registrar": {
+            "calls": 2,
+            "prompt_tokens": 14206,
+            "completion_tokens": 432,
+            "seconds": 7.02
+          },
+          "verifier": {
+            "calls": 1,
+            "prompt_tokens": 8196,
+            "completion_tokens": 417,
+            "seconds": 5.62
+          }
+        },
+        "peak_vram_mb": 13867.9,
+        "host_rss_mb": 3124.4,
+        "tokens_approx": false,
+        "host_peak_rss_mb": 3124.4375,
+        "device_peak_vram_mb": 13867.875,
+        "device_total_mb": 32110.9375,
+        "vram_sample_interval_seconds": 0.5
+      },
+      "gc_delivery": {
+        "kind": "gc_delivery",
+        "task": 1,
+        "case_id": "UNSEEN-0",
+        "fallback": false,
+        "cut": false,
+        "write_seconds": 0.00013423999916994944,
+        "total_seconds": 153.29374757699406,
+        "budget_seconds": 571.9,
+        "budget_spent": 153.3,
+        "budget_left": 418.6,
+        "budget_skipped": null,
+        "forced_close_at": null
+      }
+    },
+    {
+      "interface": 1,
+      "case_id": "UNSEEN-1",
+      "seconds": 124.8,
+      "exit_code": 0,
+      "over_gc_limit": false,
+      "files": [
+        "prostate-treatment-decision-reasoning.json",
+        "prostate-treatment-decision.json"
+      ],
+      "gc_resources": {
+        "kind": "gc_resources",
+        "case_id": "UNSEEN-1",
+        "task": 2,
+        "phases_seconds": {
+          "mcp": 7.972000892004871,
+          "model_load": 82.94423342200025,
+          "graph": 33.50881679399754,
+          "warm_prewarm:UNSEEN-1": 21.98,
+          "warm_embed": 8.04,
+          "warm_model": 82.85
+        },
+        "llm_calls": 7,
+        "prompt_tokens": 21598,
+        "completion_tokens": 1955,
+        "llm_seconds": 27.03,
+        "tool_calls": 7,
+        "tool_seconds": 0.06,
+        "tools_used": [
+          "get_family_history",
+          "get_lab_results",
+          "get_mri_report",
+          "get_pathology_report",
+          "get_previous_notes",
+          "get_psa_trend",
+          "search_guidelines"
+        ],
+        "by_role": {
+          "eau": {
+            "calls": 2,
+            "prompt_tokens": 5826,
+            "completion_tokens": 701,
+            "seconds": 9.32
+          },
+          "other": {
+            "calls": 5,
+            "prompt_tokens": 15772,
+            "completion_tokens": 1254,
+            "seconds": 17.71
+          }
+        },
+        "peak_vram_mb": 13689.9,
+        "host_rss_mb": 3380.6,
+        "tokens_approx": false,
+        "host_peak_rss_mb": 3380.5625,
+        "device_peak_vram_mb": 13689.875,
+        "device_total_mb": 32110.9375,
+        "vram_sample_interval_seconds": 0.5
+      },
+      "gc_delivery": {
+        "kind": "gc_delivery",
+        "task": 2,
+        "case_id": "UNSEEN-1",
+        "fallback": false,
+        "cut": false,
+        "write_seconds": 0.00013717800175072625,
+        "total_seconds": 116.74376993800252,
+        "budget_seconds": 571.3,
+        "budget_spent": 116.7,
+        "budget_left": 454.6,
+        "budget_skipped": null,
+        "forced_close_at": null
+      }
+    },
+    {
+      "interface": 2,
+      "case_id": "UNSEEN-2",
+      "seconds": 70.5,
+      "exit_code": 0,
+      "over_gc_limit": false,
+      "files": [
+        "prostate-time-to-recurrence-or-last-follow-up-reasoning.json",
+        "prostate-time-to-recurrence-or-last-follow-up.json"
+      ],
+      "gc_resources": {
+        "kind": "gc_resources",
+        "case_id": "UNSEEN-2",
+        "task": 3,
+        "phases_seconds": {
+          "mcp": 1.9599974621087313e-07,
+          "model_load": 59.9507545689994,
+          "graph": 4.0467845349994604,
+          "warm_model": 59.85
+        },
+        "llm_calls": 1,
+        "prompt_tokens": 2511,
+        "completion_tokens": 176,
+        "llm_seconds": 3.9,
+        "tool_calls": 0,
+        "tool_seconds": 0,
+        "tools_used": [],
+        "by_role": {
+          "chair": {
+            "calls": 1,
+            "prompt_tokens": 2511,
+            "completion_tokens": 176,
+            "seconds": 3.9
+          }
+        },
+        "peak_vram_mb": 13689.9,
+        "host_rss_mb": 2913.4,
+        "tokens_approx": false,
+        "host_peak_rss_mb": 2913.43359375,
+        "device_peak_vram_mb": 13689.875,
+        "device_total_mb": 32110.9375,
+        "vram_sample_interval_seconds": 0.5
+      },
+      "gc_delivery": {
+        "kind": "gc_delivery",
+        "task": 3,
+        "case_id": "UNSEEN-2",
+        "fallback": false,
+        "cut": false,
+        "write_seconds": 0.00012296200293349102,
+        "total_seconds": 64.19318958099757,
+        "budget_seconds": 572.1,
+        "budget_spent": 64.2,
+        "budget_left": 507.9,
+        "budget_skipped": null,
+        "forced_close_at": null
+      }
+    }
+  ]
+}
