@@ -8,9 +8,8 @@ set -euo pipefail
 DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 TAG="${DOCKER_IMAGE_TAG:-chimera_agent_baseline_final}"
 # Qué carpeta entra como `version_final_reto` (ver ESTRUCTURA.md):
-#   CODE_DIR=version_final_reto_before DOCKER_IMAGE_TAG=chimera_agent_baseline_v2 ./do_build_final.sh
-#   CODE_DIR=version_final_reto_send   DOCKER_IMAGE_TAG=chimera_agent_baseline_v3 ./do_build_final.sh
-CODE_DIR="${CODE_DIR:-version_final_reto_send}"
+#   DOCKER_IMAGE_TAG=chimera_agent_baseline_v4 ./do_build_final.sh
+CODE_DIR="${CODE_DIR:-version_final_reto_send_v4}"
 cd "$DIR"
 [[ -d "$CODE_DIR" && ! -L "$CODE_DIR" ]] || { echo "CODE_DIR=$CODE_DIR no es una carpeta real"; exit 1; }
 

@@ -1,5 +1,5 @@
 # El contexto de build solo necesita: src/, inference.py, templates/,
-# resources/, configs/, delete_final_versions_task/, data/task1/ y dependencias
+# resources/, configs/, version_final_reto_send_v4/, data/task1/ y dependencias
 model/
 data/*
 !data/task1/
@@ -124,8 +124,6 @@ version_final_reto/**/*.ipynb
 version_final_reto/task_1/experts_1/model/expert_three_with_e2.joblib
 # La evidencia de las corridas del perfilador pesa y no la necesita el contenedor.
 version_final_reto/verification/gc_profile_*/
-delete/
-delete_test/
 dev/
 .agents/
 .codex/
@@ -159,54 +157,10 @@ version_final_reto/**/*.md
 
 # Corridas pesadas y resultados: nunca en la imagen.
 result_v2/
-delete/
-delete_test/
 
-# Las dos versiones del paquete (ver ESTRUCTURA.md). Cada una entra en la imagen
-# como `version_final_reto`, así que llevan las mismas exclusiones que arriba.
+# La versión final entra en la imagen como `version_final_reto` (ver
+# ESTRUCTURA.md), así que lleva las mismas exclusiones que arriba.
 # Si se cambia una regla de `version_final_reto/`, cámbiese también aquí.
-version_final_reto_before/**/__pycache__/
-version_final_reto_before/**/*.ipynb
-version_final_reto_before/task_1/experts_1/model/expert_three_with_e2.joblib
-version_final_reto_before/verification/gc_profile_*/
-version_final_reto_before/runtime_16gb/**/__pycache__/
-version_final_reto_before/runtime_16gb/**/*.ipynb
-version_final_reto_before/runtime_16gb/**/*.md
-version_final_reto_before/runtime_16gb/analisis/
-version_final_reto_before/runtime_16gb/evaluation/
-version_final_reto_before/runtime_16gb/verification/test_*.py
-version_final_reto_before/runtime_16gb/verification/e11_*.py
-version_final_reto_before/runtime_16gb/verification/gc_profile_*/
-version_final_reto_before/investigacion/evaluation/reports/
-version_final_reto_before/investigacion/evaluation/manifests/
-version_final_reto_before/investigacion/referencias_historicas/
-version_final_reto_before/experiments/
-version_final_reto_before/baseline_scores/
-version_final_reto_before/tasks_complete/
-version_final_reto_before/**/*.md
-version_final_reto_send/**/__pycache__/
-version_final_reto_send/**/*.ipynb
-version_final_reto_send/task_1/experts_1/model/expert_three_with_e2.joblib
-version_final_reto_send/verification/gc_profile_*/
-version_final_reto_send/runtime_16gb/**/__pycache__/
-version_final_reto_send/runtime_16gb/**/*.ipynb
-version_final_reto_send/runtime_16gb/**/*.md
-version_final_reto_send/runtime_16gb/analisis/
-version_final_reto_send/runtime_16gb/evaluation/
-version_final_reto_send/runtime_16gb/verification/test_*.py
-version_final_reto_send/runtime_16gb/verification/e11_*.py
-version_final_reto_send/runtime_16gb/verification/gc_profile_*/
-version_final_reto_send/investigacion/evaluation/reports/
-version_final_reto_send/investigacion/evaluation/manifests/
-version_final_reto_send/investigacion/referencias_historicas/
-version_final_reto_send/experiments/
-version_final_reto_send/baseline_scores/
-version_final_reto_send/tasks_complete/
-version_final_reto_send/**/*.md
-# Registros de reconstrucción: no son código y no viajan en la imagen.
-version_final_reto_before/imagen_v2_enviada/
-version_final_reto_before/imagen/
-version_final_reto_send/imagen/
 version_final_reto_send_v4/**/__pycache__/
 version_final_reto_send_v4/**/*.ipynb
 version_final_reto_send_v4/task_1/experts_1/model/expert_three_with_e2.joblib
@@ -226,4 +180,5 @@ version_final_reto_send_v4/experiments/
 version_final_reto_send_v4/baseline_scores/
 version_final_reto_send_v4/tasks_complete/
 version_final_reto_send_v4/**/*.md
+# Registros de reconstrucción: no son código y no viajan en la imagen.
 version_final_reto_send_v4/imagen/
