@@ -1,0 +1,128 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "get_psa_trend",
+      "description": "Retrieve the patient's prior PSA measurements as a time series (date + value). Reveals PSA velocity / trajectory beyond the single headline value already in the prompt.",
+      "parameters": {
+        "properties": {
+          "case_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "case_id"
+        ],
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_lab_results",
+      "description": "Retrieve the full laboratory panel for the patient (PSA, free PSA, haematology, renal function, testosterone, alkaline phosphatase, LDH, etc.) as a list of {name, val, date, flag}.",
+      "parameters": {
+        "properties": {
+          "case_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "case_id"
+        ],
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_mri_report",
+      "description": "Retrieve the radiologist's full mpMRI report as free text. The headline imaging values (PI-RADS, prostate volume, PSA density, AI csPCa probability) are already in the prompt; this is the prose report behind them.",
+      "parameters": {
+        "properties": {
+          "case_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "case_id"
+        ],
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_pathology_report",
+      "description": "Retrieve the pathologist's full biopsy report as free text. The headline biopsy values (Gleason patterns, ISUP grade group) are already in the prompt for biopsied patients; this is the prose report behind them. Returns a 'no data' note if the patient has not had a biopsy.",
+      "parameters": {
+        "properties": {
+          "case_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "case_id"
+        ],
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_previous_notes",
+      "description": "Retrieve previous GP / urology consultation notes for this patient, as a list of {date, author, text}.",
+      "parameters": {
+        "properties": {
+          "case_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "case_id"
+        ],
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_family_history",
+      "description": "Ask the patient about their first-degree family history of prostate cancer (father / brothers). Returns 'Yes', 'No', or 'Unknown'. This is anamnesis elicited during the consultation rather than information present in the EHR up front, so it must be actively requested.",
+      "parameters": {
+        "properties": {
+          "case_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "case_id"
+        ],
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "search_guidelines",
+      "description": "Search clinical guidelines and protocols relevant to the query.\n\n        Uses semantic similarity search over a knowledge base of clinical\n        guidelines (e.g. EAU prostate-cancer guidelines, NCCN protocols).\n        Returns the most relevant guideline passages. Free-text query;\n        phrase as a clinical question.\n        ",
+      "parameters": {
+        "properties": {
+          "query": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object"
+      }
+    }
+  }
+]

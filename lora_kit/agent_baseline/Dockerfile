@@ -1,0 +1,60 @@
+FROM --platform=linux/amd64 pytorch/pytorch:2.9.1-cuda12.6-cudnn9-runtime AS example_algorithm_amd64
+
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH=/opt/app:/opt/app/src
+ENV HF_HUB_OFFLINE=1 \
+    TRANSFORMERS_OFFLINE=1 \
+    HF_DATASETS_OFFLINE=1 \
+    ANONYMIZED_TELEMETRY=False \
+    DO_NOT_TRACK=1 \
+    LANGCHAIN_TRACING_V2=false \
+    LANGCHAIN_TRACING=false \
+    TOKENIZERS_PARALLELISM=false
+ENV LD_LIBRARY_PATH=/opt/conda/lib/python3.11/site-packages/torch/lib:/opt/conda/lib/python3.11/site-packages/nvidia/cuda_runtime/lib:$LD_LIBRARY_PATH
+ENV VLLM_USE_FLASHINFER_SAMPLER=0
+ENV CC=/usr/bin/gcc
+ENV CXX=/usr/bin/g++
+
+RUN groupadd -r user && useradd -m --no-log-init -r -g user user
+
+WORKDIR /opt/app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        ffmpeg \
+        build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --chown=user:user requirements.txt pyproject.toml README.md /opt/app/
+
+RUN python3 -m pip install --no-cache-dir -r requirements.txt
+
+RUN python3 -m pip install --no-cache-dir --upgrade pip wheel packaging setuptools uv
+
+ARG VLLM_VERSION=0.25.0
+
+RUN uv pip install --system --no-cache --reinstall \
+    "vllm==${VLLM_VERSION}+cu129" \
+    --extra-index-url "https://wheels.vllm.ai/${VLLM_VERSION}/cu129" \
+    --extra-index-url "https://download.pytorch.org/whl/cu129" \
+    --index-strategy unsafe-best-match
+# vLLM resuelve mcp/transformers de forma abierta y se lleva la version mas nueva,
+# que rompe langchain-mcp-adapters y la config heterogenea de Gemma 4.
+# --no-deps es imprescindible: sin el vuelven a subir.
+RUN uv pip install --system --no-cache --reinstall --no-deps \
+    "mcp==1.29.0" "transformers==5.12.1" "tokenizers==0.22.2"
+RUN python3 -m pip uninstall -y torchcodec || true
+
+COPY --chown=user:user inference.py /opt/app/
+COPY --chown=user:user src/ /opt/app/src/
+
+RUN python3 -m pip install --no-cache-dir --no-deps .
+
+RUN ln -sfn /opt/ml/model /opt/app/model
+
+COPY --chown=user:user templates/ /opt/app/templates/
+COPY --chown=user:user resources/ /opt/app/resources/
+COPY --chown=user:user configs/ /opt/app/configs/
+
+USER user
+
+ENTRYPOINT ["python3", "inference.py"]

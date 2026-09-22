@@ -1,0 +1,61 @@
+You are a senior urologist reviewing a patient case. The structured clinical
+record below is shown to you up front, exactly as in the reading form. Some
+documents are not shown and must be pulled up via the available tools
+(radiology / MRI report, pathology report, previous notes, laboratory
+results, PSA history, and the family-history anamnesis) when you need to
+consult them.
+
+Case ID: PT-pseudo_0bd72f429a8b
+Task: 1
+
+Encounter: Urology - outpatient on 11 Jan 2025.
+Referrer: Dr. F. de Boer (GP).
+Type: Re-evaluation - prior PCa diagnosis.
+
+Clinical data (read-only — values loaded from the record):
+  - 56-year-old male
+  - PSA: 5.3 ng/mL
+  - mpMRI — PI-RADS score: 4 (1–2 low · 3 equivocal · 4–5 high risk)
+  - PSA density: 0.1 ng/mL²
+  - PSA velocity: 2.26 ng/mL/yr
+  - Prior PSA: 2.7 ng/mL
+  - Prostate volume: 48.0 mL
+  - Months since last PSA: 3
+  - DRE findings: Nodus (Normal · Nodus · Benign · Suspicious · Abnormal · Negative · Not done)
+  - Prior biopsy: Positive (None · Negative · ASAP/HGPIN · Positive)
+  - csPCa predicted probability: 0.40281674 (clinically significant PCa = ISUP ≥ 2)
+
+Medical history & medication:
+  - Medical history: Obesity (BMI >30)
+  - Problem list / PMHx: Obesity (BMI >30)
+  - Current medication: None
+  - Allergies: NKA
+  - Additional notes: PSA 5.3 ng/mL. PI-RADS 4. PSAD 0.10. Prostate volume 48 mL. DRE nodus. csPCa 0.40.
+
+Vitals: weight 79 kg, height 175 cm, BMI 25.8, BP 123/64 mmHg, HR 80 bpm. Smoking: Ex-smoker (33 pack-yr, quit 2021).
+
+Chief complaint: Request for clinical re-evaluation driven by previous biopsy results and a current PSA elevation to 5.3 ng/mL.
+
+History: A 56-year-old retired bank clerk first entered investigation during early 2023 after a PSA elevation triggered a positive biopsy and subsequent monitoring protocol. He is married and shares his residence with his partner, maintaining a fairly active routine that includes cycling roughly 20 kilometres twice weekly. Lower urinary tract symptoms register at a moderate IPSS of 11, with no reports of pelvic pain or haematuria. After accumulating 33 pack-years of smoking, he ceased tobacco use in 2021. Alcohol intake stays near one unit per week. Unrelated urological issues include uncomplicated cataract surgery performed three years prior and routine podiatry visits. He previously opted out of research trials and currently maintains a BMI exceeding 30 without any active medications.
+
+Physical examination: DRE — texture: moderately enlarged gland with a distinct Nodus palpable in the left peripheral zone; mobility: unrestricted. General assessment shows stable vital signs, absent lymphadenopathy, and no bone tenderness.
+
+Patient info: retired bank clerk; Married; Lives with partner.
+Next of kin: Spouse / partner (primary contact).
+
+Lifestyle: alcohol 1 units / week; exercise Cycling 2x/week, ~20 km; IPSS score: 11/35 (moderate LUTS).
+
+Recent other appointments: Podiatry — routine foot care.
+Admin: Patient declined research participation previously; respect for AS-related trials.
+
+Information you can request via tools (the masked "Extended EHR view" — what
+the urologist would actively pull up during the consult):
+  - radiology / MRI report (full mpMRI prose behind the headline imaging values)
+  - pathology report (any prior biopsy on record)
+  - previous GP / urology consultation notes
+  - laboratory results (full panel)
+  - PSA history (trend / velocity beyond the headline value)
+  - family history of prostate cancer (anamnesis)
+
+Question:
+Based on this patient's data, do you recommend biopsy?

@@ -8,7 +8,10 @@ pregunta es *cuánto aporta el entrenamiento por sí solo* con los pocos datos q
 
 El plan está escrito para ejecutarse en un repositorio limpio que solo tiene los
 datos de entrada y los de salida (ground truth). Todo lo que hace falta del
-repositorio original está resumido en el **Anexo A**.
+repositorio original viaja en esta misma carpeta `lora_kit/` (ver `README.md`):
+los prompts y funciones literales en `contract/verbatim/`, la lista exacta de
+herramientas en `contract/tool_schemas/`, y el agente baseline para evaluar en
+`agent_baseline/`. El **Anexo A** lo resume.
 
 ---
 
@@ -71,7 +74,40 @@ ejecución para la arquitectura multimodal de Gemma 4. Dejar el LoRA sin fusiona
 
 ## 2. Dos entornos separados
 
-### 2.1 Entorno de entrenamiento (GPU de ≥24 GB; A100/H100 recomendable)
+### 2.0 ¿Cabe en una GPU de 24 GB? Sí, con cuatro precauciones
+
+| Fase | Memoria aproximada | ¿24 GB? |
+|---|---|---|
+| Inferencia (vLLM, pesos fusionados) | pico medido 13,3 GB con el perfil de 16 GB | Sí, con margen |
+| LoRA bf16: pesos base congelados | ~10–11 GB (Gemma 4 E2B tiene ~5 B de parámetros contando embeddings por capa y torres de visión/audio) | — |
+| LoRA r=16: parámetros + Adam | < 0,5 GB | — |
+| Activaciones con gradient checkpointing, 8 k tokens, batch 1 | ~3–5 GB | — |
+| **Logits** (vocabulario de ~262 k × longitud de secuencia) | **8 k tokens en fp32 ≈ 8,6 GB, más su gradiente** | **Aquí está el problema** |
+
+Así que sí cabe, siempre que:
+
+1. **Batch 1 por dispositivo** + acumulación de gradiente (batch efectivo 8).
+2. **Gradient checkpointing** activado (`model.gradient_checkpointing_enable()`,
+   `use_reentrant=False`) y `model.enable_input_require_grads()`.
+3. **No materializar los logits de toda la secuencia.** Calcula `lm_head` solo sobre
+   las posiciones con etiqueta ≠ −100: saca `hidden_states` del modelo base, indéxalos
+   con la máscara y aplica `lm_head` + cross-entropy a ese subconjunto (los tokens con
+   pérdida son unos pocos cientos por ejemplo, frente a miles del prompt). Esto es lo
+   que más memoria ahorra. Alternativa: pérdida por trozos (*chunked cross-entropy*).
+4. **`max_seq_len` ≤ ~8–10 k.** Mide los percentiles (§5). Si alguna trayectoria es
+   más larga, recorta las respuestas de herramientas muy largas **igual en
+   entrenamiento que en inferencia**, o deja ese caso fuera del entrenamiento.
+
+Si aun así da OOM: **QLoRA** (base en 4 bits con `bitsandbytes`, ~4 GB de pesos). La
+fusión posterior se hace cargando el base en bf16 (en CPU si hace falta) y aplicando
+el adaptador; el modelo que se entrega sigue siendo bf16.
+
+Tiempo en 24 GB (tipo RTX 4090 / A10G / L4): unos 5–20 min por pliegue y semilla con
+~320 ejemplos y 3 épocas. La rejilla completa (5 pliegues × 3 semillas × 2–3
+configuraciones) cabe en un día de GPU. La evaluación con vLLM puede ir en la misma
+tarjeta, pero **no a la vez** que el entrenamiento.
+
+### 2.1 Entorno de entrenamiento
 
 ```bash
 python3.11 -m venv .venv-train && source .venv-train/bin/activate
@@ -105,8 +141,8 @@ repo-lora/
     task1/agent_input/<case>/{structured-prompt,*-clinical-data}.json
     task1/ground_truth/<case>/...        # salidas: decisión + razonamiento del urólogo
     task2/...  task3/...
-  vendor/chimera_contract/               # §4: copia congelada del contrato del agente
-    schema.py  form_fill_prompts.py  system_prompt.py  agent_prompt.j2  tools.py
+  lora_kit/                              # esta carpeta: plan, contrato literal y agente baseline
+    contract/verbatim/  contract/tool_schemas/  agent_baseline/
   lora/
     00_inventory.py        # §5  inventario y chequeos de calidad del GT
     01_splits.py           # §6  pliegues de validación cruzada
@@ -116,7 +152,7 @@ repo-lora/
     05_merge_export.py     # §10 fusión + exportación + pruebas de paridad
     06_eval_fold.sh        # §9  agente + evaluador oficial en el pliegue retenido
     07_report.py           # §9  tabla final con IC
-  agent/                   # el agente baseline sin tocar (git submodule o copia fijada)
+  (el agente baseline para evaluar es lora_kit/agent_baseline/)
   eval/                    # DIAGNijmegen/CHIMERA-agent (evaluation/evaluate.py), fijado por commit
   runs/<exp>/<fold>/...    # adaptadores, fusionados, salidas, puntuaciones
 ```
@@ -147,8 +183,20 @@ al ejecutarse**. Para eso hay que reproducir, carácter a carácter, lo siguient
    del panel y las que respalda una herramienta llamada (`fh` exige
    `get_family_history`).
 
-Copia esas funciones **tal cual** en `vendor/chimera_contract/` e impórtalas desde el
-constructor de datos. No las reescribas.
+Ya están copiadas **tal cual** en `lora_kit/contract/verbatim/`, y la lista de
+herramientas (punto 3) está volcada del servidor MCP real en
+`lora_kit/contract/tool_schemas/tools_task{1,2,3}.json`. Impórtalas desde el
+constructor de datos (`render_example.py` muestra cómo); no las reescribas.
+`contract/example_task1/` enseña los cuatro textos renderizados de un caso real:
+el prompt del sistema, el del caso, y el sistema y el usuario del form-fill.
+
+**Qué es y qué no es "prompt" aquí.** El experimento **no** necesita prompts nuevos:
+se entrena con los del agente baseline, sin cambiar nada, para que el modelo
+entrenado corra en el agente del reto sin tocarlo. Lo único que hay que *crear* es
+el **texto objetivo** del asistente: las llamadas a herramientas, el razonamiento
+final (§7.2) y el JSON del form-fill (§7.3). Si más adelante cambias algún prompt
+del agente, hay que regenerar los datos y reentrenar: el LoRA aprende la
+distribución de esos tokens concretos.
 
 ---
 
