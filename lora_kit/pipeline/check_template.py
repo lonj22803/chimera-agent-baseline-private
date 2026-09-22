@@ -55,7 +55,18 @@ def main() -> None:
     if tok.eos_token_id is not None:
         stop_ids.add(tok.eos_token_id)
 
-    records = [json.loads(l) for _, l in zip(range(args.n), args.sft.open())]
+    # reparto por igual entre (tarea, tipo): las tres tareas y react/form_fill
+    by_kind: dict[tuple, list] = {}
+    for line in args.sft.open():
+        r = json.loads(line)
+        by_kind.setdefault((r["task"], r["kind"]), []).append(r)
+    records, i = [], 0
+    while len(records) < args.n and any(i < len(v) for v in by_kind.values()):
+        records += [v[i] for _, v in sorted(by_kind.items()) if i < len(v)]
+        i += 1
+    records = records[: args.n]
+    print("ejemplos por (tarea, tipo):", {f"{t}:{k}": sum(1 for r in records if (r["task"], r["kind"]) == (t, k))
+                                            for t, k in sorted(by_kind)})
     results = {"string": 0, "blocks": 0}
     total = 0
     problems: list[str] = []

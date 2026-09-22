@@ -3,12 +3,15 @@
 Copia **esta carpeta entera** a la raíz del repositorio limpio. Todo lo necesario para
 entrenar y evaluar está dentro; no hace falta nada más de este repositorio.
 
-**Empieza por** [`PLAN_FINETUNING_LORA.md`](PLAN_FINETUNING_LORA.md) (§3.1 tiene la
-secuencia de comandos) y por la ficha de cada tarea en `tasks/`.
+**Empieza por** [`GUIA_DESDE_CERO.md`](GUIA_DESDE_CERO.md): todos los pasos, en orden,
+con sus comandos y cómo comprobar cada uno. El porqué de cada decisión está en
+[`PLAN_FINETUNING_LORA.md`](PLAN_FINETUNING_LORA.md), y lo propio de cada tarea en
+`tasks/`.
 
 ```
 lora_kit/
-  PLAN_FINETUNING_LORA.md      el plan paso a paso
+  GUIA_DESDE_CERO.md           qué hacer, en orden, desde una máquina vacía
+  PLAN_FINETUNING_LORA.md      el plan y el porqué de cada decisión
   requirements-train.txt       entorno de entrenamiento (versiones probadas)
   tasks/
     task1/  README.md          biopsia sí/no: datos, herramientas, salida, qué se aprende, riesgos
@@ -37,11 +40,13 @@ lora_kit/
     score_fold.py  report.py   puntuación y tabla final (IC bootstrap pareado, McNemar)
     dump_examples.py           vuelca ejemplos SFT legibles
     selftest.sh                prueba de humo sin GPU sobre fixture_data/
+    in_container.sh            ejecuta un paso dentro de la imagen de inferencia (vLLM 0.25.0)
     tests/                     tokenizador y modelo de juguete para selftest.sh
   agent_baseline/              el agente del reto para evaluar el modelo entrenado
     src/ templates/ configs/ resources/guidelines_db/ tests/ docs/
     inference.py               entrypoint de GC (USE_MERGED_SOLUTION=False: agente puro)
     Dockerfile                 imagen del reto sin la solución de expertos
+    scripts/                   descarga del modelo de embeddings y reconstrucción del RAG
     dev/score_local.py         evaluador oficial en local (lo usan score_fold.py y report.py)
     dev/baseline_reference.json  números del baseline sin entrenar (brazo B0 de referencia)
 ```

@@ -5,6 +5,9 @@
 #
 #   pipeline/eval_fold.sh <model_dir> <split.json> <data_root> <out_dir> <eval_repo> [temperatura]
 #
+# EMBEDDING_DIR (opcional): modelo de embeddings para search_guidelines. Por defecto
+# <repo>/model/embedding_model; si no existe, el agente arranca sin RAG.
+#
 #   # brazo B0 (modelo base) y brazo L1 (LoRA fusionado) en el pliegue 0:
 #   pipeline/eval_fold.sh ../model/gemma-4-E2B-it runs/r16/fold0/split.json ../data runs/B0/fold0 ../CHIMERA-agent
 #   pipeline/eval_fold.sh runs/r16/fold0/merged   runs/r16/fold0/split.json ../data runs/r16/fold0/eval ../CHIMERA-agent
@@ -29,6 +32,7 @@ python3 -m chimera_agent_baseline.run \
     paths.data_root="$DATA_ROOT" \
     paths.output_dir="$OUT/output" \
     paths.model_dir="$MODEL_DIR" \
+    paths.embedding_model_dir="${EMBEDDING_DIR:-$KIT/../model/embedding_model}" \
     "agent.pids=$PIDS" \
     generation.temperature="$TEMP" \
     2>&1 | tee "$OUT/agent.log"
