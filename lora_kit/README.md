@@ -56,7 +56,7 @@ lora_kit/
 | Qué | De dónde | Para qué |
 |---|---|---|
 | Pesos de `google/gemma-4-E2B-it` | Hugging Face (aceptar la licencia) → `model/gemma-4-E2B-it/` | Base del LoRA; su tokenizador y su plantilla de chat forman parte del contrato |
-| `google/embeddinggemma-300m` | Hugging Face → `agent_baseline/model/embedding_model/` | Solo si se mantiene `search_guidelines` |
+| `google/embeddinggemma-300m` | Hugging Face → `model/embedding_model/` (en la raíz del repositorio limpio) | Solo si se mantiene `search_guidelines` |
 | Evaluador oficial | `git clone https://github.com/DIAGNijmegen/CHIMERA-agent` (probado con el commit `92365b9`) | `evaluation/evaluate.py` |
 | Datos y ground truth | tu repositorio limpio | `data/task<N>/agent_input/…` y `data/task<N>/ground_truth/…` |
 
