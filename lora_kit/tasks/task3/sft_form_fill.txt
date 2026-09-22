@@ -1,0 +1,45 @@
+# task 3 · form_fill · caso T3-001
+
+===== system =====
+You are filling out the structured decision form for the prostate-cancer case you just analysed. The user message contains your reasoning transcript and the tools you called. Output a SINGLE JSON object matching the supplied schema EXACTLY — no extra keys, no markdown fences, no commentary before or after the JSON.
+
+===== user =====
+Case ID: T3-001
+Task: 3
+
+Your reasoning transcript (final assistant message from the ReAct loop):
+"""
+Evidence retrieved:
+- MRI report: Prostate volume: 37.29 cc. PSA density: 2.306 ng/mL/cc. PI-RADS: 5. AI model-predicted probability of clinically significant prostate cancer (0–1): 0.9527162.
+- Biopsy pathology report: The patient underwent one biopsy session. At biopsy, Gleason 4+4 (ISUP grade group 4, AI model-predicted ISUP 5) was identified in the left base; cribriform pattern was present. The reported histological growth pattern was: Adenocarcinoma.
+- Surgical pathology report: The robot-assisted radical prostatectomy specimen showed Gleason 4+3 (ISUP grade group 3), pathological stage pT4b. Extraprostatic extension was present; surgical margins were positive; the seminal vesicles were invaded; lymphovascular invasion was absent; lymph node metastasis was present.
+- Previous notes: The patient is not on 5-ARI medication. No relevant comorbidities recorded, with a Charlson Comorbidity Index (CCI) of 3.
+- Family history: There is no family history of prostate or breast cancer.
+Estimated time to biochemical recurrence or last follow-up: 30.9 months.
+The prognosis is influenced by several documented factors. Preoperative PSA was significantly elevated at 86. The surgical findings included a pathological stage pT4b, positive surgical margins, invasion of the seminal vesicles, and the presence of lymph node metastasis. The biopsy revealed a higher grade (Gleason 4+4) compared to the prostatectomy specimen (Gleason 4+3). The presence of lymph node metastasis is a significant adverse factor.
+
+Countervailing findings include the absence of lymphovascular invasion and the absence of lymph node metastasis in the biopsy, although the surgical report documented nodal metastasis. The extent of extraprostatic extension and positive margins are concerning. Missing postoperative PSA or follow-up data widens the uncertainty regarding the subsequent trajectory. Information regarding postoperative PSA levels and their subsequent changes would be crucial in revising this prognosis. The fixed estimated horizon is 30.87 months. This is a predicted recurrence horizon, not evidence of observed recurrence. The sensitivity range is 24.70–37.05 months; its coverage has not been validated.
+"""
+
+Tools you called during the ReAct loop: get_family_history, get_mri_report, get_pathology_report, get_previous_notes, get_surgical_pathology_report
+
+Now fill out the form: give your predicted months to recurrence (a non-negative number) and a focused reasoning naming the 2-4 factors that most influenced your estimate.
+
+Output a SINGLE JSON object matching exactly this shape (replace every <...> with a real value):
+
+{
+  "case_id": "<the case id>",
+  "task": 3,
+  "months_to_recurrence": <number — predicted months to recurrence / last follow-up>,
+  "reasoning": "<at least 40 chars; the evidence and the 2-4 factors that drove your estimate>"
+}
+
+Do NOT emit any other keys. Do NOT wrap in markdown fences. Do NOT echo the schema.
+
+===== >>> PÉRDIDA · assistant =====
+{
+  "case_id": "T3-001",
+  "task": 3,
+  "months_to_recurrence": 30.9,
+  "reasoning": "The prognosis is influenced by several documented factors. Preoperative PSA was significantly elevated at 86. The surgical findings included a pathological stage pT4b, positive surgical margins, invasion of the seminal vesicles, and the presence of lymph node metastasis. The biopsy revealed a higher grade (Gleason 4+4) compared to the prostatectomy specimen (Gleason 4+3). The presence of lymph node metastasis is a significant adverse factor.\n\nCountervailing findings include the absence of lymphovascular invasion and the absence of lymph node metastasis in the biopsy, although the surgical report documented nodal metastasis. The extent of extraprostatic extension and positive margins are concerning. Missing postoperative PSA or follow-up data widens the uncertainty regarding the subsequent trajectory. Information regarding postoperative PSA levels and their subsequent changes would be crucial in revising this prognosis. The fixed estimated horizon is 30.87 months. This is a predicted recurrence horizon, not evidence of observed recurrence. The sensitivity range is 24.70–37.05 months; its coverage has not been validated."
+}

@@ -1,0 +1,154 @@
+# task 1 · react · caso PT-pseudo_0bd72f429a8b
+
+[tools=get_psa_trend, get_lab_results, get_mri_report, get_previous_notes, get_family_history, search_guidelines]
+
+===== system =====
+You are a clinical decision-support agent for prostate cancer diagnostics.
+
+You see the patient encounter context up front (vitals, headline PSA, chief complaint, physical-exam prose, social context, etc.). Anything beyond that — laboratory panels, imaging reports, pathology, prior notes, family history — lives behind a tool and must be actively requested. The full set of available tools, including their schemas and what each returns, is delivered separately by the runtime; trust those descriptions over any list you may recall from elsewhere.
+
+## Calling tools — be selective
+
+Each tool call has a real-world cost (EHR retrieval, lab-system queries, patient-interview minutes, radiology / pathology reading time). The realistic per-call costs in this baseline are:
+
+| Tool                   | Cost  | What it covers |
+|------------------------|-------|----------------|
+| `search_guidelines`    | ~€2   | semantic DB query + 30 s reading |
+| `get_psa_trend`        | ~€5   | lab-system retrieval + 30 s review |
+| `get_lab_results`      | ~€10  | EHR retrieval + 1-2 min review |
+| `get_previous_notes`   | ~€15  | EHR retrieval + ~2 min reading |
+| `get_mri_report`       | ~€20  | PACS retrieval + ~3 min reading |
+| `get_pathology_report` | ~€20-€25 | pathology-system retrieval + 3-5 min reading |
+| `get_family_history`   | ~€40  | 5 min patient interview + chart cross-check |
+
+Treat the totals like a budget. A typical Task-1 (biopsy decision) workup spends **~€60-€120**; Task-2 (treatment decision) **~€80-€150**. Going over is fine when the case warrants it, but every call must justify itself.
+
+Before each tool call, ask:
+
+1. **What hypothesis am I testing?** — "Confirm the lesion is    PI-RADS ≥ 4 before recommending biopsy."
+2. **Could the result change my answer?** — if not, skip the tool.    Decisive PI-RADS 5 + PSAD 0.95 does not need lab-panel    confirmation.
+3. **Is the cheaper alternative sufficient?** — the headline PSA in    the prompt may be enough; you do not always need    `get_lab_results`.
+
+Issue tool calls **incrementally**: pull the highest-information tool first (usually `get_mri_report`), reason about the result, then decide whether the next tool is still worth its cost. Avoid blanket parallel fetches of every tool — that is exactly the lazy pattern this protocol is meant to prevent.
+
+Heuristics worth respecting:
+
+* **`get_mri_report` and `get_pathology_report` are almost always   high-yield** for biopsy or treatment decisions — pull them first.
+* **`get_lab_results` is often skippable** when the headline PSA in   the prompt context is sufficient and no rare-marker concern exists.
+* **`get_family_history` is most valuable on borderline cases**   where a positive history shifts risk; skip it when imaging / lab   evidence is already decisive.
+* **`get_pathology_report` is empty for biopsy-naïve patients** — if   the encounter type or prompt narrative makes clear there has been   no prior biopsy, you can skip it.
+* **`get_previous_notes` often duplicates the PSA trend** — read it   selectively when the chief complaint or physical-exam prose leaves   clinical context unclear.
+
+## Knowledge retrieval
+
+`search_guidelines` exists for moments of clinical uncertainty — when you are about to commit to a recommendation but are not confident about the threshold or eligibility criterion. Examples:
+
+* "Active surveillance eligibility for ISUP GG 2 with cribriform features"
+* "PSAD threshold for biopsy under PI-RADS 3"
+* "EAU recommendation for repeat MRI after an initially negative mpMRI"
+
+Phrase the query as a clinical question. Skip when your reasoning already has a confident citation. Worth calling whenever real uncertainty between two reasonable choices remains.
+
+## Reasoning trace
+
+After tool gathering, write a structured reasoning trace that:
+
+1. Lists each piece of evidence you actually retrieved, with values.
+2. Explains how each piece moved your probability estimate up or down.
+3. Names the 2-4 factors that drove the final recommendation.
+4. Cites guideline passages by name when `search_guidelines` was used.
+
+You MUST NOT cite values you did not retrieve. You MUST NOT rate variables behind tools you did not call — the structured-output step downstream will flag any such rating.
+
+
+===== user =====
+You are a senior urologist reviewing a patient case. The structured clinical
+record below is shown to you up front, exactly as in the reading form. Some
+documents are not shown and must be pulled up via the available tools
+(radiology / MRI report, pathology report, previous notes, laboratory
+results, PSA history, and the family-history anamnesis) when you need to
+consult them.
+
+Case ID: PT-pseudo_0bd72f429a8b
+Task: 1
+
+Encounter: Urology - outpatient on 11 Jan 2025.
+Referrer: Dr. F. de Boer (GP).
+Type: Re-evaluation - prior PCa diagnosis.
+
+Clinical data (read-only — values loaded from the record):
+  - 56-year-old male
+  - PSA: 5.3 ng/mL
+  - mpMRI — PI-RADS score: 4 (1–2 low · 3 equivocal · 4–5 high risk)
+  - PSA density: 0.1 ng/mL²
+  - PSA velocity: 2.26 ng/mL/yr
+  - Prior PSA: 2.7 ng/mL
+  - Prostate volume: 48.0 mL
+  - Months since last PSA: 3
+  - DRE findings: Nodus (Normal · Nodus · Benign · Suspicious · Abnormal · Negative · Not done)
+  - Prior biopsy: Positive (None · Negative · ASAP/HGPIN · Positive)
+  - csPCa predicted probability: 0.40281674 (clinically significant PCa = ISUP ≥ 2)
+
+Medical history & medication:
+  - Medical history: Obesity (BMI >30)
+  - Problem list / PMHx: Obesity (BMI >30)
+  - Current medication: None
+  - Allergies: NKA
+  - Additional notes: PSA 5.3 ng/mL. PI-RADS 4. PSAD 0.10. Prostate volume 48 mL. DRE nodus. csPCa 0.40.
+
+Vitals: weight 79 kg, height 175 cm, BMI 25.8, BP 123/64 mmHg, HR 80 bpm. Smoking: Ex-smoker (33 pack-yr, quit 2021).
+
+Chief complaint: Request for clinical re-evaluation driven by previous biopsy results and a current PSA elevation to 5.3 ng/mL.
+
+History: A 56-year-old retired bank clerk first entered investigation during early 2023 after a PSA elevation triggered a positive biopsy and subsequent monitoring protocol. He is married and shares his residence with his partner, maintaining a fairly active routine that includes cycling roughly 20 kilometres twice weekly. Lower urinary tract symptoms register at a moderate IPSS of 11, with no reports of pelvic pain or haematuria. After accumulating 33 pack-years of smoking, he ceased tobacco use in 2021. Alcohol intake stays near one unit per week. Unrelated urological issues include uncomplicated cataract surgery performed three years prior and routine podiatry visits. He previously opted out of research trials and currently maintains a BMI exceeding 30 without any active medications.
+
+Physical examination: DRE — texture: moderately enlarged gland with a distinct Nodus palpable in the left peripheral zone; mobility: unrestricted. General assessment shows stable vital signs, absent lymphadenopathy, and no bone tenderness.
+
+Patient info: retired bank clerk; Married; Lives with partner.
+Next of kin: Spouse / partner (primary contact).
+
+Lifestyle: alcohol 1 units / week; exercise Cycling 2x/week, ~20 km; IPSS score: 11/35 (moderate LUTS).
+
+Recent other appointments: Podiatry — routine foot care.
+Admin: Patient declined research participation previously; respect for AS-related trials.
+
+Information you can request via tools (the masked "Extended EHR view" — what
+the urologist would actively pull up during the consult):
+  - radiology / MRI report (full mpMRI prose behind the headline imaging values)
+  - pathology report (any prior biopsy on record)
+  - previous GP / urology consultation notes
+  - laboratory results (full panel)
+  - PSA history (trend / velocity beyond the headline value)
+  - family history of prostate cancer (anamnesis)
+
+Question:
+Based on this patient's data, do you recommend biopsy?
+
+
+===== >>> PÉRDIDA · assistant =====
+<llamada> get_mri_report({"case_id": "PT-pseudo_0bd72f429a8b"})
+
+===== tool =====
+{"case_id": "PT-pseudo_0bd72f429a8b", "radiology_report": "Amsterdam UMC (VUmc) | Multiparametric MRI Prostate | 10 Jan 2025\nClinical Indication:\nReview of prior biopsy results. Recent screening noted a PSA value of 5.3 with a PI-RADS score of 4.\n\nFINDINGS:\nGland volume registers at 48.0 mL. T2-weighted sequences show a 14 \u00d7 12 \u00d7 10 mm focal hypointense area situated at the base-to-mid junction of the left peripheral zone. Diffusion-weighted imaging exhibits pronounced restriction, mirrored by corresponding low signal on the apparent diffusion coefficient map. Dynamic contrast studies highlight early, focal enhancement against adjacent parenchyma. Seminal vesicles appear symmetric and unremarkable. No extracapsular extension or suspicious lymphadenopathy is detected. The bladder and rectum maintain normal appearance.\n\nIMPRESSION:\nPI-RADS 4 lesion in the left peripheral zone, base/mid.\nProstate volume 48.0 mL; PSAD 0.1 ng/mL/mL.\ncsPCa predicted probability 0.40281674."}
+
+===== >>> PÉRDIDA · assistant =====
+<llamada> get_psa_trend({"case_id": "PT-pseudo_0bd72f429a8b"})
+
+===== tool =====
+{"case_id": "PT-pseudo_0bd72f429a8b", "psa_trend": [{"date": "Jan 2023", "val": 3.5}, {"date": "Jan 2024", "val": 3.5}, {"date": "Jan 2025", "val": 5.3}]}
+
+===== >>> PÉRDIDA · assistant =====
+<llamada> get_previous_notes({"case_id": "PT-pseudo_0bd72f429a8b"})
+
+===== tool =====
+{"case_id": "PT-pseudo_0bd72f429a8b", "previous_notes": [{"date": "22 Jan 2023", "author": "Dr. F. de Boer (GP)", "text": "Initial referral occurred after a routine health screen recorded a PSA reading of 1.5 ng/mL. The concurrent digital rectal examination yielded normal findings, after which multiparametric MRI and targeted biopsy were ordered. Subsequent histopathology confirmed low-risk prostate cancer, and the patient entered an active surveillance protocol featuring quarterly PSA checks and annual MRI evaluations."}, {"date": "13 Sep 2024", "author": "Dr. F. de Boer (GP)", "text": "A January 2024 follow-up test showed the PSA level increasing to 2.7 ng/mL, which triggered plans for a repeat MRI that were ultimately postponed due to scheduling limits. With the latest measurement now at 5.3 ng/mL and a calculated velocity of 2.26 ng/mL/yr, administrative routing was initiated to return the case to urology for re-evaluation. Urinary function remains unaffected, and his weekly cycling routine continues unchanged."}]}
+
+===== >>> PÉRDIDA · assistant =====
+Evidence retrieved:
+- MRI report: Amsterdam UMC (VUmc) | Multiparametric MRI Prostate | 10 Jan 2025 Clinical Indication: Review of prior biopsy results. Recent screening noted a PSA value of 5.3 with a PI-RADS score of 4. FINDINGS: Gland volume registers at 48.0 mL. T2-weighted sequences show a 14 × 12 × 10 mm focal hypointense area situated at the base-to-mid junction of the left peripheral zone. Diffusion-weighted imaging …
+- PSA trend: 3 values, from 3.5 (Jan 2023) to 5.3 (Jan 2025)
+- Previous notes: 22 Jan 2023, Dr. F. de Boer (GP), Initial referral occurred after a routine health screen recorded a PSA reading of 1.5 ng/mL. The concurrent digital rectal examination yielded normal findings, after which multiparametric MRI and targeted biopsy were ordered. Subsequent histopathology confirmed low-risk prostate cancer, and the patient entered an active surveillance protocol featuring quarterly …
+Key factors: PSA 5.3; PI-RADS 4; PSA density 0.1; csPCa probability 0.40281674.
+Recommendation: biopsy recommended.
+Confidence: clear.
+The decision is driven by the combination of a PI-RADS 4 lesion, an elevated and rising PSA with a concerning velocity, and the patient's prior history of prostate cancer, all pointing towards a need for tissue confirmation.

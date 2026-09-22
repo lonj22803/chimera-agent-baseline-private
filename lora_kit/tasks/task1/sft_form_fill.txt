@@ -1,0 +1,71 @@
+# task 1 · form_fill · caso PT-pseudo_0bd72f429a8b
+
+===== system =====
+You are filling out the structured decision form for the prostate-cancer case you just analysed. The user message contains your reasoning transcript and the tools you called. Output a SINGLE JSON object matching the supplied schema EXACTLY — no extra keys, no markdown fences, no commentary before or after the JSON.
+
+===== user =====
+Case ID: PT-pseudo_0bd72f429a8b
+Task: 1
+
+Your reasoning transcript (final assistant message from the ReAct loop):
+"""
+Evidence retrieved:
+- MRI report: Amsterdam UMC (VUmc) | Multiparametric MRI Prostate | 10 Jan 2025 Clinical Indication: Review of prior biopsy results. Recent screening noted a PSA value of 5.3 with a PI-RADS score of 4. FINDINGS: Gland volume registers at 48.0 mL. T2-weighted sequences show a 14 × 12 × 10 mm focal hypointense area situated at the base-to-mid junction of the left peripheral zone. Diffusion-weighted imaging …
+- PSA trend: 3 values, from 3.5 (Jan 2023) to 5.3 (Jan 2025)
+- Previous notes: 22 Jan 2023, Dr. F. de Boer (GP), Initial referral occurred after a routine health screen recorded a PSA reading of 1.5 ng/mL. The concurrent digital rectal examination yielded normal findings, after which multiparametric MRI and targeted biopsy were ordered. Subsequent histopathology confirmed low-risk prostate cancer, and the patient entered an active surveillance protocol featuring quarterly …
+Key factors: PSA 5.3; PI-RADS 4; PSA density 0.1; csPCa probability 0.40281674.
+Recommendation: biopsy recommended.
+Confidence: clear.
+The decision is driven by the combination of a PI-RADS 4 lesion, an elevated and rising PSA with a concerning velocity, and the patient's prior history of prostate cancer, all pointing towards a need for tissue confirmation.
+"""
+
+Tools you called during the ReAct loop: get_mri_report, get_previous_notes, get_psa_trend
+
+Variables you may weight (you may ONLY weight these — every other variable was either out of scope for this task or behind a tool you did not call):
+  bx, age, dre, psa, vol, psad, cspca, pirads, comorbidity
+
+Now fill out the form. Weight each variable (not_used / noted / important / decisive); give an overall confidence; and a focused reasoning naming the 2-4 factors that most influenced your recommendation.
+
+Output a SINGLE JSON object matching exactly this shape (replace every <...> with a real value):
+
+{
+  "case_id": "<the case id>",
+  "task": 1,
+  "biopsy_decision": <true | false>,
+  "confidence": <"clear" | "borderline" | "uncertain">,
+  "variable_weights": {
+    "bx": <"not_used" | "noted" | "important" | "decisive">,
+    "age": <"not_used" | "noted" | "important" | "decisive">,
+    "dre": <"not_used" | "noted" | "important" | "decisive">,
+    "psa": <"not_used" | "noted" | "important" | "decisive">,
+    "vol": <"not_used" | "noted" | "important" | "decisive">,
+    "psad": <"not_used" | "noted" | "important" | "decisive">,
+    "cspca": <"not_used" | "noted" | "important" | "decisive">,
+    "pirads": <"not_used" | "noted" | "important" | "decisive">,
+    "comorbidity": <"not_used" | "noted" | "important" | "decisive">
+  },
+  "reasoning": "<at least 40 chars; name the 2-4 factors that drove your call>"
+}
+
+`variable_weights` MUST include all and only these keys: bx, age, dre, psa, vol, psad, cspca, pirads, comorbidity.
+Use the weight 'not_used' for any variable that did not influence your decision. Do NOT emit any other keys at the top level. Do NOT wrap in markdown fences. Do NOT echo the schema.
+
+===== >>> PÉRDIDA · assistant =====
+{
+  "case_id": "PT-pseudo_0bd72f429a8b",
+  "task": 1,
+  "biopsy_decision": true,
+  "confidence": "clear",
+  "variable_weights": {
+    "bx": "not_used",
+    "age": "not_used",
+    "dre": "not_used",
+    "psa": "decisive",
+    "vol": "noted",
+    "psad": "important",
+    "cspca": "important",
+    "pirads": "decisive",
+    "comorbidity": "not_used"
+  },
+  "reasoning": "The decision is driven by the combination of a PI-RADS 4 lesion, an elevated and rising PSA with a concerning velocity, and the patient's prior history of prostate cancer, all pointing towards a need for tissue confirmation."
+}

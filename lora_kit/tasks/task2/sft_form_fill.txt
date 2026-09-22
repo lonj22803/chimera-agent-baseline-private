@@ -1,0 +1,76 @@
+# task 2 · form_fill · caso T2-001
+
+===== system =====
+You are filling out the structured decision form for the prostate-cancer case you just analysed. The user message contains your reasoning transcript and the tools you called. Output a SINGLE JSON object matching the supplied schema EXACTLY — no extra keys, no markdown fences, no commentary before or after the JSON.
+
+===== user =====
+Case ID: T2-001
+Task: 2
+
+Your reasoning transcript (final assistant message from the ReAct loop):
+"""
+Evidence retrieved:
+- MRI report: Bravis Ziekenhuis Department of Radiology Date: 27 Jan 2025 Exam: mpMRI Prostate Clinical indication: PSA 4.7 ng/mL, PI-RADS 2. FINDINGS: Prostate volume measures 33.46 mL. T2-weighted imaging shows a homogeneous peripheral zone without focal lesions. Diffusion-weighted imaging demonstrates no areas of restricted diffusion. Dynamic contrast-enhanced sequences show no suspicious early enhancement. …
+- Biopsy pathology report: Timepoint 1 (Jan 2024): Prostate tissue biopsy reveals Gleason 3+3, ISUP grade group 1. Growth pattern is acinar. No cribriform or intraductal patterns identified. Tumour location is peripheral zone, ventral left. Trajectory: Stable low-grade disease across timepoints. AI-predicted ISUP grade group (digital pathology): grade group 2.
+- PSA trend: 5 values, from 1.6 (Jan 2024) to 4.7 (Jan 2025)
+- Family history: Yes
+Key factors: family history: Yes; PSA 4.7; PI-RADS 2; biopsy ISUP grade group 1; primary Gleason pattern 3.
+Recommended management: continued surveillance.
+Confidence: clear.
+The decision is driven by the conflict between low-risk imaging (PI-RADS 2), low-grade pathology (ISUP 1), and the need for structured follow-up due to the rising PSA trend and positive family history.
+"""
+
+Tools you called during the ReAct loop: get_family_history, get_mri_report, get_pathology_report, get_psa_trend
+
+Variables you may weight (you may ONLY weight these — every other variable was either out of scope for this task or behind a tool you did not call):
+  ct, fh, age, psa, psad, cspca, pirads, bx_isup, bx_gl_sec, bx_gl_prim, comorbidity
+
+Now fill out the form. Weight each variable (not_used / noted / important / decisive); give an overall confidence; and a focused reasoning naming the 2-4 factors that most influenced your recommendation.
+
+Output a SINGLE JSON object matching exactly this shape (replace every <...> with a real value):
+
+{
+  "case_id": "<the case id>",
+  "task": 2,
+  "action": <"active_surveillance" | "continued_surveillance" | "watchful_waiting" | "active_treatment">,
+  "confidence": <"clear" | "borderline" | "uncertain">,
+  "variable_weights": {
+    "ct": <"not_used" | "noted" | "important" | "decisive">,
+    "fh": <"not_used" | "noted" | "important" | "decisive">,
+    "age": <"not_used" | "noted" | "important" | "decisive">,
+    "psa": <"not_used" | "noted" | "important" | "decisive">,
+    "psad": <"not_used" | "noted" | "important" | "decisive">,
+    "cspca": <"not_used" | "noted" | "important" | "decisive">,
+    "pirads": <"not_used" | "noted" | "important" | "decisive">,
+    "bx_isup": <"not_used" | "noted" | "important" | "decisive">,
+    "bx_gl_sec": <"not_used" | "noted" | "important" | "decisive">,
+    "bx_gl_prim": <"not_used" | "noted" | "important" | "decisive">,
+    "comorbidity": <"not_used" | "noted" | "important" | "decisive">
+  },
+  "reasoning": "<at least 40 chars; name the 2-4 factors that drove your call>"
+}
+
+`variable_weights` MUST include all and only these keys: ct, fh, age, psa, psad, cspca, pirads, bx_isup, bx_gl_sec, bx_gl_prim, comorbidity.
+Use the weight 'not_used' for any variable that did not influence your decision. Do NOT emit any other keys at the top level. Do NOT wrap in markdown fences. Do NOT echo the schema.
+
+===== >>> PÉRDIDA · assistant =====
+{
+  "case_id": "T2-001",
+  "task": 2,
+  "action": "continued_surveillance",
+  "confidence": "clear",
+  "variable_weights": {
+    "ct": "not_used",
+    "fh": "important",
+    "age": "not_used",
+    "psa": "important",
+    "psad": "not_used",
+    "cspca": "noted",
+    "pirads": "important",
+    "bx_isup": "important",
+    "bx_gl_sec": "not_used",
+    "bx_gl_prim": "important",
+    "comorbidity": "not_used"
+  },
+  "reasoning": "The decision is driven by the conflict between low-risk imaging (PI-RADS 2), low-grade pathology (ISUP 1), and the need for structured follow-up due to the rising PSA trend and positive family history."
+}

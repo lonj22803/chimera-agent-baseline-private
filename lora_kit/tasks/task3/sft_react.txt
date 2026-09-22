@@ -1,0 +1,131 @@
+# task 3 · react · caso T3-001
+
+[tools=get_mri_report, get_pathology_report, get_surgical_pathology_report, get_previous_notes, get_family_history, search_guidelines]
+
+===== system =====
+You are a clinical decision-support agent for prostate cancer diagnostics.
+
+You see the patient encounter context up front (vitals, headline PSA, chief complaint, physical-exam prose, social context, etc.). Anything beyond that — laboratory panels, imaging reports, pathology, prior notes, family history — lives behind a tool and must be actively requested. The full set of available tools, including their schemas and what each returns, is delivered separately by the runtime; trust those descriptions over any list you may recall from elsewhere.
+
+## Calling tools — be selective
+
+Each tool call has a real-world cost (EHR retrieval, lab-system queries, patient-interview minutes, radiology / pathology reading time). The realistic per-call costs in this baseline are:
+
+| Tool                   | Cost  | What it covers |
+|------------------------|-------|----------------|
+| `search_guidelines`    | ~€2   | semantic DB query + 30 s reading |
+| `get_psa_trend`        | ~€5   | lab-system retrieval + 30 s review |
+| `get_lab_results`      | ~€10  | EHR retrieval + 1-2 min review |
+| `get_previous_notes`   | ~€15  | EHR retrieval + ~2 min reading |
+| `get_mri_report`       | ~€20  | PACS retrieval + ~3 min reading |
+| `get_pathology_report` | ~€20-€25 | pathology-system retrieval + 3-5 min reading |
+| `get_family_history`   | ~€40  | 5 min patient interview + chart cross-check |
+
+Treat the totals like a budget. A typical Task-1 (biopsy decision) workup spends **~€60-€120**; Task-2 (treatment decision) **~€80-€150**. Going over is fine when the case warrants it, but every call must justify itself.
+
+Before each tool call, ask:
+
+1. **What hypothesis am I testing?** — "Confirm the lesion is    PI-RADS ≥ 4 before recommending biopsy."
+2. **Could the result change my answer?** — if not, skip the tool.    Decisive PI-RADS 5 + PSAD 0.95 does not need lab-panel    confirmation.
+3. **Is the cheaper alternative sufficient?** — the headline PSA in    the prompt may be enough; you do not always need    `get_lab_results`.
+
+Issue tool calls **incrementally**: pull the highest-information tool first (usually `get_mri_report`), reason about the result, then decide whether the next tool is still worth its cost. Avoid blanket parallel fetches of every tool — that is exactly the lazy pattern this protocol is meant to prevent.
+
+Heuristics worth respecting:
+
+* **`get_mri_report` and `get_pathology_report` are almost always   high-yield** for biopsy or treatment decisions — pull them first.
+* **`get_lab_results` is often skippable** when the headline PSA in   the prompt context is sufficient and no rare-marker concern exists.
+* **`get_family_history` is most valuable on borderline cases**   where a positive history shifts risk; skip it when imaging / lab   evidence is already decisive.
+* **`get_pathology_report` is empty for biopsy-naïve patients** — if   the encounter type or prompt narrative makes clear there has been   no prior biopsy, you can skip it.
+* **`get_previous_notes` often duplicates the PSA trend** — read it   selectively when the chief complaint or physical-exam prose leaves   clinical context unclear.
+
+## Knowledge retrieval
+
+`search_guidelines` exists for moments of clinical uncertainty — when you are about to commit to a recommendation but are not confident about the threshold or eligibility criterion. Examples:
+
+* "Active surveillance eligibility for ISUP GG 2 with cribriform features"
+* "PSAD threshold for biopsy under PI-RADS 3"
+* "EAU recommendation for repeat MRI after an initially negative mpMRI"
+
+Phrase the query as a clinical question. Skip when your reasoning already has a confident citation. Worth calling whenever real uncertainty between two reasonable choices remains.
+
+## Reasoning trace
+
+After tool gathering, write a structured reasoning trace that:
+
+1. Lists each piece of evidence you actually retrieved, with values.
+2. Explains how each piece moved your probability estimate up or down.
+3. Names the 2-4 factors that drove the final recommendation.
+4. Cites guideline passages by name when `search_guidelines` was used.
+
+You MUST NOT cite values you did not retrieve. You MUST NOT rate variables behind tools you did not call — the structured-output step downstream will flag any such rating.
+
+
+===== user =====
+You are a senior urologist reviewing a patient with prostate cancer who has
+completed primary treatment. The structured record below is shown to you up
+front. The full documents (radiology / MRI report, biopsy pathology report,
+surgical pathology report, previous notes, and the family-history anamnesis)
+are not shown and must be pulled up via the available tools.
+
+Case ID: T3-001
+Task: 3
+
+Clinical data (read-only — values loaded from the record):
+  - 73-year-old male
+  - PSA: 86 ng/mL
+
+Physical examination (DRE): Digital rectal examination was abnormal on the right. The clinical T-stage derived from digital rectal examination was cT2.
+
+Information you can request via tools (the masked "Extended EHR view"):
+  - radiology / MRI report
+  - biopsy pathology report
+  - surgical pathology report
+  - previous GP / urology consultation notes
+  - family history of prostate cancer (anamnesis)
+
+Question:
+Following primary treatment, predict this patient's time to biochemical recurrence, in months.
+
+
+===== >>> PÉRDIDA · assistant =====
+<llamada> get_mri_report({"case_id": "T3-001"})
+
+===== tool =====
+{"case_id": "T3-001", "radiology_report": "Prostate volume: 37.29 cc. PSA density: 2.306 ng/mL/cc. PI-RADS: 5. AI model-predicted probability of clinically significant prostate cancer (0\u20131): 0.9527162."}
+
+===== >>> PÉRDIDA · assistant =====
+<llamada> get_pathology_report({"case_id": "T3-001"})
+
+===== tool =====
+{"case_id": "T3-001", "pathology_report": "The patient underwent one biopsy session. At biopsy, Gleason 4+4 (ISUP grade group 4, AI model-predicted ISUP 5) was identified in the left base; cribriform pattern was present. The reported histological growth pattern was: Adenocarcinoma."}
+
+===== >>> PÉRDIDA · assistant =====
+<llamada> get_surgical_pathology_report({"case_id": "T3-001"})
+
+===== tool =====
+{"case_id": "T3-001", "surgical_pathology_report": "The robot-assisted radical prostatectomy specimen showed Gleason 4+3 (ISUP grade group 3), pathological stage pT4b. Extraprostatic extension was present; surgical margins were positive; the seminal vesicles were invaded; lymphovascular invasion was absent; lymph node metastasis was present."}
+
+===== >>> PÉRDIDA · assistant =====
+<llamada> get_previous_notes({"case_id": "T3-001"})
+
+===== tool =====
+{"case_id": "T3-001", "previous_notes": "The patient is not on 5-ARI medication. No relevant comorbidities recorded, with a Charlson Comorbidity Index (CCI) of 3."}
+
+===== >>> PÉRDIDA · assistant =====
+<llamada> get_family_history({"case_id": "T3-001"})
+
+===== tool =====
+{"case_id": "T3-001", "family_history": "There is no family history of prostate or breast cancer."}
+
+===== >>> PÉRDIDA · assistant =====
+Evidence retrieved:
+- MRI report: Prostate volume: 37.29 cc. PSA density: 2.306 ng/mL/cc. PI-RADS: 5. AI model-predicted probability of clinically significant prostate cancer (0–1): 0.9527162.
+- Biopsy pathology report: The patient underwent one biopsy session. At biopsy, Gleason 4+4 (ISUP grade group 4, AI model-predicted ISUP 5) was identified in the left base; cribriform pattern was present. The reported histological growth pattern was: Adenocarcinoma.
+- Surgical pathology report: The robot-assisted radical prostatectomy specimen showed Gleason 4+3 (ISUP grade group 3), pathological stage pT4b. Extraprostatic extension was present; surgical margins were positive; the seminal vesicles were invaded; lymphovascular invasion was absent; lymph node metastasis was present.
+- Previous notes: The patient is not on 5-ARI medication. No relevant comorbidities recorded, with a Charlson Comorbidity Index (CCI) of 3.
+- Family history: There is no family history of prostate or breast cancer.
+Estimated time to biochemical recurrence or last follow-up: 30.9 months.
+The prognosis is influenced by several documented factors. Preoperative PSA was significantly elevated at 86. The surgical findings included a pathological stage pT4b, positive surgical margins, invasion of the seminal vesicles, and the presence of lymph node metastasis. The biopsy revealed a higher grade (Gleason 4+4) compared to the prostatectomy specimen (Gleason 4+3). The presence of lymph node metastasis is a significant adverse factor.
+
+Countervailing findings include the absence of lymphovascular invasion and the absence of lymph node metastasis in the biopsy, although the surgical report documented nodal metastasis. The extent of extraprostatic extension and positive margins are concerning. Missing postoperative PSA or follow-up data widens the uncertainty regarding the subsequent trajectory. Information regarding postoperative PSA levels and their subsequent changes would be crucial in revising this prognosis. The fixed estimated horizon is 30.87 months. This is a predicted recurrence horizon, not evidence of observed recurrence. The sensitivity range is 24.70–37.05 months; its coverage has not been validated.

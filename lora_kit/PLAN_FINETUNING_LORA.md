@@ -133,32 +133,80 @@ tiene que ser lo que correría en Grand Challenge.
 
 ---
 
-## 3. Estructura del repositorio limpio
+## 3. Estructura y cómo ejecutarlo
 
 ```
-repo-lora/
-  data/                                  # lo que ya tienes
-    task1/agent_input/<case>/{structured-prompt,*-clinical-data}.json
-    task1/ground_truth/<case>/...        # salidas: decisión + razonamiento del urólogo
-    task2/...  task3/...
-  lora_kit/                              # esta carpeta: plan, contrato literal y agente baseline
-    contract/verbatim/  contract/tool_schemas/  agent_baseline/
-  lora/
-    00_inventory.py        # §5  inventario y chequeos de calidad del GT
-    01_splits.py           # §6  pliegues de validación cruzada
-    02_build_sft.py        # §7  trayectorias de entrenamiento
-    03_check_template.py   # §8.1 fidelidad de la plantilla de chat y del parser
-    04_train.py            # §8  entrenamiento LoRA
-    05_merge_export.py     # §10 fusión + exportación + pruebas de paridad
-    06_eval_fold.sh        # §9  agente + evaluador oficial en el pliegue retenido
-    07_report.py           # §9  tabla final con IC
-  (el agente baseline para evaluar es lora_kit/agent_baseline/)
-  eval/                    # DIAGNijmegen/CHIMERA-agent (evaluation/evaluate.py), fijado por commit
-  runs/<exp>/<fold>/...    # adaptadores, fusionados, salidas, puntuaciones
+repo-limpio/
+  data/                          # lo que ya tienes: task{1,2,3}/{agent_input,ground_truth}/<case>/
+  model/gemma-4-E2B-it/          # pesos base (Hugging Face)
+  CHIMERA-agent/                 # evaluador oficial, fijado por commit
+  lora_kit/                      # esta carpeta
+    PLAN_FINETUNING_LORA.md      # este plan
+    README.md                    # qué hay y qué traer aparte
+    requirements-train.txt       # entorno de entrenamiento probado
+    tasks/task{1,2,3}/           # ficha por tarea + ejemplo SFT legible (qué se aprende)
+    fixture_data/                # un caso real por tarea, con la estructura de data/
+    contract/verbatim/           # prompts, plantilla, form-fill, esquema y herramientas, literales
+    contract/tool_schemas/       # tools_task{1,2,3}.json volcados del servidor MCP real
+    pipeline/
+      contract.py                # carga el contrato literal (lo usan todos los scripts)
+      make_folds.py              # §6  pliegues estratificados por tarea, agrupados por paciente
+      build_sft.py               # §5/§7 trayectorias react + form_fill de las 3 tareas (+ stats)
+      render.py                  # plantilla de chat + máscara de pérdida
+      check_template.py          # §8.1 comparación token a token con vLLM (entorno de inferencia)
+      train_lora.py              # §8  LoRA; un pliegue o todo; pensado para 24 GB
+      merge_export.py            # §10 fusión + paridad + checkpoint para vLLM
+      eval_fold.sh               # §9  agente sin tocar + evaluador oficial en el pliegue
+      score_fold.py  report.py   # §9  puntuación y tabla final con IC y McNemar
+      dump_examples.py           # vuelca ejemplos SFT legibles
+      selftest.sh                # prueba de humo sin GPU sobre fixture_data/
+    agent_baseline/              # el agente del reto, para evaluar (y su Dockerfile)
+  runs/                          # todo lo que se genera
 ```
 
-**Fija por hash de commit** el agente baseline y el repositorio del evaluador. Si los
-organizadores cambian `evaluate.py`, tus números dejan de ser comparables.
+**Fija por hash de commit** el repositorio del evaluador. Si los organizadores cambian
+`evaluate.py`, tus números dejan de ser comparables.
+
+### 3.1 Secuencia de comandos
+
+```bash
+cd repo-limpio
+pip install -r lora_kit/requirements-train.txt          # entorno de entrenamiento
+lora_kit/pipeline/selftest.sh CHIMERA-agent              # 1 min, sin GPU: todo encaja
+
+# datos (las tres tareas)
+python lora_kit/pipeline/make_folds.py --data-root data --out runs/folds.json --k 5
+python lora_kit/pipeline/build_sft.py  --data-root data --out runs/sft.jsonl --folds runs/folds.json
+cat runs/sft.stats.json                                  # §5: clases, incoherencias del GT, descartes
+python lora_kit/pipeline/dump_examples.py --sft runs/sft.jsonl --out runs/ejemplos
+
+# fidelidad de plantilla (entorno de INFERENCIA, con vLLM 0.25.0 y GPU)
+python lora_kit/pipeline/check_template.py --model model/gemma-4-E2B-it --sft runs/sft.jsonl
+#   -> dice qué --tool-content usar. Si falla, no se entrena.
+
+# validación cruzada: por pliegue f = 0..4 (y por semilla)
+python lora_kit/pipeline/train_lora.py --model model/gemma-4-E2B-it --sft runs/sft.jsonl \
+    --fold $f --out runs/r16/fold$f --tool-content string --eval-generate
+E=$(cat runs/r16/fold$f/BEST_EPOCH)
+python lora_kit/pipeline/merge_export.py --base model/gemma-4-E2B-it \
+    --adapter runs/r16/fold$f/adapter_epoch$E --out runs/r16/fold$f/merged --check-sft runs/sft.jsonl
+lora_kit/pipeline/eval_fold.sh model/gemma-4-E2B-it runs/r16/fold$f/split.json data runs/B0/fold$f CHIMERA-agent
+lora_kit/pipeline/eval_fold.sh runs/r16/fold$f/merged runs/r16/fold$f/split.json data runs/r16/fold$f/eval CHIMERA-agent
+
+# tabla final
+python lora_kit/pipeline/report.py --eval-repo CHIMERA-agent --ref B0 \
+    --arm B0="runs/B0/fold*/score.json" --arm L1="runs/r16/fold*/eval/score.json" --out runs/REPORT.md
+
+# modelo final (épocas fijas = la mediana de BEST_EPOCH de los pliegues)
+python lora_kit/pipeline/train_lora.py --model model/gemma-4-E2B-it --sft runs/sft.jsonl \
+    --fold -1 --epochs 3 --out runs/r16/final --tool-content string
+```
+
+`selftest.sh` se ha ejecutado de punta a punta (construcción de datos de las 3 tareas,
+máscara, entrenamiento, fusión con paridad y puntuación con el evaluador oficial) sobre
+un modelo diminuto aleatorio y un tokenizador de juguete. Lo que **no** se ha podido
+probar sin GPU ni acceso a Gemma es `check_template.py` y el entrenamiento real sobre
+Gemma 4: son los dos primeros pasos que hay que hacer en la máquina con GPU.
 
 ---
 
@@ -185,10 +233,15 @@ al ejecutarse**. Para eso hay que reproducir, carácter a carácter, lo siguient
 
 Ya están copiadas **tal cual** en `lora_kit/contract/verbatim/`, y la lista de
 herramientas (punto 3) está volcada del servidor MCP real en
-`lora_kit/contract/tool_schemas/tools_task{1,2,3}.json`. Impórtalas desde el
-constructor de datos (`render_example.py` muestra cómo); no las reescribas.
-`contract/example_task1/` enseña los cuatro textos renderizados de un caso real:
-el prompt del sistema, el del caso, y el sistema y el usuario del form-fill.
+`lora_kit/contract/tool_schemas/tools_task{1,2,3}.json`. `pipeline/contract.py` las
+importa; no las reescribas. `tasks/task{1,2,3}/sft_*.txt` enseña el resultado para un
+caso real de cada tarea.
+
+**Medido con el servidor real:** la respuesta de una herramienta no llega al modelo
+como cadena, sino como `ToolMessage.content = [{"type": "text", "text": "{...}", "id": "lc_…"}]`
+(así la deja `langchain-mcp-adapters` 0.2.2) y `ChatVLLM` la pasa sin tocar a
+`llm.chat`. `build_sft.py` escribe exactamente esa forma, y `check_template.py` decide
+si vLLM la convierte en cadena (`--tool-content string`) o la deja en bloques.
 
 **Qué es y qué no es "prompt" aquí.** El experimento **no** necesita prompts nuevos:
 se entrena con los del agente baseline, sin cambiar nada, para que el modelo
@@ -200,7 +253,7 @@ distribución de esos tokens concretos.
 
 ---
 
-## 5. Paso 1 — Inventario y calidad del ground truth (`00_inventory.py`)
+## 5. Paso 1 — Inventario y calidad del ground truth (lo informa `build_sft.py` en `sft.stats.json`)
 
 Para cada caso etiquetado, lee el GT y genera una tabla con:
 
@@ -222,7 +275,7 @@ Chequeos obligatorios (cada uno produce una lista de casos, no un aviso suelto):
 
 ---
 
-## 6. Paso 2 — Particiones (`01_splits.py`)
+## 6. Paso 2 — Particiones (`pipeline/make_folds.py`)
 
 - **Validación cruzada estratificada, 5 pliegues, por tarea**, semilla fija.
   Estratos: T1 = decisión; T2 = acción (juntando `watchful_waiting` con la clase más
@@ -239,7 +292,7 @@ para elegir épocas y rango), a costa de 5× GPU.
 
 ---
 
-## 7. Paso 3 — Construir trayectorias SFT (`02_build_sft.py`)
+## 7. Paso 3 — Construir trayectorias SFT (`pipeline/build_sft.py`)
 
 Cada caso etiquetado genera **dos ejemplos de entrenamiento**, porque en inferencia
 el mismo modelo se llama en dos contextos distintos.
@@ -330,8 +383,10 @@ plantilla determinista se queda corta en `rationale_score` con el juez encendido
   prosa es poco probable. **Incluye T3 como experimento aparte** y no dejes que tape
   el resultado de T1/T2.
 - El esquema bloqueado de T3 solo tiene `months_to_recurrence` y `reasoning`. El
-  `event` del fichero de salida lo pone el runner; revisa cómo lo hace el agente que
-  uses como marco.
+  `event` del fichero de salida lo escribe `run.py` como `structured.get("event", 0)`:
+  **siempre 0**. El acierto de evento del baseline (0,74) es la proporción de casos sin
+  evento (56/75 con 19 eventos). El LLM no puede cambiarlo. Detalles y la única vía
+  (tocar `run.py`, declarándolo) en `tasks/task3/README.md`.
 
 ### 7.5 Formato en disco
 
@@ -341,9 +396,9 @@ donde `messages` usa el formato OpenAI (`role`, `content`, `tool_calls`,
 
 ---
 
-## 8. Paso 4 — Entrenamiento LoRA (`04_train.py`)
+## 8. Paso 4 — Entrenamiento LoRA (`pipeline/train_lora.py`)
 
-### 8.1 Antes de entrenar: fidelidad de la plantilla (`03_check_template.py`)
+### 8.1 Antes de entrenar: fidelidad de la plantilla (`pipeline/check_template.py`)
 
 Este es el paso que más fácilmente se salta y el que más resultados estropea.
 
@@ -414,7 +469,7 @@ configuraciones es asumible.
 
 ---
 
-## 9. Paso 5 — Evaluación en el pliegue retenido (`06_eval_fold.sh`, `07_report.py`)
+## 9. Paso 5 — Evaluación en el pliegue retenido (`pipeline/eval_fold.sh`, `pipeline/report.py`)
 
 Para cada pliegue y semilla:
 
@@ -454,7 +509,7 @@ cruza 0** en OVERALL. Compararlo con el 0,82 de la solución entregada no es jus
 
 ---
 
-## 10. Paso 6 — Fusión, exportación y paridad (`05_merge_export.py`)
+## 10. Paso 6 — Fusión, exportación y paridad (`pipeline/merge_export.py`)
 
 ```python
 base = <ClaseGemma4>.from_pretrained(BASE_DIR, torch_dtype=torch.bfloat16)

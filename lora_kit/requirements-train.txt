@@ -1,0 +1,20 @@
+# Entorno de ENTRENAMIENTO (no el del contenedor). Probado el 22-sep-2026 con Python 3.11:
+# la pipeline construye datos, entrena, fusiona y puntúa con estas versiones.
+# torch y transformers/tokenizers tienen que coincidir con los del contenedor del reto.
+torch==2.9.1
+transformers==5.12.1
+tokenizers==0.22.2
+peft==0.21.0
+accelerate==1.15.0
+safetensors==0.8.0
+jinja2==3.1.6
+pydantic==2.13.5
+langchain-core==1.4.8   # contract/verbatim/form_fill.py lo importa
+# puntuación con el evaluador oficial (score_fold.py / report.py)
+numpy==2.4.6
+scipy==1.17.1
+scikit-learn==1.9.0
+pandas==3.0.6
+requests==2.34.2
+# opcional, solo para QLoRA:
+# bitsandbytes
