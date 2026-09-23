@@ -1,0 +1,314 @@
+version: 1
+
+variantes:
+  - id: A0
+    descripcion: V4 intacta, referencia primaria.
+    bloque: referencia
+    tipo: baseline
+    hipotesis: []
+    cambios: {}
+
+  - id: S-M1
+    descripcion: Retira las reglas de cohorte sin biopsia previa.
+    bloque: decision
+    tipo: ablacion
+    hipotesis: [H1]
+    cambios: {cohort_none: false}
+  - id: S-M2
+    descripcion: Retira las reglas de cohorte tras biopsia negativa.
+    bloque: decision
+    tipo: ablacion
+    hipotesis: [H1]
+    cambios: {cohort_negative: false}
+  - id: S-M3
+    descripcion: Retira juntas las tres reglas de cohorte con biopsia positiva.
+    bloque: decision
+    tipo: ablacion
+    hipotesis: [H1]
+    cambios: {cohort_positive_psa: false, cohort_positive_age: false, cohort_positive_pirads: false}
+  - id: S-M3a
+    descripcion: Retira la regla PSA mayor o igual a 20 con biopsia positiva.
+    bloque: decision
+    tipo: ablacion
+    hipotesis: [H1]
+    cambios: {cohort_positive_psa: false}
+  - id: S-M3b
+    descripcion: Retira la regla edad mayor o igual a 78 con biopsia positiva.
+    bloque: decision
+    tipo: ablacion
+    hipotesis: [H1]
+    cambios: {cohort_positive_age: false}
+  - id: S-M3c
+    descripcion: Retira la regla PI-RADS menor o igual a 2 con biopsia positiva.
+    bloque: decision
+    tipo: ablacion
+    hipotesis: [H1]
+    cambios: {cohort_positive_pirads: false}
+  - id: S-COH
+    descripcion: Retira todas las reglas de cohorte M1-M3.
+    bloque: decision
+    tipo: ablacion
+    hipotesis: [H1]
+    cambios: {cohort_none: false, cohort_negative: false, cohort_positive_psa: false, cohort_positive_age: false, cohort_positive_pirads: false}
+
+  - id: S-M4
+    descripcion: Retira por completo el peldano de grado documentado.
+    bloque: decision
+    tipo: ablacion
+    hipotesis: [H2]
+    cambios: {grade_ge2: false, grade_gg1: false}
+  - id: S-M4a
+    descripcion: Retira la regla de grado GG mayor o igual a 2.
+    bloque: decision
+    tipo: ablacion
+    hipotesis: [H2]
+    cambios: {grade_ge2: false}
+  - id: S-M4b
+    descripcion: Retira la regla de grado GG1.
+    bloque: decision
+    tipo: ablacion
+    hipotesis: [H2]
+    cambios: {grade_gg1: false}
+
+  - id: S-E1
+    descripcion: Retira el voto del experto estructurado E1.
+    bloque: decision
+    tipo: ablacion
+    hipotesis: [H4]
+    cambios: {structured: false}
+  - id: S-E3
+    descripcion: Retira el voto del experto de fusion E3.
+    bloque: decision
+    tipo: ablacion
+    hipotesis: [H4]
+    cambios: {fusion: false}
+  - id: S-E1E3
+    descripcion: Retira simultaneamente los votos E1 y E3.
+    bloque: decision
+    tipo: ablacion
+    hipotesis: [H4]
+    cambios: {structured: false, fusion: false}
+  - id: S-VOTO-YES
+    descripcion: Sustituye el peldano de voto por si constante mediante la carga de la prueba.
+    bloque: decision
+    tipo: reemplazo
+    hipotesis: [H3]
+    cambios: {structured: false, fusion: false}
+  - id: S-VOTO-E1
+    descripcion: Conserva solo E1 en el peldano de voto.
+    bloque: decision
+    tipo: reemplazo
+    hipotesis: [H3]
+    cambios: {fusion: false}
+  - id: S-VOTO-E3
+    descripcion: Conserva solo E3 en el peldano de voto.
+    bloque: decision
+    tipo: reemplazo
+    hipotesis: [H3]
+    cambios: {structured: false}
+
+  - id: F0
+    descripcion: Suelo de decision si constante sin documentos.
+    bloque: suelos
+    tipo: floor
+    hipotesis: [H3]
+    cambios: {cohort_none: false, cohort_negative: false, cohort_positive_psa: false, cohort_positive_age: false, cohort_positive_pirads: false, grade_ge2: false, grade_gg1: false, structured: false, fusion: false, plan: none}
+  - id: F1
+    descripcion: Suelo con cohorte y carga de la prueba, sin grado ni expertos.
+    bloque: suelos
+    tipo: floor
+    hipotesis: [H1, H3]
+    cambios: {grade_ge2: false, grade_gg1: false, structured: false, fusion: false, plan: none}
+  - id: F2
+    descripcion: Suelo con cohorte y grado; abre solo las notas previas.
+    bloque: suelos
+    tipo: floor
+    hipotesis: [H2, H3]
+    cambios: {structured: false, fusion: false, plan: all, closed_documents: [radiology_report, laboratory_results, psa_trend]}
+  - id: F3
+    descripcion: Suelo con cohorte, grado y E3; abre los documentos que E3 necesita.
+    bloque: suelos
+    tipo: floor
+    hipotesis: [H3, H4]
+    cambios: {structured: false, plan: all, closed_documents: [psa_trend]}
+
+  - id: S-DOC-prev
+    descripcion: Cierra previous_notes dentro del plan predicho.
+    bloque: documentos
+    tipo: ablacion
+    hipotesis: [H8]
+    cambios: {closed_documents: [previous_notes]}
+  - id: S-DOC-rad
+    descripcion: Cierra radiology_report dentro del plan predicho.
+    bloque: documentos
+    tipo: ablacion
+    hipotesis: [H8]
+    cambios: {closed_documents: [radiology_report]}
+  - id: S-DOC-lab
+    descripcion: Cierra laboratory_results dentro del plan predicho.
+    bloque: documentos
+    tipo: ablacion
+    hipotesis: [H8]
+    cambios: {closed_documents: [laboratory_results]}
+  - id: S-DOC-psa
+    descripcion: Cierra psa_trend dentro del plan predicho.
+    bloque: documentos
+    tipo: ablacion
+    hipotesis: [H8]
+    cambios: {closed_documents: [psa_trend]}
+
+  - id: S-PLAN-bucket
+    descripcion: Sustituye el plan de E4 por la moda del cubo de biopsia.
+    bloque: plan
+    tipo: reemplazo
+    hipotesis: [H6]
+    cambios: {plan: bucket}
+  - id: S-PLAN-todo
+    descripcion: Abre los cuatro documentos disponibles.
+    bloque: plan
+    tipo: reemplazo
+    hipotesis: [H6]
+    cambios: {plan: all}
+  - id: S-PLAN-nada
+    descripcion: No abre ningun documento.
+    bloque: plan
+    tipo: reemplazo
+    hipotesis: [H6]
+    cambios: {plan: none}
+
+  - id: S-W-mode
+    descripcion: Usa la moda del cubo para los pesos del formulario.
+    bloque: formulario
+    tipo: ablacion
+    hipotesis: [H6]
+    cambios: {weights_policy: mode}
+  - id: S-W-model
+    descripcion: Usa el modelo E4 sin puerta frente a la moda.
+    bloque: formulario
+    tipo: ablacion
+    hipotesis: [H6]
+    cambios: {weights_policy: model}
+  - id: S-W-noted
+    descripcion: Sustituye todos los pesos E4 por noted antes del aterrizaje.
+    bloque: formulario
+    tipo: ablacion
+    hipotesis: [H6]
+    cambios: {weights_policy: noted}
+  - id: S-C-trace
+    descripcion: Usa directamente la confianza predicha por E4.
+    bloque: formulario
+    tipo: ablacion
+    hipotesis: [H6]
+    cambios: {confidence_policy: trace}
+  - id: S-C-clear
+    descripcion: Sustituye la confianza por clear constante.
+    bloque: formulario
+    tipo: reemplazo
+    hipotesis: [H6]
+    cambios: {confidence_policy: clear}
+  - id: S-LIB-off
+    descripcion: Retira la biblioteca y su moda por cubo.
+    bloque: formulario
+    tipo: ablacion
+    hipotesis: [H7]
+    cambios: {library: false}
+  - id: S-PSA-off
+    descripcion: Retira los niveles declarados por E2.
+    bloque: formulario
+    tipo: ablacion
+    hipotesis: [H5]
+    cambios: {psa: false}
+  - id: S-G-off
+    descripcion: Apaga la guardia final de aterrizaje.
+    bloque: formulario
+    tipo: ablacion
+    hipotesis: [H15]
+    cambios: {grounding: "off"}
+  - id: S-G-bx
+    descripcion: Aplica aterrizaje estricto tambien a bx.
+    bloque: formulario
+    tipo: ablacion
+    hipotesis: [H15]
+    cambios: {grounding: strict_bx}
+
+  - id: S-A-libvote
+    descripcion: Add-back del voto de biblioteca con peso 0.5.
+    bloque: add-back
+    tipo: add_back
+    hipotesis: [H7]
+    cambios: {library_weight: 0.5}
+  - id: S-A-board
+    descripcion: Add-back de pesos del formulario acordados por el panel.
+    bloque: add-back
+    tipo: add_back
+    hipotesis: [H6]
+    cambios: {form_weights: board}
+
+  - id: S-T-0.35
+    descripcion: Sensibilidad del umbral de voto a 0.35.
+    bloque: sensibilidad
+    tipo: sensitivity
+    hipotesis: []
+    cambios: {threshold: 0.35}
+  - id: S-T-0.40
+    descripcion: Sensibilidad del umbral de voto a 0.40.
+    bloque: sensibilidad
+    tipo: sensitivity
+    hipotesis: []
+    cambios: {threshold: 0.40}
+  - id: S-T-0.45
+    descripcion: Sensibilidad del umbral de voto a 0.45.
+    bloque: sensibilidad
+    tipo: sensitivity
+    hipotesis: []
+    cambios: {threshold: 0.45}
+  - id: S-T-0.50
+    descripcion: Sensibilidad del umbral de voto a 0.50.
+    bloque: sensibilidad
+    tipo: sensitivity
+    hipotesis: []
+    cambios: {threshold: 0.50}
+  - id: S-T-0.55
+    descripcion: Sensibilidad del umbral de voto a 0.55.
+    bloque: sensibilidad
+    tipo: sensitivity
+    hipotesis: []
+    cambios: {threshold: 0.55}
+
+  - id: S-FM-1.0
+    descripcion: Sensibilidad del multiplicador E3 a 1.0.
+    bloque: sensibilidad
+    tipo: sensitivity
+    hipotesis: []
+    cambios: {fusion_mult: 1.0}
+  - id: S-FM-1.5
+    descripcion: Sensibilidad del multiplicador E3 a 1.5.
+    bloque: sensibilidad
+    tipo: sensitivity
+    hipotesis: []
+    cambios: {fusion_mult: 1.5}
+  - id: S-FM-2.0
+    descripcion: Sensibilidad del multiplicador E3 a 2.0.
+    bloque: sensibilidad
+    tipo: sensitivity
+    hipotesis: []
+    cambios: {fusion_mult: 2.0}
+
+  - id: S-TW-flat
+    descripcion: Sensibilidad con tramos planos 1/1/1.
+    bloque: sensibilidad
+    tipo: sensitivity
+    hipotesis: []
+    cambios: {tiers: {firm: 1.0, supports: 1.0, discuss: 1.0}}
+  - id: S-TW-default
+    descripcion: Sensibilidad con los tramos de entrega 3/2/1.
+    bloque: sensibilidad
+    tipo: sensitivity
+    hipotesis: []
+    cambios: {tiers: {firm: 3.0, supports: 2.0, discuss: 1.0}}
+  - id: S-TW-steep
+    descripcion: Sensibilidad con tramos acentuados 4/2/1.
+    bloque: sensibilidad
+    tipo: sensitivity
+    hipotesis: []
+    cambios: {tiers: {firm: 4.0, supports: 2.0, discuss: 1.0}}

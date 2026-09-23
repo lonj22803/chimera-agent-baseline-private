@@ -1,0 +1,48 @@
+version: 1
+
+brazos:
+  - id: L0
+    orden: 0
+    variante_grafo: A0
+    descripcion: Referencia A0 honest con LLM.
+    hipotesis: [H8, H11, H12]
+  - id: L1
+    orden: 1
+    variante_grafo: N07-off
+    descripcion: Sin EXPERT-EAU.
+    hipotesis: [H9]
+  - id: L2
+    orden: 2
+    variante_grafo: N08-off
+    descripcion: Sin moderador LLM; plan determinista de E4.
+    hipotesis: [H10]
+  - id: L3
+    orden: 3
+    variante_grafo: N14-off
+    descripcion: Sin verificador ni reapertura.
+    hipotesis: [H11]
+  - id: L4
+    orden: 4
+    variante_grafo: LLM-minimal
+    descripcion: Sala LLM minima, solo registrador y presidente.
+    hipotesis: []
+  - id: L5
+    orden: 5
+    variante_grafo: N15-deterministic
+    descripcion: Presidente sustituido por la nota determinista.
+    hipotesis: [H13]
+  - id: L6
+    orden: 6
+    variante_grafo: G1G2-off
+    descripcion: Sin guardias de procedencia G1 y G2.
+    hipotesis: [H14]
+  - id: L7
+    orden: 7
+    variante_grafo: G3-off
+    descripcion: Sin guardia de lenguaje de proceso G3.
+    hipotesis: [H14]
+  - id: L0p
+    orden: 8
+    variante_grafo: A0
+    descripcion: Replica independiente de L0.
+    hipotesis: []

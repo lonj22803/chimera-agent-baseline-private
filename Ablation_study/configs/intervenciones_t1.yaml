@@ -1,0 +1,356 @@
+version: 1
+
+intervenciones:
+  - id: N01
+    nombre: INTAKE (1, 2)
+    nodos_grafo: [intake]
+    simbolo: task_1/agent/graph.py:236
+    canal: Vuelca el expediente crudo y renderizado en el acta.
+    variantes: [estructural; no se ablaciona]
+    tier: []
+    hipotesis: []
+
+  - id: N03
+    nombre: EXPERT-STRUCTURED (E1)
+    nodos_grafo: [expert_structured]
+    simbolo: task_1/agent/graph.py:253
+    canal: Aporta el voto E1 al mecanismo M5.
+    variantes: [structured no disponible]
+    tier: [S]
+    hipotesis: [H4]
+
+  - id: N04
+    nombre: EXPERT-COHORT
+    nodos_grafo: [expert_cohort]
+    simbolo: task_1/agent/graph.py:264
+    canal: Ejecuta el primer peldano de la cascada mediante M1-M3.
+    variantes: [criterion devuelve verdict nulo]
+    tier: [S]
+    hipotesis: [H1]
+
+  - id: N05
+    nombre: EXPERT-EXPERIENCE (biblioteca kNN)
+    nodos_grafo: [expert_library]
+    simbolo: task_1/agent/graph.py:268
+    canal: Su bucket_mode alimenta los pesos, la confianza y el plan de E4; no vota.
+    variantes: [library nula]
+    tier: [S]
+    hipotesis: [H7]
+
+  - id: N06
+    nombre: EXPERT-TRACE (E4)
+    nodos_grafo: [expert_trace]
+    simbolo: task_1/agent/graph.py:277
+    canal: Fija el plan de documentos, los pesos y la confianza base.
+    variantes: [M9, M10]
+    tier: [S]
+    hipotesis: [H6]
+
+  - id: N07
+    nombre: EXPERT-EAU (+ RAG)
+    nodos_grafo: [eau_agent, eau_count, eau_nudge, eau_finalize, eau_post, eau_tools]
+    simbolo: task_1/agent/graph.py:290-315
+    canal: Incorpora texto de guia al acta y al parte; no entra al protocolo.
+    variantes: [sustituir por stub]
+    tier: [L, J]
+    hipotesis: [H9]
+
+  - id: N08
+    nombre: MODERATOR
+    nodos_grafo: [moderator]
+    simbolo: task_1/agent/graph.py:319
+    canal: Formula preguntas; E4 ya ha fijado el plan.
+    variantes: [stub y plan_from_sections sin preguntas]
+    tier: [L, J]
+    hipotesis: [H10]
+
+  - id: N09
+    nombre: EXPERT-IMAGE
+    nodos_grafo: [expert_image]
+    simbolo: task_1/agent/graph.py:364
+    canal: Interviene solo cuando el moderador lo convoca.
+    variantes: [no convocar y medir activaciones en L0]
+    tier: [L]
+    hipotesis: [H12]
+
+  - id: N10
+    nombre: REGISTRAR (+ MCP)
+    nodos_grafo: [registrar_agent, reg_count, registrar_nudge, registrar_finalize, registrar_post, reg_tools]
+    simbolo: task_1/agent/graph.py:381-441
+    canal: Abre documentos y habilita el grado, E2, E3 y tool_score.
+    variantes: [opened vacio, plan libre]
+    tier: [S, L]
+    hipotesis: [H8]
+
+  - id: N11
+    nombre: EXPERT-PSA (E2)
+    nodos_grafo: [expert_psa]
+    simbolo: task_1/agent/graph.py:445
+    canal: Aporta niveles a variable_view; no vota.
+    variantes: [psa vacio]
+    tier: [S]
+    hipotesis: [H5]
+
+  - id: N12
+    nombre: EXPERT-FUSION (E3)
+    nodos_grafo: [expert_fusion]
+    simbolo: task_1/agent/graph.py:450
+    canal: Aporta el voto E3 a M5 cuando se abre radiology_report.
+    variantes: [fusion no disponible]
+    tier: [S]
+    hipotesis: [H4]
+
+  - id: N13
+    nombre: PANEL-PROTOCOL
+    nodos_grafo: [panel_protocol]
+    simbolo: task_1/agent/graph.py:455
+    canal: Produce la decision mediante la cascada del protocolo.
+    variantes: [ablacionar M1-M13; conservar el nodo]
+    tier: [S]
+    hipotesis: []
+
+  - id: N14
+    nombre: VERIFIER (+ reapertura)
+    nodos_grafo: [verifier_agent, ver_count, verifier_finalize, verifier_post, ver_tools]
+    simbolo: task_1/agent/graph.py:467-516
+    canal: Puede reabrir un documento del plan y agregar texto al acta.
+    variantes: [stub y max_passes igual a 1]
+    tier: [L, J]
+    hipotesis: [H11]
+
+  - id: N15
+    nombre: CHAIR
+    nodos_grafo: [chair]
+    simbolo: task_1/agent/graph.py:527-656
+    canal: Redacta la nota; la decision y el formulario ya vienen del protocolo.
+    variantes: [chair_retries igual a 0 y nota determinista]
+    tier: [L, J]
+    hipotesis: [H13]
+
+  - id: M1
+    nombre: Cohorte sin biopsia previa, PI-RADS mayor o igual a 3
+    nodos_grafo: []
+    simbolo: task_1/experts_1/cohort.py:80
+    canal: Decide el peldano de cohorte para bx nula.
+    variantes: [forzar verdict nulo para bx nula]
+    tier: [S]
+    hipotesis: [H1]
+
+  - id: M2
+    nombre: Cohorte con biopsia negativa, PI-RADS mayor o igual a 4
+    nodos_grafo: []
+    simbolo: task_1/experts_1/cohort.py:85
+    canal: Decide el peldano de cohorte para bx negativa.
+    variantes: [forzar verdict nulo para bx negativa]
+    tier: [S]
+    hipotesis: [H1]
+
+  - id: M3
+    nombre: Cohorte con biopsia positiva
+    nodos_grafo: []
+    simbolo: task_1/experts_1/cohort.py:64-73,91
+    canal: Difiere por PSA, edad o PI-RADS en bx positiva.
+    variantes: [M3a sin PSA, M3b sin edad, M3c sin PI-RADS, M3 completa fuera]
+    tier: [S]
+    hipotesis: [H1]
+
+  - id: M4
+    nombre: Grado documentado
+    nodos_grafo: []
+    simbolo: task_1/agent/decide.py:71; task_1/agent/protocol.py:166
+    canal: Resuelve el segundo peldano con el grado de biopsia documentado.
+    variantes: [grade_rule falsa, M4a fuera, M4b fuera]
+    tier: [S]
+    hipotesis: [H2]
+
+  - id: M5
+    nombre: Voto ponderado E1 y E3
+    nodos_grafo: []
+    simbolo: task_1/agent/protocol.py:50,176
+    canal: Resuelve el tercer peldano con votos, tramos, umbral y fusion_mult.
+    variantes: [E1 fuera, E3 fuera, ambos fuera, barrido de parametros]
+    tier: [S]
+    hipotesis: [H4]
+
+  - id: M6
+    nombre: Peso de biblioteca igual a cero
+    nodos_grafo: []
+    simbolo: task_1/agent/protocol.py:58
+    canal: Impide que los precedentes voten en la decision.
+    variantes: [add-back library_weight igual a 0.5]
+    tier: [S]
+    hipotesis: [H7]
+
+  - id: M7
+    nombre: Precedente identico apagado
+    nodos_grafo: []
+    simbolo: task_1/agent/protocol.py:155
+    canal: Es una referencia de techo dentro de muestra.
+    variantes: [no se ablaciona]
+    tier: []
+    hipotesis: []
+
+  - id: M8
+    nombre: Confianza por acuerdo
+    nodos_grafo: []
+    simbolo: task_1/agent/protocol.py:189; task_1/experts_1/trace.py:58
+    canal: Calcula la confianza declarada en el formulario.
+    variantes: [trace por moda del cubo, constante clear]
+    tier: [S]
+    hipotesis: [H6]
+
+  - id: M9
+    nombre: Pesos del formulario de E4
+    nodos_grafo: []
+    simbolo: task_1/experts_1/trace.py:47-53
+    canal: Asigna variable_weights con la politica model+mode.
+    variantes: [mode, model, constante noted, add-back board]
+    tier: [S]
+    hipotesis: [H6]
+
+  - id: M10
+    nombre: Plan de documentos de E4
+    nodos_grafo: []
+    simbolo: task_1/experts_1/trace.py:55-57
+    canal: Determina que documentos puede abrir el registrador.
+    variantes: [moda del cubo, abrir los cuatro, abrir ninguno]
+    tier: [S]
+    hipotesis: [H6]
+
+  - id: M11
+    nombre: Guardia de aterrizaje
+    nodos_grafo: []
+    simbolo: task_1/agent/protocol.py:118; task_1/agent/decide.py:262
+    canal: Limita niveles y pesos a variables sustentadas por datos abiertos.
+    variantes: [apagada, estricta incluyendo bx]
+    tier: [S]
+    hipotesis: [H5]
+
+  - id: M12
+    nombre: Excepcion de bx
+    nodos_grafo: []
+    simbolo: task_1/agent/decide.py:232
+    canal: Permite bx aunque sea imposible abrir una fuente separada.
+    variantes: [usar M11 estricta]
+    tier: [S]
+    hipotesis: [H5]
+
+  - id: M13
+    nombre: Documentos individuales del plan
+    nodos_grafo: []
+    simbolo: common/roster.py:26
+    canal: Cada documento modifica el grado, expertos disponibles o fidelidad del plan.
+    variantes: [sin previous_notes, sin radiology_report, sin laboratory_results, sin psa_trend]
+    tier: [S]
+    hipotesis: [H8]
+
+  - id: G1
+    nombre: Guardia de valores sin fuente
+    nodos_grafo: []
+    simbolo: task_1/agent/graph.py:416; task_1/agent/guards.py:22
+    canal: Reta al registrador cuando aparecen valores sin fuente.
+    variantes: [unsourced_values devuelve lista vacia]
+    tier: [L]
+    hipotesis: [H14]
+
+  - id: G2
+    nombre: Guardia de grados sin fuente
+    nodos_grafo: []
+    simbolo: task_1/agent/graph.py:417,554,588
+    canal: Reta, borra y verifica menciones de grado no sustentadas.
+    variantes: [unsourced_grades vacia y drop_unsourced_grade_lines identidad]
+    tier: [L]
+    hipotesis: [H14]
+
+  - id: G3
+    nombre: Guardia de lenguaje de proceso
+    nodos_grafo: []
+    simbolo: task_1/agent/graph.py:586-623; task_1/agent/decide.py:148
+    canal: Evita que la nota describa la maquinaria de la junta.
+    variantes: [process_language devuelve lista vacia]
+    tier: [L]
+    hipotesis: [H14]
+
+  - id: G4
+    nombre: Parte clinico para el presidente
+    nodos_grafo: []
+    simbolo: task_1/agent/prompts.py:675
+    canal: Oculta el acta y entrega al presidente solo clinical_digest.
+    variantes: [evidencia previa; no se re-ejecuta]
+    tier: []
+    hipotesis: []
+
+  - id: G5
+    nombre: Restriccion de herramientas sin plan
+    nodos_grafo: []
+    simbolo: task_1/agent/graph.py:368
+    canal: Retira herramientas documentales al registrador cuando el plan esta vacio.
+    variantes: [contar planes vacios en A0]
+    tier: []
+    hipotesis: []
+
+  - id: G6
+    nombre: Filtros del moderador
+    nodos_grafo: []
+    simbolo: task_1/agent/graph.py:337-351
+    canal: Descarta preguntas de panel y extras ajenos al plan.
+    variantes: [se ablaciona junto con N08]
+    tier: [L]
+    hipotesis: [H10]
+
+  - id: G7
+    nombre: Empujones a EAU y registrador
+    nodos_grafo: []
+    simbolo: task_1/agent/graph.py:299,392
+    canal: Fuerza el uso de herramientas antes de cerrar turnos.
+    variantes: [contar activaciones en L0]
+    tier: []
+    hipotesis: []
+
+# Los pseudonodos son parte de la representacion compilada de LangGraph, no
+# intervenciones del agente. El resto de elementos estructurales se registra en 1.2.
+estructural:
+  - id: N01
+    nombre: INTAKE
+    nodos_grafo: []
+    por_que: Es la entrada obligatoria del expediente y retirarla dejaria al grafo sin caso clinico.
+  - id: M7
+    nombre: Precedente identico
+    nodos_grafo: []
+    por_que: Esta apagado en la entrega y solo se conserva como referencia de techo dentro de muestra.
+  - id: G4
+    nombre: Parte clinico en lugar del acta
+    nodos_grafo: []
+    por_que: Ya existe evidencia previa de su efecto y repetirla responderia otra vez la misma comparacion.
+  - id: G5
+    nombre: Restriccion de herramientas sin plan
+    nodos_grafo: []
+    por_que: Solo actua con un plan vacio; en A0 se registra su frecuencia en vez de retirarla.
+  - id: G7
+    nombre: Empujones de uso de herramientas
+    nodos_grafo: []
+    por_que: Es control de flujo; sus activaciones se cuentan en L0 sin crear un brazo adicional.
+  - id: D-OPERATIVA
+    nombre: Capa operativa y perfil de entrega
+    nodos_grafo: []
+    por_que: Supervisor, sombra, warmup, deadline, serial_predict, perfil 16 GB y cache sostienen el limite de 15 minutos.
+  - id: D-RASGOS
+    nombre: Bloques internos de rasgos de E1, E3 y E4
+    nodos_grafo: []
+    por_que: Ya fueron medidos por el estudio de expertos; este estudio ablaciona intervenciones del agente.
+  - id: D-PROMPTS
+    nombre: Prompts de redaccion
+    nodos_grafo: []
+    por_que: Su ablacion estudiaria calidad de prosa; aqui solo se consideran mediante las guardias G1-G3.
+  - id: D-CONTRATO
+    nombre: Esquema, reveal_sequence y validacion
+    nodos_grafo: []
+    por_que: Forman el contrato de salida del reto y retirarlos haria incomparable la entrega.
+  - id: GRAPH_START
+    nombre: Inicio de LangGraph
+    nodos_grafo: [__start__]
+    por_que: Pseudonodo de entrada creado por LangGraph.
+  - id: GRAPH_END
+    nombre: Fin de LangGraph
+    nodos_grafo: [__end__]
+    por_que: Pseudonodo de salida creado por LangGraph.

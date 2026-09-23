@@ -1,0 +1,1474 @@
+{
+  "date": "2026-09-22",
+  "metrics": [
+    "ranking",
+    "gate",
+    "f1_yes",
+    "confidence_score",
+    "variable_weight_score",
+    "important_decisive_factor_score",
+    "tool_score",
+    "section_grounding_score"
+  ],
+  "resamples": 10000,
+  "rows": [
+    {
+      "arm": "L0",
+      "changes_vs_l0": {
+        "by_field": {
+          "biopsy_decision": 0,
+          "confidence": 0,
+          "reveal_sequence": 0,
+          "variable_weights": 0
+        },
+        "cases": [],
+        "n_cases": 0
+      },
+      "description": "Referencia A0 honest con LLM.",
+      "graph_variant": "A0",
+      "hypotheses": [
+        "H8",
+        "H11",
+        "H12"
+      ],
+      "l_minus_s": {
+        "changes": {
+          "by_field": {
+            "biopsy_decision": 0,
+            "confidence": 0,
+            "reveal_sequence": 0,
+            "variable_weights": 0
+          },
+          "cases": [],
+          "n_cases": 0
+        },
+        "ranking": 0.0
+      },
+      "mcnemar_holm_p": 1.0,
+      "score": {
+        "by_bucket": {
+          "Negative": "16/18",
+          "None": "24/24",
+          "Positive": "34/49"
+        },
+        "components": {
+          "confidence_score": 0.7905405405405406,
+          "important_decisive_factor_score": 0.7668677418677419,
+          "section_grounding_score": 0.8404118404118404,
+          "tool_score": 0.865990990990991,
+          "variable_weight_score": 0.8393893893893893
+        },
+        "f1_yes": 0.8547008547008547,
+        "gate": 0.8131868131868132,
+        "mean_case": 0.6667125787318096,
+        "ranking": 0.7607067167163322
+      },
+      "versus_l0": {
+        "mcnemar": {
+          "base_only": 0,
+          "n": 0,
+          "p_value": 1.0,
+          "statistic": 0.0,
+          "variant_only": 0
+        },
+        "metrics": {
+          "confidence_score": {
+            "baseline": 0.7905405405405406,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.7905405405405406
+          },
+          "f1_yes": {
+            "baseline": 0.8547008547008547,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.8547008547008547
+          },
+          "gate": {
+            "baseline": 0.8131868131868132,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.8131868131868132
+          },
+          "important_decisive_factor_score": {
+            "baseline": 0.7668677418677419,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.7668677418677419
+          },
+          "ranking": {
+            "baseline": 0.7607067167163322,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.7607067167163322
+          },
+          "section_grounding_score": {
+            "baseline": 0.8404118404118404,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.8404118404118404
+          },
+          "tool_score": {
+            "baseline": 0.865990990990991,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.865990990990991
+          },
+          "variable_weight_score": {
+            "baseline": 0.8393893893893893,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.8393893893893893
+          }
+        },
+        "n": 91,
+        "sign_test": {
+          "base_only": 0,
+          "n": 0,
+          "p_value": 1.0,
+          "statistic": 0.0,
+          "variant_only": 0
+        }
+      }
+    },
+    {
+      "arm": "L1",
+      "changes_vs_l0": {
+        "by_field": {
+          "biopsy_decision": 0,
+          "confidence": 0,
+          "reveal_sequence": 0,
+          "variable_weights": 0
+        },
+        "cases": [],
+        "n_cases": 0
+      },
+      "description": "Sin EXPERT-EAU.",
+      "graph_variant": "N07-off",
+      "hypotheses": [
+        "H9"
+      ],
+      "l_minus_s": {
+        "changes": {
+          "by_field": {
+            "biopsy_decision": 0,
+            "confidence": 0,
+            "reveal_sequence": 0,
+            "variable_weights": 0
+          },
+          "cases": [],
+          "n_cases": 0
+        },
+        "ranking": 0.0
+      },
+      "mcnemar_holm_p": 1.0,
+      "score": {
+        "by_bucket": {
+          "Negative": "16/18",
+          "None": "24/24",
+          "Positive": "34/49"
+        },
+        "components": {
+          "confidence_score": 0.7905405405405406,
+          "important_decisive_factor_score": 0.7668677418677419,
+          "section_grounding_score": 0.8404118404118404,
+          "tool_score": 0.865990990990991,
+          "variable_weight_score": 0.8393893893893893
+        },
+        "f1_yes": 0.8547008547008547,
+        "gate": 0.8131868131868132,
+        "mean_case": 0.6667125787318096,
+        "ranking": 0.7607067167163322
+      },
+      "versus_l0": {
+        "mcnemar": {
+          "base_only": 0,
+          "n": 0,
+          "p_value": 1.0,
+          "statistic": 0.0,
+          "variant_only": 0
+        },
+        "metrics": {
+          "confidence_score": {
+            "baseline": 0.7905405405405406,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.7905405405405406
+          },
+          "f1_yes": {
+            "baseline": 0.8547008547008547,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.8547008547008547
+          },
+          "gate": {
+            "baseline": 0.8131868131868132,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.8131868131868132
+          },
+          "important_decisive_factor_score": {
+            "baseline": 0.7668677418677419,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.7668677418677419
+          },
+          "ranking": {
+            "baseline": 0.7607067167163322,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.7607067167163322
+          },
+          "section_grounding_score": {
+            "baseline": 0.8404118404118404,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.8404118404118404
+          },
+          "tool_score": {
+            "baseline": 0.865990990990991,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.865990990990991
+          },
+          "variable_weight_score": {
+            "baseline": 0.8393893893893893,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.8393893893893893
+          }
+        },
+        "n": 91,
+        "sign_test": {
+          "base_only": 0,
+          "n": 0,
+          "p_value": 1.0,
+          "statistic": 0.0,
+          "variant_only": 0
+        }
+      }
+    },
+    {
+      "arm": "L2",
+      "changes_vs_l0": {
+        "by_field": {
+          "biopsy_decision": 0,
+          "confidence": 1,
+          "reveal_sequence": 34,
+          "variable_weights": 34
+        },
+        "cases": [
+          "PT-pseudo_033f1a8e1503",
+          "PT-pseudo_0615b2bd8504",
+          "PT-pseudo_062a1125899d",
+          "PT-pseudo_099651db404e",
+          "PT-pseudo_1185f6a68df0",
+          "PT-pseudo_11fe9c6ca833",
+          "PT-pseudo_132e0000c0e0",
+          "PT-pseudo_152344add0f1",
+          "PT-pseudo_1dc32184cab6",
+          "PT-pseudo_20ba3f0f6ca0",
+          "PT-pseudo_259484ae733f",
+          "PT-pseudo_2cd88bcdf81c",
+          "PT-pseudo_2e4988b84112",
+          "PT-pseudo_2eef4115a253",
+          "PT-pseudo_2ef22b5dd08e",
+          "PT-pseudo_2fbb84505a45",
+          "PT-pseudo_3477ea7065bd",
+          "PT-pseudo_36c92fb424ac",
+          "PT-pseudo_376de00c8131",
+          "PT-pseudo_3f75ae876abe",
+          "PT-pseudo_41ca49bed13d",
+          "PT-pseudo_47d8b39fd07f",
+          "PT-pseudo_4bfd4ec864d8",
+          "PT-pseudo_4d54f04e26ae",
+          "PT-pseudo_562159dc2cc6",
+          "PT-pseudo_575cb2819e96",
+          "PT-pseudo_b9aa0df93f2a",
+          "PT-pseudo_b9f0b7018502",
+          "PT-pseudo_c12bcf838ec8",
+          "PT-pseudo_c13fda040310",
+          "PT-pseudo_c55496c11421",
+          "PT-pseudo_c7277954c60f",
+          "PT-pseudo_cac2563c222a",
+          "PT-pseudo_dcd7bf13a6f4"
+        ],
+        "n_cases": 34
+      },
+      "description": "Sin moderador LLM; plan determinista de E4.",
+      "graph_variant": "N08-off",
+      "hypotheses": [
+        "H10"
+      ],
+      "l_minus_s": {
+        "changes": {
+          "by_field": {
+            "biopsy_decision": 0,
+            "confidence": 1,
+            "reveal_sequence": 34,
+            "variable_weights": 34
+          },
+          "cases": [
+            "PT-pseudo_033f1a8e1503",
+            "PT-pseudo_0615b2bd8504",
+            "PT-pseudo_062a1125899d",
+            "PT-pseudo_099651db404e",
+            "PT-pseudo_1185f6a68df0",
+            "PT-pseudo_11fe9c6ca833",
+            "PT-pseudo_132e0000c0e0",
+            "PT-pseudo_152344add0f1",
+            "PT-pseudo_1dc32184cab6",
+            "PT-pseudo_20ba3f0f6ca0",
+            "PT-pseudo_259484ae733f",
+            "PT-pseudo_2cd88bcdf81c",
+            "PT-pseudo_2e4988b84112",
+            "PT-pseudo_2eef4115a253",
+            "PT-pseudo_2ef22b5dd08e",
+            "PT-pseudo_2fbb84505a45",
+            "PT-pseudo_3477ea7065bd",
+            "PT-pseudo_36c92fb424ac",
+            "PT-pseudo_376de00c8131",
+            "PT-pseudo_3f75ae876abe",
+            "PT-pseudo_41ca49bed13d",
+            "PT-pseudo_47d8b39fd07f",
+            "PT-pseudo_4bfd4ec864d8",
+            "PT-pseudo_4d54f04e26ae",
+            "PT-pseudo_562159dc2cc6",
+            "PT-pseudo_575cb2819e96",
+            "PT-pseudo_b9aa0df93f2a",
+            "PT-pseudo_b9f0b7018502",
+            "PT-pseudo_c12bcf838ec8",
+            "PT-pseudo_c13fda040310",
+            "PT-pseudo_c55496c11421",
+            "PT-pseudo_c7277954c60f",
+            "PT-pseudo_cac2563c222a",
+            "PT-pseudo_dcd7bf13a6f4"
+          ],
+          "n_cases": 34
+        },
+        "ranking": -0.0009745115995116738
+      },
+      "mcnemar_holm_p": 1.0,
+      "score": {
+        "by_bucket": {
+          "Negative": "16/18",
+          "None": "24/24",
+          "Positive": "34/49"
+        },
+        "components": {
+          "confidence_score": 0.7837837837837838,
+          "important_decisive_factor_score": 0.7713829713829714,
+          "section_grounding_score": 0.8507078507078507,
+          "tool_score": 0.8164414414414414,
+          "variable_weight_score": 0.8538038038038038
+        },
+        "f1_yes": 0.8547008547008547,
+        "gate": 0.8131868131868132,
+        "mean_case": 0.6647635555327863,
+        "ranking": 0.7597322051168205
+      },
+      "versus_l0": {
+        "mcnemar": {
+          "base_only": 0,
+          "n": 0,
+          "p_value": 1.0,
+          "statistic": 0.0,
+          "variant_only": 0
+        },
+        "metrics": {
+          "confidence_score": {
+            "baseline": 0.7905405405405406,
+            "ci95": [
+              0.0,
+              0.02027027027027027
+            ],
+            "delta": 0.006756756756756757,
+            "n": 74,
+            "variant": 0.7837837837837838
+          },
+          "f1_yes": {
+            "baseline": 0.8547008547008547,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.8547008547008547
+          },
+          "gate": {
+            "baseline": 0.8131868131868132,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.8131868131868132
+          },
+          "important_decisive_factor_score": {
+            "baseline": 0.7668677418677419,
+            "ci95": [
+              -0.01144358644358644,
+              0.0
+            ],
+            "delta": -0.004515229515229514,
+            "n": 74,
+            "variant": 0.7713829713829714
+          },
+          "ranking": {
+            "baseline": 0.7607067167163322,
+            "ci95": [
+              -0.0004754845848595823,
+              0.002693833943833945
+            ],
+            "delta": 0.0009745115995116738,
+            "n": 91,
+            "variant": 0.7597322051168205
+          },
+          "section_grounding_score": {
+            "baseline": 0.8404118404118404,
+            "ci95": [
+              -0.013191763191763146,
+              -0.007722007722007694
+            ],
+            "delta": -0.01029601029601026,
+            "n": 74,
+            "variant": 0.8507078507078506
+          },
+          "tool_score": {
+            "baseline": 0.865990990990991,
+            "ci95": [
+              0.02927927927927928,
+              0.07207207207207206
+            ],
+            "delta": 0.04954954954954954,
+            "n": 74,
+            "variant": 0.8164414414414414
+          },
+          "variable_weight_score": {
+            "baseline": 0.8393893893893893,
+            "ci95": [
+              -0.018918918918918916,
+              -0.009909909909909913
+            ],
+            "delta": -0.014414414414414416,
+            "n": 74,
+            "variant": 0.8538038038038037
+          }
+        },
+        "n": 91,
+        "sign_test": {
+          "base_only": 14,
+          "n": 32,
+          "p_value": 0.5966148958541453,
+          "statistic": 4.0,
+          "variant_only": 18
+        }
+      }
+    },
+    {
+      "arm": "L3",
+      "changes_vs_l0": {
+        "by_field": {
+          "biopsy_decision": 0,
+          "confidence": 0,
+          "reveal_sequence": 0,
+          "variable_weights": 0
+        },
+        "cases": [],
+        "n_cases": 0
+      },
+      "description": "Sin verificador ni reapertura.",
+      "graph_variant": "N14-off",
+      "hypotheses": [
+        "H11"
+      ],
+      "l_minus_s": {
+        "changes": {
+          "by_field": {
+            "biopsy_decision": 0,
+            "confidence": 0,
+            "reveal_sequence": 0,
+            "variable_weights": 0
+          },
+          "cases": [],
+          "n_cases": 0
+        },
+        "ranking": 0.0
+      },
+      "mcnemar_holm_p": 1.0,
+      "score": {
+        "by_bucket": {
+          "Negative": "16/18",
+          "None": "24/24",
+          "Positive": "34/49"
+        },
+        "components": {
+          "confidence_score": 0.7905405405405406,
+          "important_decisive_factor_score": 0.7668677418677419,
+          "section_grounding_score": 0.8404118404118404,
+          "tool_score": 0.865990990990991,
+          "variable_weight_score": 0.8393893893893893
+        },
+        "f1_yes": 0.8547008547008547,
+        "gate": 0.8131868131868132,
+        "mean_case": 0.6667125787318096,
+        "ranking": 0.7607067167163322
+      },
+      "versus_l0": {
+        "mcnemar": {
+          "base_only": 0,
+          "n": 0,
+          "p_value": 1.0,
+          "statistic": 0.0,
+          "variant_only": 0
+        },
+        "metrics": {
+          "confidence_score": {
+            "baseline": 0.7905405405405406,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.7905405405405406
+          },
+          "f1_yes": {
+            "baseline": 0.8547008547008547,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.8547008547008547
+          },
+          "gate": {
+            "baseline": 0.8131868131868132,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.8131868131868132
+          },
+          "important_decisive_factor_score": {
+            "baseline": 0.7668677418677419,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.7668677418677419
+          },
+          "ranking": {
+            "baseline": 0.7607067167163322,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.7607067167163322
+          },
+          "section_grounding_score": {
+            "baseline": 0.8404118404118404,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.8404118404118404
+          },
+          "tool_score": {
+            "baseline": 0.865990990990991,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.865990990990991
+          },
+          "variable_weight_score": {
+            "baseline": 0.8393893893893893,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.8393893893893893
+          }
+        },
+        "n": 91,
+        "sign_test": {
+          "base_only": 0,
+          "n": 0,
+          "p_value": 1.0,
+          "statistic": 0.0,
+          "variant_only": 0
+        }
+      }
+    },
+    {
+      "arm": "L4",
+      "changes_vs_l0": {
+        "by_field": {
+          "biopsy_decision": 0,
+          "confidence": 0,
+          "reveal_sequence": 23,
+          "variable_weights": 23
+        },
+        "cases": [
+          "PT-pseudo_033f1a8e1503",
+          "PT-pseudo_099651db404e",
+          "PT-pseudo_11574b12444b",
+          "PT-pseudo_1185f6a68df0",
+          "PT-pseudo_11fe9c6ca833",
+          "PT-pseudo_132e0000c0e0",
+          "PT-pseudo_152344add0f1",
+          "PT-pseudo_175e6ad47991",
+          "PT-pseudo_249def42388a",
+          "PT-pseudo_2cd88bcdf81c",
+          "PT-pseudo_3646e0a2ae13",
+          "PT-pseudo_3f75ae876abe",
+          "PT-pseudo_47d8b39fd07f",
+          "PT-pseudo_4a4fedfc1f51",
+          "PT-pseudo_4bfd4ec864d8",
+          "PT-pseudo_4d54f04e26ae",
+          "PT-pseudo_4e545d350c5b",
+          "PT-pseudo_575cb2819e96",
+          "PT-pseudo_c12bcf838ec8",
+          "PT-pseudo_c13fda040310",
+          "PT-pseudo_c55496c11421",
+          "PT-pseudo_d38917f87b35",
+          "PT-pseudo_dcd7bf13a6f4"
+        ],
+        "n_cases": 23
+      },
+      "description": "Sala LLM minima, solo registrador y presidente.",
+      "graph_variant": "LLM-minimal",
+      "hypotheses": [],
+      "l_minus_s": {
+        "changes": {
+          "by_field": {
+            "biopsy_decision": 0,
+            "confidence": 0,
+            "reveal_sequence": 23,
+            "variable_weights": 23
+          },
+          "cases": [
+            "PT-pseudo_033f1a8e1503",
+            "PT-pseudo_099651db404e",
+            "PT-pseudo_11574b12444b",
+            "PT-pseudo_1185f6a68df0",
+            "PT-pseudo_11fe9c6ca833",
+            "PT-pseudo_132e0000c0e0",
+            "PT-pseudo_152344add0f1",
+            "PT-pseudo_175e6ad47991",
+            "PT-pseudo_249def42388a",
+            "PT-pseudo_2cd88bcdf81c",
+            "PT-pseudo_3646e0a2ae13",
+            "PT-pseudo_3f75ae876abe",
+            "PT-pseudo_47d8b39fd07f",
+            "PT-pseudo_4a4fedfc1f51",
+            "PT-pseudo_4bfd4ec864d8",
+            "PT-pseudo_4d54f04e26ae",
+            "PT-pseudo_4e545d350c5b",
+            "PT-pseudo_575cb2819e96",
+            "PT-pseudo_c12bcf838ec8",
+            "PT-pseudo_c13fda040310",
+            "PT-pseudo_c55496c11421",
+            "PT-pseudo_d38917f87b35",
+            "PT-pseudo_dcd7bf13a6f4"
+          ],
+          "n_cases": 23
+        },
+        "ranking": -9.122821622831179e-05
+      },
+      "mcnemar_holm_p": 1.0,
+      "score": {
+        "by_bucket": {
+          "Negative": "16/18",
+          "None": "24/24",
+          "Positive": "34/49"
+        },
+        "components": {
+          "confidence_score": 0.7905405405405406,
+          "important_decisive_factor_score": 0.770926670926671,
+          "section_grounding_score": 0.8474903474903475,
+          "tool_score": 0.8333333333333333,
+          "variable_weight_score": 0.8492992992992993
+        },
+        "f1_yes": 0.8547008547008547,
+        "gate": 0.8131868131868132,
+        "mean_case": 0.666530122299353,
+        "ranking": 0.7606154885001039
+      },
+      "versus_l0": {
+        "mcnemar": {
+          "base_only": 0,
+          "n": 0,
+          "p_value": 1.0,
+          "statistic": 0.0,
+          "variant_only": 0
+        },
+        "metrics": {
+          "confidence_score": {
+            "baseline": 0.7905405405405406,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.7905405405405406
+          },
+          "f1_yes": {
+            "baseline": 0.8547008547008547,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.8547008547008547
+          },
+          "gate": {
+            "baseline": 0.8131868131868132,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.8131868131868132
+          },
+          "important_decisive_factor_score": {
+            "baseline": 0.7668677418677419,
+            "ci95": [
+              -0.012295737295737293,
+              0.003689403689403691
+            ],
+            "delta": -0.004058929058929056,
+            "n": 74,
+            "variant": 0.7709266709266709
+          },
+          "ranking": {
+            "baseline": 0.7607067167163322,
+            "ci95": [
+              -0.0011693983100233092,
+              0.0014076392357642356
+            ],
+            "delta": 9.122821622831179e-05,
+            "n": 91,
+            "variant": 0.7606154885001039
+          },
+          "section_grounding_score": {
+            "baseline": 0.8404118404118404,
+            "ci95": [
+              -0.009652509652509618,
+              -0.004504504504504489
+            ],
+            "delta": -0.007078507078507054,
+            "n": 74,
+            "variant": 0.8474903474903475
+          },
+          "tool_score": {
+            "baseline": 0.865990990990991,
+            "ci95": [
+              0.01463963963963964,
+              0.05292792792792792
+            ],
+            "delta": 0.03265765765765766,
+            "n": 74,
+            "variant": 0.8333333333333333
+          },
+          "variable_weight_score": {
+            "baseline": 0.8393893893893893,
+            "ci95": [
+              -0.014414414414414416,
+              -0.005855855855855854
+            ],
+            "delta": -0.009909909909909911,
+            "n": 74,
+            "variant": 0.8492992992992993
+          }
+        },
+        "n": 91,
+        "sign_test": {
+          "base_only": 8,
+          "n": 22,
+          "p_value": 0.28627872467041016,
+          "statistic": 6.0,
+          "variant_only": 14
+        }
+      }
+    },
+    {
+      "arm": "L5",
+      "changes_vs_l0": {
+        "by_field": {
+          "biopsy_decision": 0,
+          "confidence": 0,
+          "reveal_sequence": 0,
+          "variable_weights": 0
+        },
+        "cases": [],
+        "n_cases": 0
+      },
+      "description": "Presidente sustituido por la nota determinista.",
+      "graph_variant": "N15-deterministic",
+      "hypotheses": [
+        "H13"
+      ],
+      "l_minus_s": {
+        "changes": {
+          "by_field": {
+            "biopsy_decision": 0,
+            "confidence": 0,
+            "reveal_sequence": 0,
+            "variable_weights": 0
+          },
+          "cases": [],
+          "n_cases": 0
+        },
+        "ranking": 0.0
+      },
+      "mcnemar_holm_p": 1.0,
+      "score": {
+        "by_bucket": {
+          "Negative": "16/18",
+          "None": "24/24",
+          "Positive": "34/49"
+        },
+        "components": {
+          "confidence_score": 0.7905405405405406,
+          "important_decisive_factor_score": 0.7668677418677419,
+          "section_grounding_score": 0.8404118404118404,
+          "tool_score": 0.865990990990991,
+          "variable_weight_score": 0.8393893893893893
+        },
+        "f1_yes": 0.8547008547008547,
+        "gate": 0.8131868131868132,
+        "mean_case": 0.6667125787318096,
+        "ranking": 0.7607067167163322
+      },
+      "versus_l0": {
+        "mcnemar": {
+          "base_only": 0,
+          "n": 0,
+          "p_value": 1.0,
+          "statistic": 0.0,
+          "variant_only": 0
+        },
+        "metrics": {
+          "confidence_score": {
+            "baseline": 0.7905405405405406,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.7905405405405406
+          },
+          "f1_yes": {
+            "baseline": 0.8547008547008547,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.8547008547008547
+          },
+          "gate": {
+            "baseline": 0.8131868131868132,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.8131868131868132
+          },
+          "important_decisive_factor_score": {
+            "baseline": 0.7668677418677419,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.7668677418677419
+          },
+          "ranking": {
+            "baseline": 0.7607067167163322,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.7607067167163322
+          },
+          "section_grounding_score": {
+            "baseline": 0.8404118404118404,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.8404118404118404
+          },
+          "tool_score": {
+            "baseline": 0.865990990990991,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.865990990990991
+          },
+          "variable_weight_score": {
+            "baseline": 0.8393893893893893,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.8393893893893893
+          }
+        },
+        "n": 91,
+        "sign_test": {
+          "base_only": 0,
+          "n": 0,
+          "p_value": 1.0,
+          "statistic": 0.0,
+          "variant_only": 0
+        }
+      }
+    },
+    {
+      "arm": "L6",
+      "changes_vs_l0": {
+        "by_field": {
+          "biopsy_decision": 0,
+          "confidence": 0,
+          "reveal_sequence": 0,
+          "variable_weights": 0
+        },
+        "cases": [],
+        "n_cases": 0
+      },
+      "description": "Sin guardias de procedencia G1 y G2.",
+      "graph_variant": "G1G2-off",
+      "hypotheses": [
+        "H14"
+      ],
+      "l_minus_s": {
+        "changes": {
+          "by_field": {
+            "biopsy_decision": 0,
+            "confidence": 0,
+            "reveal_sequence": 0,
+            "variable_weights": 0
+          },
+          "cases": [],
+          "n_cases": 0
+        },
+        "ranking": 0.0
+      },
+      "mcnemar_holm_p": 1.0,
+      "score": {
+        "by_bucket": {
+          "Negative": "16/18",
+          "None": "24/24",
+          "Positive": "34/49"
+        },
+        "components": {
+          "confidence_score": 0.7905405405405406,
+          "important_decisive_factor_score": 0.7668677418677419,
+          "section_grounding_score": 0.8404118404118404,
+          "tool_score": 0.865990990990991,
+          "variable_weight_score": 0.8393893893893893
+        },
+        "f1_yes": 0.8547008547008547,
+        "gate": 0.8131868131868132,
+        "mean_case": 0.6667125787318096,
+        "ranking": 0.7607067167163322
+      },
+      "versus_l0": {
+        "mcnemar": {
+          "base_only": 0,
+          "n": 0,
+          "p_value": 1.0,
+          "statistic": 0.0,
+          "variant_only": 0
+        },
+        "metrics": {
+          "confidence_score": {
+            "baseline": 0.7905405405405406,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.7905405405405406
+          },
+          "f1_yes": {
+            "baseline": 0.8547008547008547,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.8547008547008547
+          },
+          "gate": {
+            "baseline": 0.8131868131868132,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.8131868131868132
+          },
+          "important_decisive_factor_score": {
+            "baseline": 0.7668677418677419,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.7668677418677419
+          },
+          "ranking": {
+            "baseline": 0.7607067167163322,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.7607067167163322
+          },
+          "section_grounding_score": {
+            "baseline": 0.8404118404118404,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.8404118404118404
+          },
+          "tool_score": {
+            "baseline": 0.865990990990991,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.865990990990991
+          },
+          "variable_weight_score": {
+            "baseline": 0.8393893893893893,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.8393893893893893
+          }
+        },
+        "n": 91,
+        "sign_test": {
+          "base_only": 0,
+          "n": 0,
+          "p_value": 1.0,
+          "statistic": 0.0,
+          "variant_only": 0
+        }
+      }
+    },
+    {
+      "arm": "L7",
+      "changes_vs_l0": {
+        "by_field": {
+          "biopsy_decision": 0,
+          "confidence": 0,
+          "reveal_sequence": 0,
+          "variable_weights": 0
+        },
+        "cases": [],
+        "n_cases": 0
+      },
+      "description": "Sin guardia de lenguaje de proceso G3.",
+      "graph_variant": "G3-off",
+      "hypotheses": [
+        "H14"
+      ],
+      "l_minus_s": {
+        "changes": {
+          "by_field": {
+            "biopsy_decision": 0,
+            "confidence": 0,
+            "reveal_sequence": 0,
+            "variable_weights": 0
+          },
+          "cases": [],
+          "n_cases": 0
+        },
+        "ranking": 0.0
+      },
+      "mcnemar_holm_p": 1.0,
+      "score": {
+        "by_bucket": {
+          "Negative": "16/18",
+          "None": "24/24",
+          "Positive": "34/49"
+        },
+        "components": {
+          "confidence_score": 0.7905405405405406,
+          "important_decisive_factor_score": 0.7668677418677419,
+          "section_grounding_score": 0.8404118404118404,
+          "tool_score": 0.865990990990991,
+          "variable_weight_score": 0.8393893893893893
+        },
+        "f1_yes": 0.8547008547008547,
+        "gate": 0.8131868131868132,
+        "mean_case": 0.6667125787318096,
+        "ranking": 0.7607067167163322
+      },
+      "versus_l0": {
+        "mcnemar": {
+          "base_only": 0,
+          "n": 0,
+          "p_value": 1.0,
+          "statistic": 0.0,
+          "variant_only": 0
+        },
+        "metrics": {
+          "confidence_score": {
+            "baseline": 0.7905405405405406,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.7905405405405406
+          },
+          "f1_yes": {
+            "baseline": 0.8547008547008547,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.8547008547008547
+          },
+          "gate": {
+            "baseline": 0.8131868131868132,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.8131868131868132
+          },
+          "important_decisive_factor_score": {
+            "baseline": 0.7668677418677419,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.7668677418677419
+          },
+          "ranking": {
+            "baseline": 0.7607067167163322,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.7607067167163322
+          },
+          "section_grounding_score": {
+            "baseline": 0.8404118404118404,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.8404118404118404
+          },
+          "tool_score": {
+            "baseline": 0.865990990990991,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.865990990990991
+          },
+          "variable_weight_score": {
+            "baseline": 0.8393893893893893,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.8393893893893893
+          }
+        },
+        "n": 91,
+        "sign_test": {
+          "base_only": 0,
+          "n": 0,
+          "p_value": 1.0,
+          "statistic": 0.0,
+          "variant_only": 0
+        }
+      }
+    },
+    {
+      "arm": "L0p",
+      "changes_vs_l0": {
+        "by_field": {
+          "biopsy_decision": 0,
+          "confidence": 0,
+          "reveal_sequence": 0,
+          "variable_weights": 0
+        },
+        "cases": [],
+        "n_cases": 0
+      },
+      "description": "Replica independiente de L0.",
+      "graph_variant": "A0",
+      "hypotheses": [],
+      "l_minus_s": {
+        "changes": {
+          "by_field": {
+            "biopsy_decision": 0,
+            "confidence": 0,
+            "reveal_sequence": 0,
+            "variable_weights": 0
+          },
+          "cases": [],
+          "n_cases": 0
+        },
+        "ranking": 0.0
+      },
+      "mcnemar_holm_p": 1.0,
+      "score": {
+        "by_bucket": {
+          "Negative": "16/18",
+          "None": "24/24",
+          "Positive": "34/49"
+        },
+        "components": {
+          "confidence_score": 0.7905405405405406,
+          "important_decisive_factor_score": 0.7668677418677419,
+          "section_grounding_score": 0.8404118404118404,
+          "tool_score": 0.865990990990991,
+          "variable_weight_score": 0.8393893893893893
+        },
+        "f1_yes": 0.8547008547008547,
+        "gate": 0.8131868131868132,
+        "mean_case": 0.6667125787318096,
+        "ranking": 0.7607067167163322
+      },
+      "versus_l0": {
+        "mcnemar": {
+          "base_only": 0,
+          "n": 0,
+          "p_value": 1.0,
+          "statistic": 0.0,
+          "variant_only": 0
+        },
+        "metrics": {
+          "confidence_score": {
+            "baseline": 0.7905405405405406,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.7905405405405406
+          },
+          "f1_yes": {
+            "baseline": 0.8547008547008547,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.8547008547008547
+          },
+          "gate": {
+            "baseline": 0.8131868131868132,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.8131868131868132
+          },
+          "important_decisive_factor_score": {
+            "baseline": 0.7668677418677419,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.7668677418677419
+          },
+          "ranking": {
+            "baseline": 0.7607067167163322,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 91,
+            "variant": 0.7607067167163322
+          },
+          "section_grounding_score": {
+            "baseline": 0.8404118404118404,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.8404118404118404
+          },
+          "tool_score": {
+            "baseline": 0.865990990990991,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.865990990990991
+          },
+          "variable_weight_score": {
+            "baseline": 0.8393893893893893,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "delta": 0.0,
+            "n": 74,
+            "variant": 0.8393893893893893
+          }
+        },
+        "n": 91,
+        "sign_test": {
+          "base_only": 0,
+          "n": 0,
+          "p_value": 1.0,
+          "statistic": 0.0,
+          "variant_only": 0
+        }
+      }
+    }
+  ],
+  "seed": 20260921
+}

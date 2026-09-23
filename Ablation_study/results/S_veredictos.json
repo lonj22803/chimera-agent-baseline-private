@@ -1,0 +1,60 @@
+{
+  "date": "2026-09-22",
+  "hypotheses": {
+    "H1": {
+      "estado": "indeterminada",
+      "evidencia": "S-COH: delta ranking 0.0648, IC95 [0.0186, 0.1142], McNemar-Holm p=0.5371; signo DEV/VAL positivo.",
+      "fuente": "S_loo.csv; S_robustez.csv",
+      "regla": "INDETERMINADA_D"
+    },
+    "H15": {
+      "estado": "confirmada",
+      "evidencia": "Sin M11: variable_weight mejora 0.0378, grounding cae 0.1782 y el neto favorece a la guardia en 0.00833 de ranking.",
+      "fuente": "S_loo.csv; S_formulario.csv",
+      "regla": "NECESARIA_F"
+    },
+    "H2": {
+      "estado": "indeterminada",
+      "evidencia": "S-M4: delta ranking 0.0302, IC95 [-0.0113, 0.0776], McNemar-Holm p=1; signos DEV/VAL opuestos.",
+      "fuente": "S_loo.csv; S_robustez.csv",
+      "regla": "INDETERMINADA_D"
+    },
+    "H3": {
+      "estado": "indeterminada",
+      "evidencia": "Voto honesto 15/27 frente a si constante 18/27; delta ranking A0-si -0.0829, IC95 [-0.2174, 0.0317].",
+      "fuente": "S_cascade.csv",
+      "regla": "comparacion pareada del peldano de voto"
+    },
+    "H4": {
+      "estado": "confirmada",
+      "evidencia": "Shapley ranking E3=0.0371 y E1=-0.0052.",
+      "fuente": "S_factorial.csv",
+      "regla": "E1 < E3"
+    },
+    "H5": {
+      "estado": "confirmada",
+      "evidencia": "S-PSA-off: 0 filas distintas y delta cero en D, ranking y los cinco componentes.",
+      "fuente": "S_loo.csv",
+      "regla": "SOBRA por construccion"
+    },
+    "H6": {
+      "estado": "confirmada",
+      "evidencia": "Pesos constantes noted: delta ranking 0.0634. Abrir todo: delta tool 0.0818. Ambos brazos se clasifican NECESARIA_F.",
+      "fuente": "S_loo.csv; S_formulario.csv",
+      "regla": "pesos=NECESARIA_F; plan=NECESARIA_F"
+    },
+    "H7": {
+      "estado": "refutada",
+      "evidencia": "S-LIB-off: 0 filas distintas y delta cero en todos los componentes; no aparece la bajada F prevista.",
+      "fuente": "S_loo.csv",
+      "regla": "SOBRA por construccion"
+    },
+    "H8": {
+      "estado": "indeterminada",
+      "evidencia": "Cerrar radiologia cambia 3 decisiones y cerrar notas previas cambia 5, pero ninguna supera Holm; la equivalencia prosa-ejecutor requiere L0.",
+      "fuente": "S_loo.csv",
+      "regla": "Tier L pendiente"
+    }
+  },
+  "tier": "S"
+}
