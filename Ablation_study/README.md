@@ -5,6 +5,7 @@ la inferencia, cuáles sólo para la forma del formulario o la nota, y cuáles s
 
 | Fichero | Qué es |
 |---|---|
+| [Memoria del estudio T1/T2/T3](MEMORIA_ESTUDIO_ABLACION_T1_T2_T3.md) | Exposición del trabajo: objetivos, metodología, relevancia de expertos y LLM, resultados, duración y trabajo futuro |
 | [Informe ejecutivo final T1/T2/T3](reports/INFORME_EJECUTIVO_FINAL_T1_T2_T3.md) | Hallazgos principales, reducciones candidatas, costes, límites y siguientes pasos |
 | [PLAN_ABLACION_T1.md](PLAN_ABLACION_T1.md) | **Plan T1**: diseño, catálogo, hipótesis y los pasos para Codex. Fuente de verdad del avance T1 |
 | [Extensión T2/T3](T2_T3/README.md) | Plan, ejecutores, resultados e informe técnico de tratamiento y recurrencia |
